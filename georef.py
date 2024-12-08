@@ -5,8 +5,9 @@ from operator import contains
 import geopandas as gp
 import pandas as pd
 from shapely import geometry as geom
+from shapely.affinity import translate
 import matplotlib.pyplot as plt
-
+from win32gui import Polygon
 
 kad_path = r'C:\Users\NietLottede\Documents\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\Documents\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
@@ -61,7 +62,7 @@ pand_point = gp.read_file(pand_path)
 pand_point = pand_point.rename(columns={'geometry': 'point_geometry'})
 
 # kadperceel_pand = gp.sjoin(kadpercelen, kadpandpoint, how='left', predicate='contains')
-rooms = []
+all_panden = []
 
 for perceel in perceel_list:
     parts = perceel.split('_')
@@ -116,6 +117,7 @@ for perceel in perceel_list:
     rooms_perceel = rooms_perceel.set_geometry('geometry_y')
     rooms_pand = rooms_perceel.sjoin(pand_point, how='left', predicate='contains')
 
+    # allign the id string with the one from the bag
     rooms_pand['pand_id'] = rooms_pand['identifica'].apply(
         lambda x: 'NL.IMBAG.Pand.' + str(x) if not str(x).startswith('NL.IMBAG.Pand.') else str(x))
 
@@ -127,35 +129,61 @@ for perceel in perceel_list:
     rooms_bg = rooms_pand[rooms_pand['verdieping'].str.contains("BEGANE GROND", na=False)]
     # look into multiple panden per perceel
     pand_outline = rooms_bg.groupby('pand_id')['geometry_x'].apply(lambda g: g.unary_union)
-    print("rooms")
-    print(rooms.info())
-    print("pand_geom")
-    print(pand_geom.info())
     pand_data = rooms.merge(pand_geom[['geometry', 'identificatie']], how='left', left_on='pand_id', right_on='identificatie')
-    print("pand data")
-    print(pand_data.info())
-    panden = pd.DataFrame(pand_outline).reset_index()
-    panden = panden.merge(pand_data, left_on='pand_id', right_on='identificatie', how='left')
-    panden = gp.GeoDataFrame(panden, geometry='geometry_x_x', crs='EPSG:28992')
-    print("panden")
-    print(panden.info())
+    pand = pd.DataFrame(pand_outline).reset_index()
+    pand = pand.merge(pand_data, left_on='pand_id', right_on='identificatie', how='left')
+    pand = gp.GeoDataFrame(pand, geometry='geometry_x_x', crs='EPSG:28992')
+
+    all_panden.append(pand)
+
+
+panden = pd.concat(all_panden)
+panden.rename(columns={'geometry_x_x':'vec_pand_outline', 'geometry_x_y': 'vec_pand_rooms', 'pand_id_x': 'pand_id', 'pand_id_y':'room_id'}, inplace=True)
+
+# need a better way to structure, now just dropped the rooms
+if 'pand_id' in panden.columns:
+    panden = panden.drop_duplicates(subset=['pand_id'])
+
+# print("panden")
+# panden.to_csv('panden.csv', index=False)
+
+# scale tests
+# align centroid
+
+#not working yet, there are not enough geometries and the ones i have are invalid
+def translate(polygon, dx, dy):
+    new_coords = [(x + dx, y + dy) for x, y in polygon.exterior.coords]
+    return polygon(new_coords)
+
+panden = panden[panden['vec_pand_outline'].notna() & panden['geometry'].notna() & panden['vec_pand_rooms'].notna()]
+
+print(panden['vec_pand_outline'].head())
+
+panden['vec_pand_outline'] = panden.apply(lambda row:translate(row['vec_pand_outline'],
+                                                               row['geometry'].centroid.x - row['vec_pand_outline'].centroid.x,
+                                                               row['geometry'].centroid.y - row['vec_pand_outline'].centroid.y),axis=1)
+print(panden['vec_pand_outline'].head())
+
     # panden = panden.drop('geometry_x_y', axis=1)
     # panden = panden.drop('geometry', axis=1)
     # panden.to_file(os.path.join(out_path, f'{perceel}.pand.gpkg'), driver='GPKG')
 
-    panden = panden.set_crs('epsg:28992', allow_override=True)
-    # vectorised pand
-    panden = panden.set_geometry('geometry_x_y')
-    panden.plot()
-    plt.show()
-    # outline BG pand
-    panden = panden.set_geometry('geometry_x_x')
-    panden.plot()
-    plt.show()
-    # georeferenced pand
-    panden = panden.set_geometry('geometry')
-    panden.plot()
-    plt.show()
+    # plotting
+    # panden = panden.set_crs('epsg:28992', allow_override=True)
+    # # vectorised pand
+    # panden = panden.set_geometry('geometry_x_y')
+    # panden.plot()
+    # plt.show()
+    # # outline BG pand
+    # panden = panden.set_geometry('geometry_x_x')
+    # panden.plot()
+    # plt.show()
+    # # georeferenced pand
+    # panden = panden.set_geometry('geometry')
+    # panden.plot()
+    # plt.show()
+
+
 
 
 
