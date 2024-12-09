@@ -14,7 +14,7 @@ json_path = r"C:\Users\NietLottede\Documents\Lotte\original_data\gevectoriseerde
 out_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\output"
 pand_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\pand_point.shp"
 #need a bigger area
-pand_geom_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\10-506-654.gpkg"
+pand_geom_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\panden.gpkg"
 
 if not os.path.exists(out_path):
     os.mkdir(out_path)
@@ -23,7 +23,7 @@ if not os.path.exists(out_path):
 files = os.listdir(json_path)
 kadpercelen = gp.read_file(kad_path)
 kadpandpoint = gp.read_file(pand_path)
-pand_geom = gp.read_file(pand_geom_path, layer='pand')
+pand_geom = gp.read_file(pand_geom_path)
 
 def calcScale(bbxobj,pix):
     xlen = float((bbxobj.maxx-bbxobj.minx).iloc[0])
@@ -128,11 +128,14 @@ for perceel in perceel_list:
     # #create a dataframe for the panden with the polygon outline of the BG
     rooms_bg = rooms_pand[rooms_pand['verdieping'].str.contains("BEGANE GROND", na=False)]
     # look into multiple panden per perceel
+    print(rooms_bg['geometry_x'].head(10))
     pand_outline = rooms_bg.groupby('pand_id')['geometry_x'].apply(lambda g: g.unary_union)
     pand_data = rooms.merge(pand_geom[['geometry', 'identificatie']], how='left', left_on='pand_id', right_on='identificatie')
     pand = pd.DataFrame(pand_outline).reset_index()
     pand = pand.merge(pand_data, left_on='pand_id', right_on='identificatie', how='left')
+    print(pand['geometry_x_x'].head(10))
     pand = gp.GeoDataFrame(pand, geometry='geometry_x_x', crs='EPSG:28992')
+
 
     all_panden.append(pand)
 
@@ -150,39 +153,39 @@ if 'pand_id' in panden.columns:
 # scale tests
 # align centroid
 
-#not working yet, there are not enough geometries and the ones i have are invalid
-def translate(polygon, dx, dy):
-    new_coords = [(x + dx, y + dy) for x, y in polygon.exterior.coords]
-    return polygon(new_coords)
-
-panden = panden[panden['vec_pand_outline'].notna() & panden['geometry'].notna() & panden['vec_pand_rooms'].notna()]
-
-print(panden['vec_pand_outline'].head())
-
-panden['vec_pand_outline'] = panden.apply(lambda row:translate(row['vec_pand_outline'],
-                                                               row['geometry'].centroid.x - row['vec_pand_outline'].centroid.x,
-                                                               row['geometry'].centroid.y - row['vec_pand_outline'].centroid.y),axis=1)
-print(panden['vec_pand_outline'].head())
+# #not working yet, there are not enough geometries and the ones i have are invalid
+# def translate(polygon, dx, dy):
+#     new_coords = [(x + dx, y + dy) for x, y in polygon.exterior.coords]
+#     return polygon(new_coords)
+#
+# panden = panden[panden['vec_pand_outline'].notna() & panden['geometry'].notna() & panden['vec_pand_rooms'].notna()]
+#
+# print(panden['vec_pand_outline'].head())
+#
+# panden['vec_pand_outline'] = panden.apply(lambda row:translate(row['vec_pand_outline'],
+#                                                                row['geometry'].centroid.x - row['vec_pand_outline'].centroid.x,
+#                                                                row['geometry'].centroid.y - row['vec_pand_outline'].centroid.y),axis=1)
+# print(panden['vec_pand_outline'].head())
 
     # panden = panden.drop('geometry_x_y', axis=1)
     # panden = panden.drop('geometry', axis=1)
     # panden.to_file(os.path.join(out_path, f'{perceel}.pand.gpkg'), driver='GPKG')
 
     # plotting
-    # panden = panden.set_crs('epsg:28992', allow_override=True)
-    # # vectorised pand
-    # panden = panden.set_geometry('geometry_x_y')
-    # panden.plot()
-    # plt.show()
-    # # outline BG pand
-    # panden = panden.set_geometry('geometry_x_x')
-    # panden.plot()
-    # plt.show()
-    # # georeferenced pand
-    # panden = panden.set_geometry('geometry')
-    # panden.plot()
-    # plt.show()
 
+panden = panden.set_geometry('vec_pand_rooms')
+panden = panden.set_crs('epsg:28992', allow_override=True)
+# vectorised pand
+panden.plot()
+plt.show()
+# outline BG pand
+panden = panden.set_geometry('vec_pand_outline')
+panden.plot()
+plt.show()
+# georeferenced pand
+panden = panden.set_geometry('geometry')
+panden.plot()
+plt.show()
 
 
 
