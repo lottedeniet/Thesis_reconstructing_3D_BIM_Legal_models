@@ -12,8 +12,6 @@ from win32gui import Polygon
 kad_path = r'C:\Users\NietLottede\Documents\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\Documents\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
 out_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\output"
-pand_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\pand_point.shp"
-#need a bigger area
 pand_geom_path = r"C:\Users\NietLottede\Documents\Lotte\github_code\thesis\werkmap\panden.gpkg"
 
 if not os.path.exists(out_path):
@@ -22,13 +20,15 @@ if not os.path.exists(out_path):
 
 files = os.listdir(json_path)
 kadpercelen = gp.read_file(kad_path)
-kadpandpoint = gp.read_file(pand_path)
 pand_geom = gp.read_file(pand_geom_path)
 
 def calcScale(bbxobj,pix):
+    # get the length of the xbbox and ybbox of the kad perceel
     xlen = float((bbxobj.maxx-bbxobj.minx).iloc[0])
     ylen = float((bbxobj.maxy-bbxobj.miny).iloc[0])
+    # if the building is drawn horizontally
     if xlen < ylen:
+        # why not the other way around? if the x is smaller, the page is horizontal so the pixel approx is for the x right?
         return ylen/float(pix)
     else:
         return xlen/float(pix)
@@ -56,10 +56,8 @@ for f in files:
         parts = f.split('.')
         perceel_list.append(parts[0])
 
-# read all relevant parcels
-kadpercelen = gp.read_file(kad_path)
-pand_point = gp.read_file(pand_path)
-pand_point = pand_point.rename(columns={'geometry': 'point_geometry'})
+
+
 
 # kadperceel_pand = gp.sjoin(kadpercelen, kadpandpoint, how='left', predicate='contains')
 all_panden = []
@@ -70,13 +68,20 @@ for perceel in perceel_list:
         kadpercelen.KAD_GEM.eq(parts[1]) & kadpercelen.SECTIE.eq(parts[2]) & kadpercelen.PERCEELNUM.eq(
             int(parts[3]))]
     bp = selection.centroid
+    # bounds => envelope per perceel
     bbx = selection.bounds
+    print(bbx)
+
     with open(os.path.join(json_path, f'{perceel}.latest.json')) as f:
         data = json.load(f)
 
+    #  get the approximate size in pixels of the building
     pixapprox = max(data['meta']['frontDimensions']) / 3
     scale = calcScale(bbx, pixapprox)
     # create pointdict
+
+    # translate to the centroid kinda? and scaled according to scale factor
+    # float(data['meta']['frontDimensions'][1]) - y => just go from top left to bottom left y coord
     pointDict = {}
     for pt in data['points'].keys():
         x, y = data['points'][pt]['position']
@@ -111,36 +116,35 @@ for perceel in perceel_list:
     # join rooms with perceel through perceel ID
     rooms_perceel = vec_rooms.merge(selection[['perceel_id', 'geometry']], on='perceel_id', how='left')
 
-    # join rooms with pand through point-in-polygon
-    pand_point = pand_point[['point_geometry', 'identifica']]
-    pand_point = pand_point.set_geometry('point_geometry')
+    # use the centroid of the bag panden to check if the pand is on the perceel
+    # not optimal, remakes all points for every perceel
+    centroid_pand = pand_geom.centroid
+    pand_geom['centroid'] = centroid_pand
     rooms_perceel = rooms_perceel.set_geometry('geometry_y')
-    rooms_pand = rooms_perceel.sjoin(pand_point, how='left', predicate='contains')
+    pand_geom = pand_geom.set_geometry('centroid')
 
-    # allign the id string with the one from the bag
-    rooms_pand['pand_id'] = rooms_pand['identifica'].apply(
-        lambda x: 'NL.IMBAG.Pand.' + str(x) if not str(x).startswith('NL.IMBAG.Pand.') else str(x))
-
-    rooms = rooms_pand[['room', 'verdieping', 'appartement', 'ruimte', 'attachment', 'geometry_x', 'pand_id']]
-    # rooms.to_file(os.path.join(out_path, f'{perceel}.rooms.gpkg'), driver='GPKG')
-
+    # pand data still has all the buildings
+    pand_data = rooms_perceel.sjoin(pand_geom, how='left', predicate='contains')
+    pand_data.plot()
+    plt.show()
+    print(pand_data.info())
+    # rooms = pand_data[['room', 'verdieping', 'appartement', 'ruimte', 'attachment', 'geometry_x', 'pand_id']]
+    # # rooms.to_file(os.path.join(out_path, f'{perceel}.rooms.gpkg'), driver='GPKG')
 
     # #create a dataframe for the panden with the polygon outline of the BG
-    rooms_bg = rooms_pand[rooms_pand['verdieping'].str.contains("BEGANE GROND", na=False)]
+    rooms_bg = pand_data[pand_data['verdieping'].str.contains("BEGANE GROND", na=False)]
     # look into multiple panden per perceel
-    print(rooms_bg['geometry_x'].head(10))
-    pand_outline = rooms_bg.groupby('pand_id')['geometry_x'].apply(lambda g: g.unary_union)
-    pand_data = rooms.merge(pand_geom[['geometry', 'identificatie']], how='left', left_on='pand_id', right_on='identificatie')
+    pand_outline = rooms_bg.groupby('identificatie')['geometry_x'].apply(lambda g: g.unary_union)
     pand = pd.DataFrame(pand_outline).reset_index()
-    pand = pand.merge(pand_data, left_on='pand_id', right_on='identificatie', how='left')
-    print(pand['geometry_x_x'].head(10))
+    pand = pand.merge(pand_data, left_on='identificatie', right_on='identificatie', how='left')
+    print(pand.info())
     pand = gp.GeoDataFrame(pand, geometry='geometry_x_x', crs='EPSG:28992')
 
 
     all_panden.append(pand)
 
-
 panden = pd.concat(all_panden)
+print(panden.info())
 panden.rename(columns={'geometry_x_x':'vec_pand_outline', 'geometry_x_y': 'vec_pand_rooms', 'pand_id_x': 'pand_id', 'pand_id_y':'room_id'}, inplace=True)
 
 # need a better way to structure, now just dropped the rooms
