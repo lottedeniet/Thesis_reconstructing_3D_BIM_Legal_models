@@ -5,9 +5,8 @@ from operator import contains
 import geopandas as gp
 import pandas as pd
 from shapely import geometry as geom
-from shapely.affinity import translate
 import matplotlib.pyplot as plt
-from win32gui import Polygon
+pd.set_option('display.max_rows', None)
 
 kad_path = r'C:\Users\NietLottede\Documents\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\Documents\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
@@ -63,6 +62,7 @@ for f in files:
 all_panden = []
 
 for perceel in perceel_list:
+    print(perceel)
     parts = perceel.split('_')
     selection = kadpercelen[
         kadpercelen.KAD_GEM.eq(parts[1]) & kadpercelen.SECTIE.eq(parts[2]) & kadpercelen.PERCEELNUM.eq(
@@ -70,7 +70,6 @@ for perceel in perceel_list:
     bp = selection.centroid
     # bounds => envelope per perceel
     bbx = selection.bounds
-    print(bbx)
 
     with open(os.path.join(json_path, f'{perceel}.latest.json')) as f:
         data = json.load(f)
@@ -116,70 +115,26 @@ for perceel in perceel_list:
     # join rooms with perceel through perceel ID
     rooms_perceel = vec_rooms.merge(selection[['perceel_id', 'geometry']], on='perceel_id', how='left')
 
-    # use the centroid of the bag panden to check if the pand is on the perceel
-    # not optimal, remakes all points for every perceel
-    centroid_pand = pand_geom.centroid
-    pand_geom['centroid'] = centroid_pand
+    # join the BAG if it intersects with the perceel
     rooms_perceel = rooms_perceel.set_geometry('geometry_y')
-    pand_geom = pand_geom.set_geometry('centroid')
-
-    # pand data still has all the buildings
-    pand_data = rooms_perceel.sjoin(pand_geom, how='left', predicate='contains')
-    pand_data.plot()
-    plt.show()
-    print(pand_data.info())
-    # rooms = pand_data[['room', 'verdieping', 'appartement', 'ruimte', 'attachment', 'geometry_x', 'pand_id']]
-    # # rooms.to_file(os.path.join(out_path, f'{perceel}.rooms.gpkg'), driver='GPKG')
+    pand_geom = pand_geom.set_geometry('geometry')
+    pand_data = rooms_perceel.sjoin(pand_geom, how='left', predicate='intersects')
 
     # #create a dataframe for the panden with the polygon outline of the BG
     rooms_bg = pand_data[pand_data['verdieping'].str.contains("BEGANE GROND", na=False)]
-    # look into multiple panden per perceel
     pand_outline = rooms_bg.groupby('identificatie')['geometry_x'].apply(lambda g: g.unary_union)
     pand = pd.DataFrame(pand_outline).reset_index()
     pand = pand.merge(pand_data, left_on='identificatie', right_on='identificatie', how='left')
-    print(pand.info())
+
     pand = gp.GeoDataFrame(pand, geometry='geometry_x_x', crs='EPSG:28992')
-
-
     all_panden.append(pand)
 
 panden = pd.concat(all_panden)
-print(panden.info())
 panden.rename(columns={'geometry_x_x':'vec_pand_outline', 'geometry_x_y': 'vec_pand_rooms', 'pand_id_x': 'pand_id', 'pand_id_y':'room_id'}, inplace=True)
-
-# need a better way to structure, now just dropped the rooms
-if 'pand_id' in panden.columns:
-    panden = panden.drop_duplicates(subset=['pand_id'])
-
-# print("panden")
-# panden.to_csv('panden.csv', index=False)
-
-# scale tests
-# align centroid
-
-# #not working yet, there are not enough geometries and the ones i have are invalid
-# def translate(polygon, dx, dy):
-#     new_coords = [(x + dx, y + dy) for x, y in polygon.exterior.coords]
-#     return polygon(new_coords)
-#
-# panden = panden[panden['vec_pand_outline'].notna() & panden['geometry'].notna() & panden['vec_pand_rooms'].notna()]
-#
-# print(panden['vec_pand_outline'].head())
-#
-# panden['vec_pand_outline'] = panden.apply(lambda row:translate(row['vec_pand_outline'],
-#                                                                row['geometry'].centroid.x - row['vec_pand_outline'].centroid.x,
-#                                                                row['geometry'].centroid.y - row['vec_pand_outline'].centroid.y),axis=1)
-# print(panden['vec_pand_outline'].head())
-
-    # panden = panden.drop('geometry_x_y', axis=1)
-    # panden = panden.drop('geometry', axis=1)
-    # panden.to_file(os.path.join(out_path, f'{perceel}.pand.gpkg'), driver='GPKG')
-
-    # plotting
+print(panden.info())
 
 panden = panden.set_geometry('vec_pand_rooms')
 panden = panden.set_crs('epsg:28992', allow_override=True)
-# vectorised pand
 panden.plot()
 plt.show()
 # outline BG pand
@@ -187,7 +142,8 @@ panden = panden.set_geometry('vec_pand_outline')
 panden.plot()
 plt.show()
 # georeferenced pand
-panden = panden.set_geometry('geometry')
+panden = panden.set_geometry('geometry_y')
+panden.to_csv('panden.csv', index=False)
 panden.plot()
 plt.show()
 
