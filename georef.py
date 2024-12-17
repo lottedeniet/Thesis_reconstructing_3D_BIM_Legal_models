@@ -69,7 +69,15 @@ for perceel in perceel_list:
             int(parts[3]))]
     bp = selection.centroid
     # bounds => envelope per perceel
-    bbx = selection.bounds
+    bbx = selection.geometry.bounds
+    print(bbx)
+    bbox = f'{int(bbx.minx)},{int(bbx.miny)},{int(bbx.maxx)},{int(bbx.maxy)}'
+
+    # connect to the BGT
+    params = {'bbox': bbox, 'bbox-crs': 'http://www.opengis.net/def/crs/EPSG/0/28992'}
+    response = requests.get(api_bgt, params=params)
+    data = response.json()
+    print(data)
 
     with open(os.path.join(json_path, f'{perceel}.latest.json')) as f:
         data = json.load(f)
