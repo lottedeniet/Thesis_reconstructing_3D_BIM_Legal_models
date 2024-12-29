@@ -211,8 +211,11 @@ for perceel in perceel_list:
     if translation_version == 'centroid':
         bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
         print('bgt_centroid', bgt_centroid)
-        building_centroid = pand.geometry.centroid.iloc[0]
-        print('building_centroid', building_centroid)
+        if len(pand.geometry.centroid) > 1:
+            building_centroid = pand.geometry.centroid.iloc[0]
+        else:
+            building_centroid = pand.geometry.centroid
+
 
         translation_vector = (
             bgt_centroid.x - building_centroid.x,
