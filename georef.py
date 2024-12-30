@@ -3,10 +3,11 @@ import json
 from operator import contains
 from urllib import response
 
+import numpy as np
 import requests
 import geopandas as gp
 import pandas as pd
-from shapely.affinity import translate
+from shapely.affinity import translate, scale
 from shapely.geometry import shape
 from shapely import geometry as geom
 import re
@@ -30,8 +31,10 @@ if not os.path.exists(out_path):
     os.mkdir(out_path)
     print('output directory created')
 
-scale_version = 'text'
+# options: text, area
+scale_version = 'area'
 rotation_version = 'none'
+# options: bbox, centroid
 translation_version = 'centroid'
 
 
@@ -171,8 +174,8 @@ for perceel in perceel_list:
         if scale_version == 'text':
             scale_text = verdiepingsaanduiding[-1]
             scale_factor = get_scale_text(scale_text)
-        else:
-            None
+        if scale_version == 'area':
+            scale_factor = 1
 
         pointDict = {}
         for pt in data['points'].keys():
@@ -207,6 +210,37 @@ for perceel in perceel_list:
 
     pand = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
 
+    if scale_version == 'area':
+        area_ref = pand['geometry_y'].area
+        pand['area_pand'] = pand.geometry.area
+        # bounds = pand.geometry.bounds
+        # width = bounds['maxx'] - bounds['minx']
+        # height = bounds['maxy'] - bounds['miny']
+
+
+        def scale_geom(row):
+            # Check if there are any geometry columns in the row
+            geometry_columns = [col for col in row.index if 'geometry' in col.lower()]
+
+            # Iterate over each geometry column and apply scaling
+            for col in geometry_columns:
+                geometry = row[col]
+                if geometry is not None:
+                    # Scale the geometry and update the column with the scaled geometry
+                    row[col] = scale(geometry,
+                                     xfact=row.scale_factor,
+                                     yfact=row.scale_factor,
+                                     origin=(0, 0))  # Use (0, 0) as the origin for scaling
+            return row
+
+
+        # Apply the function to all rows in the DataFrame
+        pand['scale_factor'] = np.sqrt(area_ref / pand['area_pand'])  # Define the scale factor
+        pand = pand.apply(scale_geom, axis=1)
+
+    else:
+        pass
+
     # allign centroids -> translation
     if translation_version == 'centroid':
         bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
@@ -215,18 +249,29 @@ for perceel in perceel_list:
             building_centroid = pand.geometry.centroid.iloc[0]
         else:
             building_centroid = pand.geometry.centroid
+        translation_vector = (bgt_centroid.x - building_centroid.x,
+            bgt_centroid.y - building_centroid.y)
+    if translation_version == 'bbox':
+        if len(perceel_bgt.geometry.bounds) > 1:
+            bgt_bbox = perceel_bgt.geometry.bounds.iloc[0]
+        else:
+            bgt_bbox = perceel_bgt.geometry.bounds
+        if len(pand.geometry.bounds)> 1:
+            building_bbox = pand.geometry.bounds.iloc[0]
+        else:
+            building_bbox = pand.geometry.bounds
+        translation_vector = (bgt_bbox.minx - building_bbox.minx,
+                              bgt_bbox.miny - building_bbox.miny)
 
 
-        translation_vector = (
-            bgt_centroid.x - building_centroid.x,
-            bgt_centroid.y - building_centroid.y
-        )
-        print(pand.info())
-        pand['aligned_geometry'] = translate_polygon(pand.geometry, translation_vector)
-        pand['vec_pand_rooms'] = translate_polygon(pand['geometry_x_y'], translation_vector)
-        pand['bgt_geometry'] = translate_polygon(pand['geometry_y'], translation_vector)
-    else:
-        None
+    print(pand.info())
+    pand.set_geometry('geometry_x_y')
+    pand['aligned_geometry'] = translate_polygon(pand.geometry, translation_vector)
+    pand['vec_pand_rooms'] = translate_polygon(pand['geometry_x_y'], translation_vector)
+    pand['bgt_geometry'] = translate_polygon(pand['geometry_y'], translation_vector)
+    pand['outline'] = translate_polygon(pand['geometry'], translation_vector)
+    pand['roomsxy'] = translate_polygon(pand['geometry_x_y'], translation_vector)
+
 
     pand = gp.GeoDataFrame(pand, geometry='geometry_x_x', crs='EPSG:28992')
     all_panden.append(pand)
@@ -235,19 +280,27 @@ panden = pd.concat(all_panden)
 panden = panden.set_crs('epsg:28992', allow_override=True)
 
 # outline BG pand
-panden = panden.set_geometry('aligned_geometry')
-panden.plot()
-plt.show()
-panden1 = panden['aligned_geometry']
-panden1.to_file("test_scale_centroid.shp", driver="ESRI Shapefile")
+# panden = panden.set_geometry('aligned_geometry')
+# panden.plot()
+# plt.show()
+# panden1 = panden['aligned_geometry']
+# name = "test_" + translation_version + "_"+ scale_version + ".shp"
+# panden1.to_file(name, driver="ESRI Shapefile")
+
 # georeferenced pand
-panden = panden.set_geometry('bgt_geometry')
-panden.to_csv('panden.csv', index=False)
+# panden = panden.set_geometry('bgt_geometry')
+# panden.to_csv('panden.csv', index=False)
 # panden2 = panden['bgt_geometry']
 # panden2.to_file("bgt_geometry2", driver="ESRI Shapefile")
-panden.plot()
-plt.show()
+# panden.plot()
+# plt.show()
 
 # separate_pand = panden.groupby(['bgt_lokaal_id']).first()
-panden.to_csv('separate_pand.csv', index=True)
+# panden.to_csv('separate_pand.csv', index=True)
+#
 
+panden.set_geometry('aligned_geometry', crs='EPSG:28992')
+panden2 = panden['aligned_geometry']
+panden2.to_file("aligned2.shp", driver="ESRI Shapefile")
+
+#they're sort of correct, but double and where are the rooms
