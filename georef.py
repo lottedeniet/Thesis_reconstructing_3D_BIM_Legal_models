@@ -7,7 +7,7 @@ import numpy as np
 import requests
 import geopandas as gp
 import pandas as pd
-from shapely.affinity import translate, scale
+from shapely.affinity import translate, scale, rotate
 from shapely.geometry import shape
 from shapely import geometry as geom
 import re
@@ -29,14 +29,15 @@ pand_geom = gp.read_file(pand_geom_path)
 
 if not os.path.exists(out_path):
     os.mkdir(out_path)
-    print('output directory created')
 
 # options: text, area
-scale_version = 'area'
-rotation_version = 'none'
+scale_version = 'text'
+rotate_version = 'normal'
 # options: bbox, centroid
 translation_version = 'centroid'
 
+
+rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
 
 def calcScale(bbxobj, pix):
     # get the length of the xbbox and ybbox of the kad perceel
@@ -91,7 +92,6 @@ def calculate_centroid(pointDict):
     n = len(pointDict)
     centroid_x = sum(coord[0] for coord in pointDict.values()) / n
     centroid_y = sum(coord[1] for coord in pointDict.values()) / n
-    print('centroid_x vect', centroid_x)
     return centroid_x, centroid_y
 
 
@@ -113,7 +113,6 @@ for perceel in perceel_list:
         kadpercelen.KAD_GEM.eq(parts[1]) & kadpercelen.SECTIE.eq(parts[2]) & kadpercelen.PERCEELNUM.eq(
             int(parts[3]))]
     bp = selection_perceel.centroid
-    print('centroid_x perceel', bp.x.iloc[0])
 
     # bounds => envelope per perceel
     bbx = selection_perceel.geometry.bounds
@@ -210,6 +209,75 @@ for perceel in perceel_list:
 
     pand = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
 
+    if rotate_version == "normal":
+        from shapely.geometry import Polygon, MultiPolygon
+        from shapely.affinity import rotate
+        import numpy as np
+
+
+        def calculate_normal_vector(geometry):
+            """
+            Calculate a normal vector for a polygon or multipolygon geometry.
+            This function computes the normal based on the first edge of the exterior boundary.
+            """
+
+            if isinstance(geometry, (Polygon, MultiPolygon)):
+                # Use the exterior boundary of the geometry
+                if isinstance(geometry, MultiPolygon):
+                    # Use the largest polygon (assuming it's the main one)
+                    geometry = max(geometry.geoms, key=lambda g: g.area)
+
+                exterior_coords = list(geometry.exterior.coords)
+                if len(exterior_coords) > 1:
+                    # Take the first edge of the polygon
+                    x1, y1 = exterior_coords[0]
+                    x2, y2 = exterior_coords[1]
+                    # Compute the direction vector
+                    dx, dy = x2 - x1, y2 - y1
+                    # Compute the normal vector: (-dy, dx) is perpendicular
+                    normal_vector = (-dy, dx)
+                    # Normalize the vector
+                    length = np.hypot(normal_vector[0], normal_vector[1])
+                    return (normal_vector[0] / length, normal_vector[1] / length) if length != 0 else (0, 0)
+            return (0, 0)
+
+
+        def calculate_rotation_angle(normal1, normal2):
+            """
+            Calculate the rotation angle (in degrees) to align normal1 with normal2.
+            """
+            dot_product = np.dot(normal1, normal2)
+            determinant = np.cross(normal1, normal2)
+            angle = np.arctan2(determinant, dot_product)  # Angle in radians
+            return np.degrees(angle)
+
+
+        def rotate_geom(row):
+            # Get the geometries
+            pand_outline = row.get('geometry', None)
+            geometry_y = row.get('geometry_y', None)
+            geometry_columns = ['pand_outline', 'geometry', 'geometry_x_y']
+            print(pand_outline)
+            print(geometry_y)
+            if pand_outline is not None and geometry_y is not None:
+                # Calculate the normal vectors
+                normal_pand_outline = calculate_normal_vector(pand_outline)
+                print(normal_pand_outline)
+                normal_geometry_y = calculate_normal_vector(geometry_y)
+
+                # Calculate the rotation angle
+                angle = calculate_rotation_angle(normal_pand_outline, normal_geometry_y)
+                print(angle)
+                # Rotate all specified geometry columns
+                for col in geometry_columns:
+                    geometry = row.get(col, None)
+                    if geometry is not None:
+                        row[col] = rotate(geometry, angle, origin='centroid')
+            return row
+
+
+        pand = pand.apply(rotate_geom, axis=1)
+
     if scale_version == 'area':
         area_ref = pand['geometry_y'].area
         pand['area_pand'] = pand.geometry.area
@@ -244,7 +312,6 @@ for perceel in perceel_list:
     # allign centroids -> translation
     if translation_version == 'centroid':
         bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
-        print('bgt_centroid', bgt_centroid)
         if len(pand.geometry.centroid) > 1:
             building_centroid = pand.geometry.centroid.iloc[0]
         else:
@@ -264,7 +331,6 @@ for perceel in perceel_list:
                               bgt_bbox.miny - building_bbox.miny)
 
 
-    print(pand.info())
     pand.set_geometry('geometry_x_y')
     pand['aligned_geometry'] = translate_polygon(pand.geometry, translation_vector)
     pand['vec_pand_rooms'] = translate_polygon(pand['geometry_x_y'], translation_vector)
@@ -295,12 +361,12 @@ panden = panden.set_crs('epsg:28992', allow_override=True)
 # panden.plot()
 # plt.show()
 
-# separate_pand = panden.groupby(['bgt_lokaal_id']).first()
-# panden.to_csv('separate_pand.csv', index=True)
+separate_pand = panden.groupby(['perceel_id']).first()
+separate_pand.to_csv('separate_pand.csv', index=True)
 #
 
 panden.set_geometry('aligned_geometry', crs='EPSG:28992')
 panden2 = panden['aligned_geometry']
-panden2.to_file("aligned2.shp", driver="ESRI Shapefile")
+panden2.to_file("aligned_rot_arrow.shp", driver="ESRI Shapefile")
 
 #they're sort of correct, but double and where are the rooms
