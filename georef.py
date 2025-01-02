@@ -52,10 +52,6 @@ def addValue(cat, clist, room):
     except:
         clist.append('')
 
-def translate_polygon(geometries, translation_vector):
-    dx, dy = translation_vector
-    return geometries.apply(lambda geom: translate(geom, xoff=dx, yoff=dy))
-
 
 # new functions
 def get_scale_text(text):
@@ -133,29 +129,19 @@ def rotate_geom_arrow(row):
     return row
 
 
-def scale_geom(row):
-    # Check if there are any geometry columns in the row
-    geometry_columns = [col for col in row.index if 'geometry' in col.lower()]
+def translate_polygon(geometries, translation_vector):
+    dx, dy = translation_vector
+    return geometries.apply(lambda geom: translate(geom, xoff=dx, yoff=dy))
 
-    # Iterate over each geometry column and apply scaling
-    for col in geometry_columns:
-        geometry = row[col]
-        if geometry is not None:
-            # Scale the geometry and update the column with the scaled geometry
-            row[col] = scale(geometry,
-                             xfact=row.scale_factor,
-                             yfact=row.scale_factor,
-                             origin=(0, 0))  # Use (0, 0) as the origin for scaling
-    return row
 
 
 
 # start code
 
 # options: text, area
-scale_version = 'text'
+scale_version = 'area'
 # options: normal, arrow
-rotate_version = 'normal'
+rotate_version = 'arrow'
 # options: bbox, centroid
 translation_version = 'centroid'
 rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
@@ -277,13 +263,28 @@ for perceel in perceel_list:
         pand = pand.apply(rotate_geom_arrow, axis=1)
 
     if scale_version == 'area':
-        # doesnt work
-        area_ref = pand.geometry.area
-        pand['area_pand'] = pand.geometry.area
-        pand['scale_factor'] = np.sqrt(area_ref / pand['area_pand'])
-        pand = pand.apply(scale_geom, axis=1)
+        pand.set_geometry('geom_bgt', inplace=True)
+        if len(pand.geometry.area) > 1:
+            reference_area = pand.geometry.area.iloc[0]
+        else:
+            reference_area = pand.geometry.area
+        pand.set_geometry('geom_akte_bg', inplace=True)
+        if len(pand.geometry.area) > 1:
+            akte_area = pand.geometry.area.iloc[0]
+        else:
+            akte_area = pand.geometry.area
 
+        scale_factor = np.sqrt(reference_area / akte_area)
+        pand['geom_akte_bg_scaled'] = pand['geom_akte_bg'].apply(
+            lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
+        pand['geom_akte_all_scaled'] = pand['geom_akte_all'].apply(
+            lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
 
+        pand.set_geometry('geom_akte_bg_scaled', inplace=True)
+        pand['geom_akte_bg'] = pand['geom_akte_bg_scaled']
+        pand['geom_akte_all'] = pand['geom_akte_all_scaled']
+        pand.set_geometry('geom_akte_bg', inplace=True)
+        pand.drop(columns=['geom_akte_bg_scaled', 'geom_akte_all_scaled'], axis=1, inplace=True)
 
     # allign centroids -> translation
     if translation_version == 'centroid':
@@ -295,6 +296,7 @@ for perceel in perceel_list:
 
         translation_vector = (  bgt_centroid.x - building_centroid.x,
                                 bgt_centroid.y - building_centroid.y)
+
     if translation_version == 'bbox':
         if len(perceel_bgt.geometry.bounds) > 1:
             bgt_bbox = perceel_bgt.geometry.bounds.iloc[0]
