@@ -70,38 +70,45 @@ def get_scale_text(text):
 def calculate_normal_vector(geometry):
     """
     Calculate a normal vector for a polygon or multipolygon geometry.
-    This function computes the normal based on the first edge of the exterior boundary.
     """
+    if geometry.is_empty:
+        return (0.0, 0.0)  # Return a default vector for empty geometries
 
-    if isinstance(geometry, (Polygon, MultiPolygon)):
-        # Use the exterior boundary of the geometry
-        if isinstance(geometry, MultiPolygon):
-            # Use the largest polygon (assuming it's the main one)
-            geometry = max(geometry.geoms, key=lambda g: g.area)
+    # Handle MultiPolygon or Polygon
+    if geometry.geom_type == 'MultiPolygon':
+        geometry = max(geometry.geoms, key=lambda g: g.area)  # Largest polygon
 
-        exterior_coords = list(geometry.exterior.coords)
-        if len(exterior_coords) > 1:
-            # Take the first edge of the polygon
-            x1, y1 = exterior_coords[0]
-            x2, y2 = exterior_coords[1]
-            # Compute the direction vector
-            dx, dy = x2 - x1, y2 - y1
-            # Compute the normal vector: (-dy, dx) is perpendicular
-            normal_vector = (-dy, dx)
-            # Normalize the vector
-            length = np.hypot(normal_vector[0], normal_vector[1])
-            return (normal_vector[0] / length, normal_vector[1] / length) if length != 0 else (0, 0)
-    return (0, 0)
+    exterior_coords = list(geometry.exterior.coords)
+    if len(exterior_coords) > 1:
+        # Compute normal vector from the first edge
+        x1, y1 = exterior_coords[0]
+        x2, y2 = exterior_coords[1]
+        dx, dy = x2 - x1, y2 - y1
+        normal_vector = (-dy, dx)
+        length = np.hypot(normal_vector[0], normal_vector[1])
+        return (normal_vector[0] / length, normal_vector[1] / length) if length != 0 else (0.0, 0.0)
+    return (0.0, 0.0)  # Default vector for degenerate geometries
 
 
 def calculate_rotation_angle(normal1, normal2):
     """
-    Calculate the rotation angle (in degrees) to align normal1 with normal2.
+    Calculate the rotation angle between two normal vectors.
     """
+    # Ensure inputs are numpy arrays
+    normal1 = np.array(normal1)
+    normal2 = np.array(normal2)
+
+    # Calculate the dot product and magnitude of the vectors
     dot_product = np.dot(normal1, normal2)
-    determinant = np.cross(normal1, normal2)
-    angle = np.arctan2(determinant, dot_product)  # Angle in radians
-    return np.degrees(angle)
+    magnitude1 = np.linalg.norm(normal1)
+    magnitude2 = np.linalg.norm(normal2)
+
+    # Compute the cosine of the angle
+    cos_angle = dot_product / (magnitude1 * magnitude2)
+    cos_angle = np.clip(cos_angle, -1.0, 1.0)  # Clip to handle numerical issues
+
+    # Return the rotation angle in radians
+    return np.degrees(np.arccos(cos_angle))
 
 
 def rotate_geom_normal(row):
@@ -139,7 +146,7 @@ def translate_polygon(geometries, translation_vector):
 # start code
 
 # options: text, area
-scale_version = 'area'
+scale_version = 'text'
 # options: normal, arrow
 rotate_version = 'arrow'
 # options: bbox, centroid
@@ -255,8 +262,37 @@ for perceel in perceel_list:
     pand.set_geometry('geom_akte_bg', inplace=True)
 
     if rotate_version == "normal":
-        # doesnt work
-        pand = pand.apply(rotate_geom_normal, axis=1)
+
+        if not pand.empty:
+            pand = pand[pand['geom_akte_bg'].notnull() & pand['geom_bgt'].notnull()]
+
+            pand['normal_akte_bg'] = pand['geom_akte_bg'].apply(calculate_normal_vector)
+            pand['normal_bgt'] = pand['geom_bgt'].apply(calculate_normal_vector)
+
+            # Calculate rotation angles and filter negligible rotations
+            pand['rotation_angle'] = pand.apply(
+                lambda row: calculate_rotation_angle(row['normal_akte_bg'], row['normal_bgt']),
+                axis=1
+            )
+
+            pand = pand[pand['rotation_angle'].abs() > 0.01]  # Skip negligible rotations (e.g., < 0.01 radians)
+
+            # Apply rotation
+            pand['geom_akte_bg_rotated'] = pand.apply(
+                lambda row: rotate(row['geom_akte_bg'], row['rotation_angle']),
+                axis=1
+            )
+            pand['geom_akte_all_rotated'] = pand.apply(
+                lambda row: rotate(row['geom_akte_all'], row['rotation_angle']),
+                axis=1
+            )
+
+            # Update geometries
+            pand.set_geometry('geom_akte_bg_rotated', inplace=True)
+            pand['geom_akte_bg'] = pand['geom_akte_bg_rotated']
+            pand['geom_akte_all'] = pand['geom_akte_all_rotated']
+            pand.drop(columns=['geom_akte_bg_rotated', 'geom_akte_all_rotated'], axis=1, inplace=True)
+
 
 
     if rotate_version == 'arrow':
@@ -320,8 +356,8 @@ for perceel in perceel_list:
 
 panden = pd.concat(all_panden)
 
-separate_pand = panden.groupby(['perceel_id']).first()
-separate_pand.to_csv('separate_pand.csv', index=True)
+
+panden.to_csv('separate_pand.csv', index=True)
 
 
 panden.set_geometry('aligned_geometry', crs='EPSG:28992')
