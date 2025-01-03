@@ -247,19 +247,22 @@ for perceel in perceel_list:
     aktes_rooms['perceel_id'] = aktes_rooms['perceel_id'].astype(str)
 
     # join rooms with perceel through perceel ID
-    rooms_perceel = aktes_rooms.merge(perceel_bgt, on='perceel_id', how='left')
+    pand_data = aktes_rooms.merge(perceel_bgt, on='perceel_id', how='left')
     # geometry_x = the akte geometry
-    pand_data = rooms_perceel.set_geometry('geometry_x')
+    pand_data.rename(columns={'geometry_x': 'geom_akte_all', "geometry_y": "geom_bgt"}, inplace=True)
+    pand_data = pand_data.set_geometry('geom_akte_all')
 
     # create a dataframe for the panden with the polygon outline of the BG
     rooms_bg = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
-    pand_outline = rooms_bg.groupby('bgt_lokaal_id')['geometry_x'].apply(lambda g: g.geometry.values.union_all())
-    pand = gp.GeoDataFrame(pand_outline, geometry=pand_outline,crs=28992)
+    pand_outline = rooms_bg.groupby('bgt_lokaal_id').agg({
+        'geom_akte_all': lambda g: g.unary_union, 'perceel_id': 'first', 'bag_pnd': 'first', 'geom_bgt': 'first' })
+    pand = gp.GeoDataFrame(pand_outline,geometry='geom_akte_all',crs=28992)
+    pand.rename(columns={'geom_akte_all': 'geom_akte_bg'}, inplace=True)
 
-    pand = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
-    pand.rename(columns={'geometry': 'geom_akte_bg', 'geometry_x_y': 'geom_akte_all', 'geometry_y': "geom_bgt"}, inplace=True)
-    pand.drop('geometry_x_x', axis=1, inplace=True)
-    pand.set_geometry('geom_akte_bg', inplace=True)
+
+    # join the dataframes
+    combined_df = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
+    combined_df.drop(columns=['geom_bgt_y'], inplace=True)
 
     if rotate_version == "normal":
 
@@ -275,14 +278,14 @@ for perceel in perceel_list:
                 axis=1
             )
 
-            pand = pand[pand['rotation_angle'].abs() > 0.01]  # Skip negligible rotations (e.g., < 0.01 radians)
 
             # Apply rotation
             pand['geom_akte_bg_rotated'] = pand.apply(
                 lambda row: rotate(row['geom_akte_bg'], row['rotation_angle']),
                 axis=1
             )
-            pand['geom_akte_all_rotated'] = pand.apply(
+            # needs fixing
+            pand_data['geom_akte_all_rotated'] = pand_data.apply(
                 lambda row: rotate(row['geom_akte_all'], row['rotation_angle']),
                 axis=1
             )
@@ -290,9 +293,9 @@ for perceel in perceel_list:
             # Update geometries
             pand.set_geometry('geom_akte_bg_rotated', inplace=True)
             pand['geom_akte_bg'] = pand['geom_akte_bg_rotated']
-            pand['geom_akte_all'] = pand['geom_akte_all_rotated']
-            pand.drop(columns=['geom_akte_bg_rotated', 'geom_akte_all_rotated'], axis=1, inplace=True)
-
+            pand_data['geom_akte_all'] = pand_data['geom_akte_all_rotated']
+            pand.drop(columns=['geom_akte_bg_rotated'], axis=1, inplace=True)
+            pand_data.drop(columns=['geom_akte_all_rotated'], axis=1, inplace=True)
 
 
     if rotate_version == 'arrow':
@@ -313,15 +316,16 @@ for perceel in perceel_list:
         scale_factor = np.sqrt(reference_area / akte_area)
         pand['geom_akte_bg_scaled'] = pand['geom_akte_bg'].apply(
             lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
-        pand['geom_akte_all_scaled'] = pand['geom_akte_all'].apply(
+        pand_data['geom_akte_all_scaled'] = pand_data['geom_akte_all'].apply(
             lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
 
         pand.set_geometry('geom_akte_bg_scaled', inplace=True)
         pand['geom_akte_bg'] = pand['geom_akte_bg_scaled']
-        pand['geom_akte_all'] = pand['geom_akte_all_scaled']
-        pand.set_geometry('geom_akte_bg', inplace=True)
-        pand.drop(columns=['geom_akte_bg_scaled', 'geom_akte_all_scaled'], axis=1, inplace=True)
+        pand_data['geom_akte_all'] = pand_data['geom_akte_all_scaled']
+        pand.drop(columns=['geom_akte_bg_scaled'], axis=1, inplace=True)
+        pand_data.drop(columns=['geom_akte_all_scaled'], axis=1, inplace=True)
 
+    pand = gp.GeoDataFrame(pand, geometry='geom_akte_bg')
     # allign centroids -> translation
     if translation_version == 'centroid':
         bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
@@ -348,7 +352,8 @@ for perceel in perceel_list:
 
     pand.set_geometry('geom_akte_bg')
     pand['aligned_geometry'] = translate_polygon(pand.geometry, translation_vector)
-    pand['geom_akte_all'] = translate_polygon(pand['geom_akte_all'], translation_vector)
+    # still need to translate the rooms too
+    # pand_data['geom_akte_all'] = translate_polygon(pand_data['geom_akte_all'], translation_vector)
     pand['geom_bgt'] = translate_polygon(pand['geom_bgt'], translation_vector)
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
@@ -361,5 +366,5 @@ panden.to_csv('separate_pand.csv', index=True)
 
 
 panden.set_geometry('aligned_geometry', crs='EPSG:28992')
-panden2 = panden.drop(columns=['geom_akte_bg', 'geom_akte_all', 'geom_bgt'])
+panden2 = panden.drop(columns=['geom_akte_bg', 'geom_bgt'])
 panden2.to_file(rotate_version + "_" + translation_version + "_" + scale_version + "2.shp", driver="ESRI Shapefile")
