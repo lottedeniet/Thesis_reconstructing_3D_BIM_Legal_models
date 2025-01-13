@@ -12,6 +12,7 @@ import re
 from shapely.geometry import Polygon, MultiPolygon
 import math
 
+from shapely.geometry.linestring import LineString
 
 kad_path = r'C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
@@ -79,6 +80,29 @@ def rotate_geom_arrow(row):
         row[col] = rotate(geometry, angle, origin='centroid')
     return row
 
+def rotate_geom_azimuth(group):
+    geometry_columns = [col for col in group.columns if 'geom_akte_bg' in col]
+    ref_columns = [col for col in group.columns if 'bgt_outline' in col]
+
+    for index, row in group.iterrows():
+        for col in ref_columns:
+            geometry_ref = row[col]
+            area = geometry_ref.minimum_rotated_rectangle
+            line = area.boundary
+
+            coords = [c for c in line.coords]
+            segments = [LineString([a, b]) for a, b in zip(coords, coords[1:])]
+            longest_segment = max(segments, key=lambda x: x.length)
+            p1, p2 = [c for c in longest_segment.coords]
+            angle = math.degrees(math.atan2(p2[1] - p1[1], p2[0] - p1[0])) + 90
+            print("angle", angle)
+
+            for col in geometry_columns:
+                geometry_pol = row[col]
+                group.at[index, col] = rotate(geometry_pol, angle, origin='centroid')
+
+    return group
+
 
 def translate_polygon(geometries, translation_vector):
     dx, dy = translation_vector
@@ -102,10 +126,10 @@ def goodness_of_fit(polygon, reference):
 
 # options: text, area
 scale_version = 'area'
-# options: normal, arrow
-rotate_version = 'arrow'
+# options: azimuth, arrow
+rotate_version = 'azimuth'
 # options: bbox, centroid
-translation_version = 'centroid'
+translation_version = 'bbox'
 rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
 
 
@@ -219,14 +243,22 @@ for perceel in perceel_list:
     combined_df = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
     combined_df.drop(columns=['geom_bgt_y'], inplace=True)
 
-
+    outline = pand.groupby('perceel_id').agg({'geom_bgt': lambda g: g.unary_union})
+    bgt_outline = gp.GeoDataFrame(outline, geometry='geom_bgt', crs=28992)
+    bgt_outline = bgt_outline.rename_geometry('bgt_outline')
+    pand = pand.merge(bgt_outline, on='perceel_id', how='left')
 
     pand = gp.GeoDataFrame(pand, geometry='geom_akte_bg')
 
     if rotate_version == 'arrow':
         pand = pand.apply(rotate_geom_arrow, axis=1)
+    if rotate_version == 'azimuth':
+        pand_grouped = pand.groupby('perceel_id').apply(rotate_geom_azimuth)
+        pand = pand.merge(pand_grouped, on='bag_pnd', how='left')
+        pand = pand.loc[:, ~pand.columns.str.endswith('_x')]
+        pand.columns = pand.columns.str.replace('_y', '', regex=False)
 
-
+    print(pand.info())
     if scale_version == 'area':
         pand.set_geometry('geom_bgt', inplace=True)
         if len(pand.geometry.area) > 1:
@@ -286,12 +318,8 @@ for perceel in perceel_list:
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
 
-    outline = pand.groupby('perceel_id').agg({
-        'geom_bgt': lambda g: g.unary_union})
-    bgt_outline = gp.GeoDataFrame(outline, geometry='geom_bgt', crs=28992)
-    bgt_outline = bgt_outline.rename_geometry('bgt_outline')
-    pand = pand.merge(bgt_outline, on='perceel_id', how='left')
-    print(pand['bgt_outline'].head(20))
+
+
     pand['gof'] = pand.apply(lambda row: goodness_of_fit(row['aligned_geometry'], row['bgt_outline']), axis=1)
 
 
@@ -302,9 +330,23 @@ panden = pd.concat(all_panden)
 
 panden.to_csv('separate_pand.csv', index=True)
 
+import matplotlib.pyplot as plt
+
+# Methods and their average performance
+methods = ['Azimuth', 'Arrow', 'Bbox', 'Centroid', 'Text','Area']
+average_performance = [0.278,  0.288, 0.279, 0.287, 0.252, 0.314]
+colors = ['lightblue', 'lightblue', 'lightgreen', 'lightgreen', 'lightcoral', 'lightcoral']
+
+# Plotting the results
+plt.barh(methods, average_performance, color=colors)
+plt.xlabel('Average Performance')
+plt.title('Average Performance of Methods')
+plt.show()
 
 panden.set_geometry('aligned_geometry', crs='EPSG:28992')
 panden2 = panden.drop(columns=['geom_akte_bg', 'geom_bgt', 'bgt_outline'])
 print(panden2['gof'].sum()/len(panden2))
 panden2.to_file("gof_"+ rotate_version + "_" + translation_version + "_" + scale_version + ".shp", driver="ESRI Shapefile")
 # panden2.to_file( "gof.shp", driver="ESRI Shapefile")
+
+
