@@ -10,6 +10,7 @@ from shapely.geometry import shape
 from shapely import geometry as geom
 import re
 from shapely.geometry import Polygon, MultiPolygon
+import math
 
 
 kad_path = r'C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
@@ -67,63 +68,6 @@ def get_scale_text(text):
         # put something else here
         return 100
 
-def calculate_normal_vector(geometry):
-    """
-    Calculate a normal vector for a polygon or multipolygon geometry.
-    """
-    if geometry.is_empty:
-        return (0.0, 0.0)  # Return a default vector for empty geometries
-
-    # Handle MultiPolygon or Polygon
-    if geometry.geom_type == 'MultiPolygon':
-        geometry = max(geometry.geoms, key=lambda g: g.area)  # Largest polygon
-
-    exterior_coords = list(geometry.exterior.coords)
-    if len(exterior_coords) > 1:
-        # Compute normal vector from the first edge
-        x1, y1 = exterior_coords[0]
-        x2, y2 = exterior_coords[1]
-        dx, dy = x2 - x1, y2 - y1
-        normal_vector = (-dy, dx)
-        length = np.hypot(normal_vector[0], normal_vector[1])
-        return (normal_vector[0] / length, normal_vector[1] / length) if length != 0 else (0.0, 0.0)
-    return (0.0, 0.0)  # Default vector for degenerate geometries
-
-
-def calculate_rotation_angle(normal1, normal2):
-    """
-    Calculate the rotation angle between two normal vectors.
-    """
-    # Ensure inputs are numpy arrays
-    normal1 = np.array(normal1)
-    normal2 = np.array(normal2)
-
-    # Calculate the dot product and magnitude of the vectors
-    dot_product = np.dot(normal1, normal2)
-    magnitude1 = np.linalg.norm(normal1)
-    magnitude2 = np.linalg.norm(normal2)
-
-    # Compute the cosine of the angle
-    cos_angle = dot_product / (magnitude1 * magnitude2)
-    cos_angle = np.clip(cos_angle, -1.0, 1.0)  # Clip to handle numerical issues
-
-    # Return the rotation angle in radians
-    return np.degrees(np.arccos(cos_angle))
-
-
-def rotate_geom_normal(row):
-    pand_outline = row.get('geom_akte_bg')
-    geometry_bgt = row.get('geom_bgt')
-    geometry_columns = ['geom_akte_bg', 'geom_akte_all']
-    normal_pand_outline = calculate_normal_vector(pand_outline)
-    normal_geometry_bgt = calculate_normal_vector(geometry_bgt)
-
-    angle = calculate_rotation_angle(normal_pand_outline, normal_geometry_bgt)
-    for col in geometry_columns:
-        geometry = row.get(col)
-        row[col] = rotate(geometry, angle, origin='centroid')
-    return row
-
 
 def rotate_geom_arrow(row):
     perceel_id = row.get('perceel_id', None)
@@ -141,12 +85,23 @@ def translate_polygon(geometries, translation_vector):
     return geometries.apply(lambda geom: translate(geom, xoff=dx, yoff=dy))
 
 
-
+def goodness_of_fit(polygon, reference):
+    if isinstance(polygon, (Polygon, MultiPolygon)) and isinstance(reference, (Polygon, MultiPolygon)):
+        if polygon.is_empty or reference.is_empty:
+            return 0
+        else:
+            c = polygon.intersection(reference).area
+            a = polygon.area
+            b = reference.area
+            g_o_f = (c / b) * (c / a)
+            return g_o_f
+    else:
+        return 0
 
 # start code
 
 # options: text, area
-scale_version = 'text'
+scale_version = 'area'
 # options: normal, arrow
 rotate_version = 'arrow'
 # options: bbox, centroid
@@ -264,42 +219,13 @@ for perceel in perceel_list:
     combined_df = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='left')
     combined_df.drop(columns=['geom_bgt_y'], inplace=True)
 
-    if rotate_version == "normal":
-
-        if not pand.empty:
-            pand = pand[pand['geom_akte_bg'].notnull() & pand['geom_bgt'].notnull()]
-
-            pand['normal_akte_bg'] = pand['geom_akte_bg'].apply(calculate_normal_vector)
-            pand['normal_bgt'] = pand['geom_bgt'].apply(calculate_normal_vector)
-
-            # Calculate rotation angles and filter negligible rotations
-            pand['rotation_angle'] = pand.apply(
-                lambda row: calculate_rotation_angle(row['normal_akte_bg'], row['normal_bgt']),
-                axis=1
-            )
 
 
-            # Apply rotation
-            pand['geom_akte_bg_rotated'] = pand.apply(
-                lambda row: rotate(row['geom_akte_bg'], row['rotation_angle']),
-                axis=1
-            )
-            # needs fixing
-            pand_data['geom_akte_all_rotated'] = pand_data.apply(
-                lambda row: rotate(row['geom_akte_all'], row['rotation_angle']),
-                axis=1
-            )
-
-            # Update geometries
-            pand.set_geometry('geom_akte_bg_rotated', inplace=True)
-            pand['geom_akte_bg'] = pand['geom_akte_bg_rotated']
-            pand_data['geom_akte_all'] = pand_data['geom_akte_all_rotated']
-            pand.drop(columns=['geom_akte_bg_rotated'], axis=1, inplace=True)
-            pand_data.drop(columns=['geom_akte_all_rotated'], axis=1, inplace=True)
-
+    pand = gp.GeoDataFrame(pand, geometry='geom_akte_bg')
 
     if rotate_version == 'arrow':
         pand = pand.apply(rotate_geom_arrow, axis=1)
+
 
     if scale_version == 'area':
         pand.set_geometry('geom_bgt', inplace=True)
@@ -316,16 +242,18 @@ for perceel in perceel_list:
         scale_factor = np.sqrt(reference_area / akte_area)
         pand['geom_akte_bg_scaled'] = pand['geom_akte_bg'].apply(
             lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
-        pand_data['geom_akte_all_scaled'] = pand_data['geom_akte_all'].apply(
-            lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
+        # pand_data['geom_akte_all_scaled'] = pand_data['geom_akte_all'].apply(
+        #     lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
 
         pand.set_geometry('geom_akte_bg_scaled', inplace=True)
         pand['geom_akte_bg'] = pand['geom_akte_bg_scaled']
-        pand_data['geom_akte_all'] = pand_data['geom_akte_all_scaled']
+        # pand_data['geom_akte_all'] = pand_data['geom_akte_all_scaled']
         pand.drop(columns=['geom_akte_bg_scaled'], axis=1, inplace=True)
-        pand_data.drop(columns=['geom_akte_all_scaled'], axis=1, inplace=True)
+        # pand_data.drop(columns=['geom_akte_all_scaled'], axis=1, inplace=True)
+        pand.set_geometry('geom_akte_bg', inplace=True)
 
-    pand = gp.GeoDataFrame(pand, geometry='geom_akte_bg')
+
+
     # allign centroids -> translation
     if translation_version == 'centroid':
         bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
@@ -354,9 +282,19 @@ for perceel in perceel_list:
     pand['aligned_geometry'] = translate_polygon(pand.geometry, translation_vector)
     # still need to translate the rooms too
     # pand_data['geom_akte_all'] = translate_polygon(pand_data['geom_akte_all'], translation_vector)
-    pand['geom_bgt'] = translate_polygon(pand['geom_bgt'], translation_vector)
+    pand = gp.GeoDataFrame(pand, geometry='geom_bgt', crs='EPSG:28992')
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
+
+    outline = pand.groupby('perceel_id').agg({
+        'geom_bgt': lambda g: g.unary_union})
+    bgt_outline = gp.GeoDataFrame(outline, geometry='geom_bgt', crs=28992)
+    bgt_outline = bgt_outline.rename_geometry('bgt_outline')
+    pand = pand.merge(bgt_outline, on='perceel_id', how='left')
+    print(pand['bgt_outline'].head(20))
+    pand['gof'] = pand.apply(lambda row: goodness_of_fit(row['aligned_geometry'], row['bgt_outline']), axis=1)
+
+
     all_panden.append(pand)
 
 panden = pd.concat(all_panden)
@@ -366,5 +304,7 @@ panden.to_csv('separate_pand.csv', index=True)
 
 
 panden.set_geometry('aligned_geometry', crs='EPSG:28992')
-panden2 = panden.drop(columns=['geom_akte_bg', 'geom_bgt'])
-panden2.to_file(rotate_version + "_" + translation_version + "_" + scale_version + "2.shp", driver="ESRI Shapefile")
+panden2 = panden.drop(columns=['geom_akte_bg', 'geom_bgt', 'bgt_outline'])
+print(panden2['gof'].sum()/len(panden2))
+panden2.to_file("gof_"+ rotate_version + "_" + translation_version + "_" + scale_version + ".shp", driver="ESRI Shapefile")
+# panden2.to_file( "gof.shp", driver="ESRI Shapefile")
