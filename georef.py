@@ -11,6 +11,7 @@ from shapely import geometry as geom
 import re
 from shapely.geometry import Polygon, MultiPolygon
 import math
+import time
 
 from shapely.geometry.linestring import LineString
 
@@ -95,7 +96,6 @@ def rotate_geom_azimuth(group):
             longest_segment = max(segments, key=lambda x: x.length)
             p1, p2 = [c for c in longest_segment.coords]
             angle = math.degrees(math.atan2(p2[1] - p1[1], p2[0] - p1[0])) + 90
-            print("angle", angle)
 
             for col in geometry_columns:
                 geometry_pol = row[col]
@@ -105,7 +105,10 @@ def rotate_geom_azimuth(group):
 
 
 def translate_polygon(geometries, translation_vector):
-    dx, dy = translation_vector
+    if isinstance(translation_vector[0], pd.Series):
+        dx, dy = translation_vector[0].iloc[0], translation_vector[1].iloc[0]  # Extract scalars
+    else:
+        dx, dy = translation_vector
     return geometries.apply(lambda geom: translate(geom, xoff=dx, yoff=dy))
 
 
@@ -122,16 +125,80 @@ def goodness_of_fit(polygon, reference):
     else:
         return 0
 
-# start code
+def compute_hausdorff(polygon, reference):
+    if isinstance(polygon, (Polygon, MultiPolygon)) and isinstance(reference, (Polygon, MultiPolygon)):
+        return polygon.hausdorff_distance(reference)
+    return float('inf')
 
+def grid_search(pand, reference_column, aligned_column, alpha, angle_step=0.5, scale_step=0.05, scale_range=(0.9, 1.1)):
+    """
+    Performs a grid search over rotation angles to optimize Goodness of Fit (GoF).
+
+    Parameters:
+    - pand: DataFrame with reference and aligned geometries
+    - reference_column: Column name containing the reference geometries
+    - aligned_column: Column name containing the aligned geometries to rotate
+    - angle_step: Step size for the rotation angles (default: 0.5°)
+
+    Returns:
+    - DataFrame with best rotation applied
+    - Best rotation angle
+    - Best GoF score
+    """
+    best_score = -np.inf
+    best_geometries = None
+    best_scale = 1.0
+    angles = np.arange(-180, 180, angle_step)
+    scales = np.arange(scale_range[0], scale_range[1] + scale_step, scale_step)
+
+    for scale_factor in scales:
+        for angle in angles:
+            transformed_geometries = pand[aligned_column].apply(lambda g: rotate(scale(g, xfact=scale_factor, yfact=scale_factor), angle, origin='centroid'))
+            gof_scores = transformed_geometries.apply(lambda g: goodness_of_fit(g, pand[reference_column].iloc[0]))
+            hausdorff_values = transformed_geometries.apply(lambda g: compute_hausdorff(g, pand[reference_column].iloc[0]))
+
+            mean_gof = gof_scores.mean()
+            mean_hausdorff = hausdorff_values.mean()
+
+            score, score_gof, score_haus = combined_score(mean_gof, mean_hausdorff, alpha)
+
+            if score > best_score:
+                best_score = score
+                best_geometries = transformed_geometries
+                best_scale = scale_factor
+
+    # Store the best rotation
+    pand['optimized_geometry'] = best_geometries
+    pand['score_gof'] = score_gof
+    pand['score_haus'] = score_haus
+    pand['score'] = best_score
+    print('Best scale:', best_scale)
+    return pand
+
+
+def combined_score(gof, hausdorff, alpha):
+    """
+    Combine GoF and Hausdorff into a single score.
+    - `alpha` controls the weight:
+        - alpha=0.5 means equal weighting
+        - alpha > 0.5 favors GoF more
+        - alpha < 0.5 favors minimizing Hausdorff more
+    """
+    hausdorff_normalized = 1 / (1 + hausdorff)
+    combined_score = alpha * gof + (1 - alpha) * hausdorff_normalized
+    return combined_score, gof, hausdorff_normalized
+
+
+# start code
+start_time = time.time()
 # options: text, area
 scale_version = 'area'
 # options: azimuth, arrow
 rotate_version = 'azimuth'
 # options: bbox, centroid
-translation_version = 'bbox'
+translation_version = 'centroid'
 rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
-
+alpha = 1
 
 kadpercelen = gp.read_file(kad_path)
 
@@ -179,10 +246,15 @@ for perceel in perceel_list:
 
     # now intersect with the actual geometry bc otherwise its too many polygons
     join_bgt = gp.sjoin(bgt_geom_all, selection_perceel, how='inner', predicate='intersects')
+    join_bgt["overlap_area"] = join_bgt.geometry.intersection(selection_perceel.geometry.iloc[0]).area
+    selection_perceel.plot()
+    join_bgt.plot()
+
+    join_bgt = join_bgt[join_bgt["overlap_area"] >= 2]
+    join_bgt.plot()
 
     perceel_bgt = join_bgt.set_crs('epsg:28992', allow_override=True)
     perceel_bgt = perceel_bgt[['bgt_lokaal_id', 'bag_pnd', 'geometry', 'perceel_id']]
-
     # now get the rooms data
     with open(os.path.join(json_path, f'{perceel}.latest.json')) as f:
         data = json.load(f)
@@ -231,12 +303,14 @@ for perceel in perceel_list:
     pand_data.rename(columns={'geometry_x': 'geom_akte_all', "geometry_y": "geom_bgt"}, inplace=True)
     pand_data = pand_data.set_geometry('geom_akte_all')
 
+
     # create a dataframe for the panden with the polygon outline of the BG
     rooms_bg = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
     pand_outline = rooms_bg.groupby('bgt_lokaal_id').agg({
         'geom_akte_all': lambda g: g.unary_union, 'perceel_id': 'first', 'bag_pnd': 'first', 'geom_bgt': 'first' })
     pand = gp.GeoDataFrame(pand_outline,geometry='geom_akte_all',crs=28992)
     pand.rename(columns={'geom_akte_all': 'geom_akte_bg'}, inplace=True)
+
 
 
     # join the dataframes
@@ -258,9 +332,8 @@ for perceel in perceel_list:
         pand = pand.loc[:, ~pand.columns.str.endswith('_x')]
         pand.columns = pand.columns.str.replace('_y', '', regex=False)
 
-    print(pand.info())
     if scale_version == 'area':
-        pand.set_geometry('geom_bgt', inplace=True)
+        pand.set_geometry('bgt_outline', inplace=True)
         if len(pand.geometry.area) > 1:
             reference_area = pand.geometry.area.iloc[0]
         else:
@@ -271,9 +344,18 @@ for perceel in perceel_list:
         else:
             akte_area = pand.geometry.area
 
+
         scale_factor = np.sqrt(reference_area / akte_area)
+
+        # Extract scalar value from the Series
+        if isinstance(scale_factor, pd.Series):
+            scale_factor_value = scale_factor.iloc[0]  # Extract first element if it's a Series
+        else:
+            scale_factor_value = scale_factor  # Get first value if it's a single-element Series
+
         pand['geom_akte_bg_scaled'] = pand['geom_akte_bg'].apply(
-            lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
+            lambda g: scale(g, xfact=scale_factor_value, yfact=scale_factor_value, origin='centroid'))
+
         # pand_data['geom_akte_all_scaled'] = pand_data['geom_akte_all'].apply(
         #     lambda g: scale(g, xfact=scale_factor, yfact=scale_factor, origin='centroid'))
 
@@ -285,10 +367,9 @@ for perceel in perceel_list:
         pand.set_geometry('geom_akte_bg', inplace=True)
 
 
-
     # allign centroids -> translation
     if translation_version == 'centroid':
-        bgt_centroid = perceel_bgt.geometry.centroid.iloc[0]
+        bgt_centroid = pand.bgt_outline.centroid.iloc[0]
         if len(pand.geometry.centroid) > 1:
             building_centroid = pand.geometry.centroid.iloc[0]
         else:
@@ -298,10 +379,10 @@ for perceel in perceel_list:
                                 bgt_centroid.y - building_centroid.y)
 
     if translation_version == 'bbox':
-        if len(perceel_bgt.geometry.bounds) > 1:
-            bgt_bbox = perceel_bgt.geometry.bounds.iloc[0]
+        if len(pand.bgt_outline.bounds) > 1:
+            bgt_bbox = pand.bgt_outline.bounds.iloc[0]
         else:
-            bgt_bbox = perceel_bgt.geometry.bounds
+            bgt_bbox = pand.bgt_outline.bounds
         if len(pand.geometry.bounds)> 1:
             building_bbox = pand.geometry.bounds.iloc[0]
         else:
@@ -318,35 +399,24 @@ for perceel in perceel_list:
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
 
-
-
-    pand['gof'] = pand.apply(lambda row: goodness_of_fit(row['aligned_geometry'], row['bgt_outline']), axis=1)
-
-
+    pand = grid_search(pand, 'geom_bgt', 'aligned_geometry', alpha)
     all_panden.append(pand)
 
 panden = pd.concat(all_panden)
 
 
-panden.to_csv('separate_pand.csv', index=True)
+# panden.to_csv('separate_pand.csv', index=True)
 
 import matplotlib.pyplot as plt
 
-# Methods and their average performance
-methods = ['Azimuth', 'Arrow', 'Bbox', 'Centroid', 'Text','Area']
-average_performance = [0.278,  0.288, 0.279, 0.287, 0.252, 0.314]
-colors = ['lightblue', 'lightblue', 'lightgreen', 'lightgreen', 'lightcoral', 'lightcoral']
+end_time = time.time()
+print("Executed time: ", end_time - start_time)
 
-# Plotting the results
-plt.barh(methods, average_performance, color=colors)
-plt.xlabel('Average Performance')
-plt.title('Average Performance of Methods')
-plt.show()
-
-panden.set_geometry('aligned_geometry', crs='EPSG:28992')
-panden2 = panden.drop(columns=['geom_akte_bg', 'geom_bgt', 'bgt_outline'])
-print(panden2['gof'].sum()/len(panden2))
-panden2.to_file("gof_"+ rotate_version + "_" + translation_version + "_" + scale_version + ".shp", driver="ESRI Shapefile")
+panden.set_geometry('optimized_geometry', crs='EPSG:28992')
+panden2 = panden.drop(columns=['geom_akte_bg', 'aligned_geometry', 'bgt_outline', 'geom_bgt'])
+print("Average Hausdorff Score: ", panden2['score_haus'].sum()/len(panden2))
+print("Average GoF Score: ", panden2['score_gof'].sum()/len(panden2))
+print("Combined Score: ", panden2['score'].sum()/len(panden2))
+panden2.to_file("optimized_rot_"+ rotate_version + "_" + str(alpha)  + ".shp", driver="ESRI Shapefile")
 # panden2.to_file( "gof.shp", driver="ESRI Shapefile")
-
 
