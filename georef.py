@@ -61,7 +61,7 @@ def get_scale_text(text):
     """
     Get the scale from the text in the deed
     :param text:
-    :return:
+    :return: scale
     """
     match = re.search(r'1:(\d+)', text)
     if match:
@@ -125,29 +125,34 @@ def goodness_of_fit(polygon, reference):
     else:
         return 0
 
-def compute_hausdorff(polygon, reference):
+def calc_hausdorff(polygon, reference):
+    """"
+    Greatest distance between any point in A and the closest point in B
+    """
     if isinstance(polygon, (Polygon, MultiPolygon)) and isinstance(reference, (Polygon, MultiPolygon)):
         return polygon.hausdorff_distance(reference)
     return float('inf')
 
 def grid_search(pand, reference_column, aligned_column, alpha, angle_step=0.5, scale_step=0.05, scale_range=(0.9, 1.1)):
     """
-    Performs a grid search over rotation angles to optimize Goodness of Fit (GoF).
+    Performs a grid search over rotation angles and scales to optimize Goodness of Fit (GoF).
 
     Parameters:
-    - pand: DataFrame with reference and aligned geometries
+    - pand: DataFrame
     - reference_column: Column name containing the reference geometries
     - aligned_column: Column name containing the aligned geometries to rotate
+    - alpha: Ratio of hausdorff vs gof metrics
     - angle_step: Step size for the rotation angles (default: 0.5°)
+    - scale_step: Step size for the scaling factor (default: 0.05)
+    - scale_range: Range of scaling factors (default: (0.9, 1.1))
 
     Returns:
-    - DataFrame with best rotation applied
-    - Best rotation angle
-    - Best GoF score
+    - DataFrame with best transformation applied
     """
     best_score = -np.inf
     best_geometries = None
     best_scale = 1.0
+    best_angle = 0
     angles = np.arange(-180, 180, angle_step)
     scales = np.arange(scale_range[0], scale_range[1] + scale_step, scale_step)
 
@@ -155,7 +160,7 @@ def grid_search(pand, reference_column, aligned_column, alpha, angle_step=0.5, s
         for angle in angles:
             transformed_geometries = pand[aligned_column].apply(lambda g: rotate(scale(g, xfact=scale_factor, yfact=scale_factor), angle, origin='centroid'))
             gof_scores = transformed_geometries.apply(lambda g: goodness_of_fit(g, pand[reference_column].iloc[0]))
-            hausdorff_values = transformed_geometries.apply(lambda g: compute_hausdorff(g, pand[reference_column].iloc[0]))
+            hausdorff_values = transformed_geometries.apply(lambda g: calc_hausdorff(g, pand[reference_column].iloc[0]))
 
             mean_gof = gof_scores.mean()
             mean_hausdorff = hausdorff_values.mean()
@@ -166,13 +171,13 @@ def grid_search(pand, reference_column, aligned_column, alpha, angle_step=0.5, s
                 best_score = score
                 best_geometries = transformed_geometries
                 best_scale = scale_factor
+                best_angle = angle
 
-    # Store the best rotation
     pand['optimized_geometry'] = best_geometries
     pand['score_gof'] = score_gof
     pand['score_haus'] = score_haus
     pand['score'] = best_score
-    print('Best scale:', best_scale)
+    angles_list.append(best_angle)
     return pand
 
 
@@ -197,10 +202,13 @@ scale_version = 'area'
 rotate_version = 'azimuth'
 # options: bbox, centroid
 translation_version = 'centroid'
+rotation_angles2 = [171.3,  180,  -43.5,  78.9,  6.8,  0.0,  121.6, 120,  22.2,7]
 rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
 alpha = 1
+angles_list = []
 
 kadpercelen = gp.read_file(kad_path)
+
 
 perceel_list = []
 # get all the 'Kadastrale aanduidingen' (Gemeente, Sectie, Perceelnr) in the deed files
@@ -208,6 +216,11 @@ for f in files:
     if f.endswith('.json'):
         parts = f.split('.')
         perceel_list.append(parts[0])
+
+for perceel in perceel_list:
+    parts = perceel.split('_')
+    if len(parts) > 4:
+        print(perceel, parts)
 
 all_panden = []
 for perceel in perceel_list:
@@ -399,6 +412,7 @@ for perceel in perceel_list:
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
 
+    # grid search optimization for rotation and scale
     pand = grid_search(pand, 'geom_bgt', 'aligned_geometry', alpha)
     all_panden.append(pand)
 
@@ -410,13 +424,15 @@ panden = pd.concat(all_panden)
 import matplotlib.pyplot as plt
 
 end_time = time.time()
-print("Executed time: ", end_time - start_time)
-
+# print("Executed time: ", end_time - start_time)
+print(angles_list)
 panden.set_geometry('optimized_geometry', crs='EPSG:28992')
 panden2 = panden.drop(columns=['geom_akte_bg', 'aligned_geometry', 'bgt_outline', 'geom_bgt'])
-print("Average Hausdorff Score: ", panden2['score_haus'].sum()/len(panden2))
-print("Average GoF Score: ", panden2['score_gof'].sum()/len(panden2))
-print("Combined Score: ", panden2['score'].sum()/len(panden2))
+# print("Average Hausdorff Score: ", panden2['score_haus'].sum()/len(panden2))
+# print("Average GoF Score: ", panden2['score_gof'].sum()/len(panden2))
+# print("Combined Score: ", panden2['score'].sum()/len(panden2))
 panden2.to_file("optimized_rot_"+ rotate_version + "_" + str(alpha)  + ".shp", driver="ESRI Shapefile")
 # panden2.to_file( "gof.shp", driver="ESRI Shapefile")
+
+
 
