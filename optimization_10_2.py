@@ -17,6 +17,8 @@ from shapely.measurement import hausdorff_distance, frechet_distance
 from shapely.ops import nearest_points
 import itertools
 from joblib import Parallel, delayed
+from scipy.spatial import KDTree
+from skimage.transform import estimate_transform
 
 kad_path = r'C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
@@ -237,241 +239,61 @@ def compute_neighbor_angle(edge, neighbor):
 
 
 
-def find_best_matching_edges(aligned_edges, reference_edges,
+# def find_best_matching_edges(aligned_edges, reference_edges,
+#
+#                              length_threshold=0.05,
+#                              angle_continuity_threshold=1):
+#     """
+#     Finds multiple matching edge pairs between two polygons based on:
+#     - Slope (edge direction)
+#     - Length similarity
+#     - Angle continuity with neighboring edges
+#
+#     Returns:
+#     - List of (aligned_edge, reference_edge, score) tuples.
+#     """
+#     matches = []
+#
+#     for i, a_edge in enumerate(aligned_edges):
+#         angle_a = compute_edge_angle(a_edge)
+#         a_length = np.linalg.norm(np.array(a_edge[1]) - np.array(a_edge[0]))
+#
+#         # Find neighboring edges (next edge in the polygon)
+#         a_neighbor = aligned_edges[(i + 1) % len(aligned_edges)]
+#         angle_a_neighbor = compute_neighbor_angle(a_edge, a_neighbor)
+#
+#         for j, r_edge in enumerate(reference_edges):
+#             angle_r = compute_edge_angle(r_edge)
+#             r_length = np.linalg.norm(np.array(r_edge[1]) - np.array(r_edge[0]))
+#
+#             # **1. Check Slope Difference**
+#             slope_diff = abs(angle_r - angle_a) % 180
+#             if slope_diff > slope_threshold:
+#                 continue
+#
+#             # **2. Check Length Similarity**
+#             length_diff = abs(a_length - r_length) / max(a_length, r_length)
+#             if length_diff > length_threshold:
+#                 continue
+#
+#             # **3. Check Neighbor Angle Similarity**
+#             r_neighbor = reference_edges[(j + 1) % len(reference_edges)]
+#             angle_r_neighbor = compute_neighbor_angle(r_edge, r_neighbor)
+#
+#             angle_diff = abs(angle_r_neighbor - angle_a_neighbor)
+#             if angle_diff > angle_continuity_threshold:
+#                 continue
+#
+#             # **Compute Matching Score (lower is better)**
+#             total_diff = (length_diff * 10)
+#
+#             matches.append((a_edge, r_edge, total_diff))
+#
+#     # Sort matches by best score
+#     matches.sort(key=lambda x: x[2])
+#
+#     return matches[:1]  # Return top 3 matches
 
-                             length_threshold=0.05,
-                             angle_continuity_threshold=1):
-    """
-    Finds multiple matching edge pairs between two polygons based on:
-    - Slope (edge direction)
-    - Length similarity
-    - Angle continuity with neighboring edges
-
-    Returns:
-    - List of (aligned_edge, reference_edge, score) tuples.
-    """
-    matches = []
-
-    for i, a_edge in enumerate(aligned_edges):
-        angle_a = compute_edge_angle(a_edge)
-        a_length = np.linalg.norm(np.array(a_edge[1]) - np.array(a_edge[0]))
-
-        # Find neighboring edges (next edge in the polygon)
-        a_neighbor = aligned_edges[(i + 1) % len(aligned_edges)]
-        angle_a_neighbor = compute_neighbor_angle(a_edge, a_neighbor)
-
-        for j, r_edge in enumerate(reference_edges):
-            angle_r = compute_edge_angle(r_edge)
-            r_length = np.linalg.norm(np.array(r_edge[1]) - np.array(r_edge[0]))
-
-            # **1. Check Slope Difference**
-            # slope_diff = abs(angle_r - angle_a) % 180
-            # if slope_diff > slope_threshold:
-            #     continue
-
-            # **2. Check Length Similarity**
-            length_diff = abs(a_length - r_length) / max(a_length, r_length)
-            if length_diff > length_threshold:
-                continue
-
-            # # **3. Check Neighbor Angle Similarity**
-            # r_neighbor = reference_edges[(j + 1) % len(reference_edges)]
-            # angle_r_neighbor = compute_neighbor_angle(r_edge, r_neighbor)
-            #
-            # angle_diff = abs(angle_r_neighbor - angle_a_neighbor)
-            # if angle_diff > angle_continuity_threshold:
-            #     continue
-
-            # **Compute Matching Score (lower is better)**
-            total_diff = (length_diff * 10)
-
-            matches.append((a_edge, r_edge, total_diff))
-
-    # Sort matches by best score
-    matches.sort(key=lambda x: x[2])
-
-    return matches[:1]  # Return top 3 matches
-
-
-# import shapely.affinity as affinity
-# import shapely.geometry as sg
-#
-#
-#
-#
-#
-# def compute_turning_function(edges):
-#     angles = []
-#     total_length = 0
-#     lengths = []
-#
-#     for i in range(len(edges)):
-#         edge = edges[i]
-#         next_edge = edges[(i + 1) % len(edges)]
-#
-#         vec1 = np.array(edge[1]) - np.array(edge[0])
-#         vec2 = np.array(next_edge[1]) - np.array(next_edge[0])
-#
-#         angle = np.arctan2(vec2[1], vec2[0]) - np.arctan2(vec1[1], vec1[0])
-#         angle = np.degrees(angle) % 360
-#         if angle > 180:
-#             angle -= 360  # Normalize to [-180, 180]
-#
-#         length = np.linalg.norm(vec1)
-#         total_length += length
-#         angles.append(angle)
-#         lengths.append(total_length)
-#
-#     return np.array(lengths) / total_length, np.cumsum(angles)
-#
-#
-# def resample_turning_function(lengths, angles, target_length):
-#     target_x = np.linspace(0, 1, target_length)
-#     resampled_angles = np.interp(target_x, lengths, angles)
-#     return resampled_angles
-#
-#
-# def edge_match_transform(pand, reference_column, aligned_column, bgt_outline):
-#     transformed_geometries = []
-#
-#     for idx, row in pand.iterrows():
-#         aligned_geom = row[aligned_column]
-#         reference_geom = row[bgt_outline]
-#
-#         if not isinstance(aligned_geom, Polygon) or not isinstance(reference_geom, Polygon):
-#             transformed_geometries.append(None)
-#             continue
-#
-#         aligned_edges = list(zip(aligned_geom.exterior.coords[:-1], aligned_geom.exterior.coords[1:]))
-#         reference_edges = list(zip(reference_geom.exterior.coords[:-1], reference_geom.exterior.coords[1:]))
-#
-#         ref_lengths, ref_turning = compute_turning_function(reference_edges)
-#         aligned_lengths, aligned_turning = compute_turning_function(aligned_edges)
-#
-#         target_length = max(len(ref_turning), len(aligned_turning))
-#         ref_turning_resampled = resample_turning_function(ref_lengths, ref_turning, target_length)
-#         aligned_turning_resampled = resample_turning_function(aligned_lengths, aligned_turning, target_length)
-#
-#         best_score = float('inf')
-#         best_transform = None
-#
-#         for angle in np.arange(0, 360, 1):  # Try rotating in 1-degree steps
-#             rotated_geom = rotate(aligned_geom, angle, origin='centroid')
-#             rotated_edges = list(zip(rotated_geom.exterior.coords[:-1], rotated_geom.exterior.coords[1:]))
-#             _, rotated_turning = compute_turning_function(rotated_edges)
-#             rotated_turning_resampled = resample_turning_function(aligned_lengths, rotated_turning, target_length)
-#
-#             score = np.sum((rotated_turning_resampled - ref_turning_resampled) ** 2)
-#
-#             if score < best_score:
-#                 best_score = score
-#                 best_transform = rotated_geom
-#
-#         transformed_geometries.append(best_transform)
-#
-#     pand["optimized_geometry"] = transformed_geometries
-#     return pand
-#
-#
-# def match_turning_function(aligned_geom, aligned_turning, ref_turning):
-#     """Finds the best transformation to match the turning function."""
-#     best_score = float("inf")
-#     best_transform = None
-#
-#     for angle in np.linspace(-180, 180, 360):  # Try rotations in 1-degree increments
-#         rotated = affinity.rotate(aligned_geom, angle, origin='centroid')
-#         rotated_turning = compute_turning_function(rotated)
-#         score = np.sum((rotated_turning - ref_turning) ** 2)
-#
-#         if score < best_score:
-#             best_score = score
-#             best_transform = {'rotation': angle}
-#
-#     return best_transform
-#
-#
-# def apply_transformation(geom, transform):
-#     """Applies the best transformation to the geometry."""
-#     return affinity.rotate(geom, transform['rotation'], origin='centroid')
-
-
-def edge_match_transform(pand, reference_column, aligned_column, bgt_outline):
-    """
-    Performs edge matching on each polygon in `pand`, aligning `aligned_column` to `reference_column`.
-
-    Parameters:
-    - pand (GeoDataFrame): Data containing polygons to align.
-    - reference_column (str): Column name for reference polygons.
-    - aligned_column (str): Column name for polygons to be aligned.
-    - apply_scaling (bool): Apply scaling (default=True).
-    - apply_rotation (bool): Apply rotation (default=True).
-    - apply_translation (bool): Apply translation (default=True).
-
-    Returns:
-    - Updated GeoDataFrame with `optimized_geometry` column storing transformed geometries.
-    """
-    optimized_geometries = []
-
-    for idx, row in pand.iterrows():
-        aligned_poly = row[aligned_column]
-        reference_poly = row[bgt_outline]
-
-        # Skip if geometries are missing
-        if aligned_poly is None or reference_poly is None:
-            optimized_geometries.append(None)
-            continue
-
-        aligned_edges = get_polygon_edges(aligned_poly)
-        reference_edges = get_polygon_edges(reference_poly)
-
-        best_matches = find_best_matching_edges(aligned_edges, reference_edges)
-
-        if not best_matches:
-            # Use grid search if no matches found
-            geometries = grid_search(pand, reference_column, aligned_column, bgt_outline, alpha=0.2, buffer=1,
-                                     angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
-                                     translation_step=0.2, max_translation=1)
-            optimized_geometries.append(geometries[0])
-        else:
-            translations = []
-            rotations = []
-            scales = []
-
-            for best_aligned_edge, best_reference_edge, _ in best_matches:
-                # Compute translation
-                translation_x = best_reference_edge[0][0] - best_aligned_edge[0][0]
-                translation_y = best_reference_edge[0][1] - best_aligned_edge[0][1]
-                translations.append((translation_x, translation_y))
-
-                # Compute rotation
-                a_vec = np.array(best_aligned_edge[1]) - np.array(best_aligned_edge[0])
-                r_vec = np.array(best_reference_edge[1]) - np.array(best_reference_edge[0])
-                angle_a = np.degrees(np.arctan2(a_vec[1], a_vec[0]))
-                angle_r = np.degrees(np.arctan2(r_vec[1], r_vec[0]))
-                rotations.append(angle_r - angle_a)
-
-                # Compute scaling
-                aligned_length = np.linalg.norm(a_vec)
-                reference_length = np.linalg.norm(r_vec)
-                scales.append(reference_length / aligned_length if aligned_length > 0 else 1)
-
-            # **Apply Averaged Transformation**
-            avg_translation = np.mean(translations, axis=0)
-            avg_rotation = np.mean(rotations)
-            avg_scale = np.mean(scales)
-
-            # Apply transformations
-            aligned_poly = translate(aligned_poly, xoff=avg_translation[0], yoff=avg_translation[1])
-            aligned_poly = rotate(aligned_poly,  avg_rotation,
-                                  origin=best_matches[0][1][0])  # Rotate around first ref point
-            aligned_poly = scale(aligned_poly, xfact=avg_scale, yfact=avg_scale, origin=best_matches[0][1][0])
-
-            optimized_geometries.append(aligned_poly)
-
-    # Store transformed geometries in the GeoDataFrame
-    print(optimized_geometries)
-    pand['optimized_geometry'] = optimized_geometries
-    return pand
 
 
 
@@ -580,194 +402,11 @@ def grid_search(pand, reference_column, aligned_column, bgt_outline, alpha,
     pand['translation_x'] = best_params[4][0] if best_params else None
     pand['translation_y'] = best_params[4][1] if best_params else None
 
-    if best_geometries is not None:
-        best_geometries = [refine_alignment(pand["bgt_outline"].iloc[i], g)
-                           for i, g in enumerate(best_geometries)]
+    # if best_geometries is not None:
+    #     best_geometries = [refine_alignment(pand["bgt_outline"].iloc[i], g)
+    #                        for i, g in enumerate(best_geometries)]
     pand["optimized_geometry"] = best_geometries
     return pand
-
-
-from scipy.spatial import KDTree
-from shapely.geometry import Point
-import numpy as np
-
-
-def compute_vertex_angles(geometry):
-    """Compute vertex angles for Polygons and MultiPolygons."""
-    angles = []
-
-    if isinstance(geometry, MultiPolygon):
-        for poly in geometry.geoms:
-            angles.extend(compute_vertex_angles(poly))  # Recursively compute angles for each polygon
-    elif isinstance(geometry, Polygon):
-        coords = np.array(geometry.exterior.coords)
-
-        for i in range(1, len(coords) - 1):  # Skip first and last as they repeat
-            v1 = coords[i - 1] - coords[i]
-            v2 = coords[i + 1] - coords[i]
-
-            dot_product = np.dot(v1, v2)
-            norm_product = np.linalg.norm(v1) * np.linalg.norm(v2)
-
-            angle = np.arccos(np.clip(dot_product / norm_product, -1, 1))  # Clamp for numerical stability
-            angles.append((tuple(coords[i]), np.degrees(angle)))  # Convert to degrees
-
-    return angles
-
-
-
-import numpy as np
-from shapely.geometry import Polygon
-from scipy.spatial import KDTree
-import cv2
-
-import numpy as np
-from shapely.geometry import Polygon
-from scipy.spatial import KDTree
-from skimage.transform import estimate_transform
-
-
-def is_almost_collinear(points, tolerance=5):
-    """Check if three points are almost collinear using the area of the triangle they form."""
-    if len(points) < 3:
-        return True  # Not enough points
-
-    p1, p2, p3 = points[:3]
-    area = abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0)
-
-    return area < tolerance  # If area is very small, points are nearly collinear
-
-
-def find_best_anchors(ref_vertices, aligned_vertices, distance_threshold, angle_threshold):
-    """Find well-matching anchor points that are not nearly collinear."""
-    ref_tree = KDTree([v[0] for v in ref_vertices])
-    matched_aligned = []
-    matched_ref = []
-
-    for v, angle in aligned_vertices:
-        dist, idx = ref_tree.query(v, k=1)
-        ref_angle = ref_vertices[idx][1]
-
-        if dist < distance_threshold and abs(ref_angle - angle) < angle_threshold:
-            matched_aligned.append(v)
-            matched_ref.append(ref_vertices[idx][0])
-
-    if len(matched_aligned) < 3:
-        return None  # Not enough matches
-
-    # Ensure selected points are not collinear
-    for i in range(len(matched_aligned) - 2):
-        if not is_almost_collinear([matched_aligned[i], matched_aligned[i + 1], matched_aligned[i + 2]]):
-            return np.array(matched_aligned[i:i + 3]), np.array(matched_ref[i:i + 3])
-
-    return None  # No good non-collinear set found
-
-
-def rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref, reference_geom):
-    """Compute a rigid transformation and apply it to the polygon."""
-    if len(matched_aligned) < 3:
-        return aligned_geom  # Not enough anchor points
-
-    # Estimate rigid transformation (similarity: rotation, uniform scale, translation)
-    transform = estimate_transform('similarity', np.array(matched_aligned), np.array(matched_ref))
-    transformed_coords = transform(np.array(aligned_geom.exterior.coords))
-    transformed_polygon = Polygon(transformed_coords[:, :2])
-    return transformed_polygon
-
-
-def refine_alignment(reference_geom, aligned_geom, distance_threshold=0.5, angle_threshold=1, max_scale=1.2,
-                     max_translation=4):
-    """Refine alignment by finding best anchor points and applying a rigid transformation."""
-    # if reference_geom.geom_type != "Polygon" or aligned_geom.geom_type != "Polygon":
-    #     return aligned_geom  # Skip MultiPolygons
-
-    ref_vertices = compute_vertex_angles(reference_geom)
-    aligned_vertices = compute_vertex_angles(aligned_geom)
-
-    anchors = find_best_anchors(ref_vertices, aligned_vertices, distance_threshold, angle_threshold)
-
-    if anchors is None:
-        return aligned_geom  # Not enough good matches
-
-    matched_aligned, matched_ref = anchors
-
-    return rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref, reference_geom, max_scale,
-                                   max_translation)
-
-
-# def refine_alignment(reference_geom, aligned_geom, distance_threshold=2, angle_threshold=1, visualize=True):
-#     """Align vertices within distance and angle constraints, with optional visualization."""
-#
-#     # Skip MultiPolygons
-#     if reference_geom.geom_type == "MultiPolygon" or aligned_geom.geom_type == "MultiPolygon":
-#         print("Skipping MultiPolygons...")
-#         return aligned_geom
-#
-#     ref_vertices = compute_vertex_angles(reference_geom)
-#     aligned_vertices = compute_vertex_angles(aligned_geom)
-#
-#     adjusted_coords = []
-#     snap_lines = []  # Store lines for visualization
-#
-#     for v, angle in aligned_vertices:
-#         # Find closest reference vertex manually
-#         closest_dist = float('inf')
-#         closest_vertex = None
-#         closest_angle = None
-#
-#         for ref_v, ref_angle in ref_vertices:
-#             dist = np.linalg.norm(np.array(v) - np.array(ref_v))  # Euclidean distance
-#
-#             if dist < closest_dist:
-#                 closest_dist = dist
-#                 closest_vertex = ref_v
-#                 closest_angle = ref_angle
-#
-#         # Check if closest vertex is within distance and angle thresholds
-#         if closest_dist < distance_threshold and abs(closest_angle - angle) < angle_threshold:
-#             adjusted_coords.append(closest_vertex)  # Snap to reference vertex
-#             snap_lines.append((v, closest_vertex))  # Store snap line
-#         else:
-#             adjusted_coords.append(v)  # Keep original vertex
-#
-#     refined_polygon = Polygon(adjusted_coords)
-#
-#     if visualize:
-#         plot_alignment(reference_geom, aligned_geom, refined_polygon, snap_lines)
-#
-#     return refined_polygon  # Return refined geometry
-#
-#
-# def plot_alignment(reference_geom, aligned_geom, refined_geom, snap_lines):
-#     """Visualize reference, aligned, and adjusted geometries."""
-#     fig, ax = plt.subplots(figsize=(6, 6))
-#
-#     def plot_polygon(polygon, color, label, marker='o'):
-#         """Helper function to plot polygon with vertices."""
-#         if not polygon or not polygon.is_valid:
-#             return  # Skip invalid polygons
-#
-#         x, y = zip(*polygon.exterior.coords)
-#         ax.plot(x, y, color=color, linestyle='-', alpha=0.5, label=label)
-#         ax.scatter(x, y, color=color, s=40, edgecolor='k', marker=marker)  # Mark vertices
-#
-#     # Plot original reference polygon (blue)
-#     plot_polygon(reference_geom, color='blue', label='Reference Polygon', marker='s')
-#
-#     # Plot aligned polygon before refinement (red)
-#     plot_polygon(aligned_geom, color='red', label='Aligned Polygon', marker='x')
-#
-#     # Plot refined polygon after snapping (green)
-#     plot_polygon(refined_geom, color='green', label='Refined Polygon', marker='o')
-#
-#     # Draw lines between snapped points
-#     for v1, v2 in snap_lines:
-#         ax.plot([v1[0], v2[0]], [v1[1], v2[1]], 'k--', alpha=0.7)  # Dashed line for snapping
-#
-#     ax.legend()
-#     ax.set_title("Polygon Vertex Alignment")
-#     plt.show()
-
 
 def combined_score(gof, hausdorff, alpha):
     """
@@ -794,6 +433,189 @@ def get_edges(geometry):
         for polygon in geometry.geoms:
             edges.extend([polygon.exterior.coords[i:i + 2] for i in range(len(polygon.exterior.coords) - 1)])
     return edges
+
+
+
+def compute_vertex_angles(geometry):
+    """Compute vertex angles for Polygons and MultiPolygons."""
+    angles = []
+
+    if isinstance(geometry, MultiPolygon):
+        for poly in geometry.geoms:
+            angles.extend(compute_vertex_angles(poly))  # Recursively compute angles for each polygon
+    elif isinstance(geometry, Polygon):
+        coords = np.array(geometry.exterior.coords)
+
+        for i in range(1, len(coords) - 1):  # Skip first and last as they repeat
+            v1 = coords[i - 1] - coords[i]
+            v2 = coords[i + 1] - coords[i]
+
+            dot_product = np.dot(v1, v2)
+            norm_product = np.linalg.norm(v1) * np.linalg.norm(v2)
+
+            angle = np.arccos(np.clip(dot_product / norm_product, -1, 1))  # Clamp for numerical stability
+            angles.append((tuple(coords[i]), np.degrees(angle)))  # Convert to degrees
+
+    return angles
+
+
+def is_almost_collinear(points, tolerance=5):
+    """Check if three points are almost collinear using the area of the triangle they form."""
+    if len(points) < 3:
+        return True  # Not enough points
+
+    p1, p2, p3 = points[:3]
+    area = abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0)
+
+    return area < tolerance  # If area is very small, points are nearly collinear
+
+
+# def find_best_anchors(ref_vertices, aligned_vertices, distance_threshold, angle_threshold):
+#     """Find well-matching anchor points that are not nearly collinear."""
+#     ref_tree = KDTree([v[0] for v in ref_vertices])
+#     matched_aligned = []
+#     matched_ref = []
+#
+#     for v, angle in aligned_vertices:
+#         dist, idx = ref_tree.query(v, k=1)
+#         ref_angle = ref_vertices[idx][1]
+#
+#         if dist < distance_threshold and abs(ref_angle - angle) < angle_threshold:
+#             matched_aligned.append(v)
+#             matched_ref.append(ref_vertices[idx][0])
+#
+#     if len(matched_aligned) < 3:
+#         return None  # Not enough matches
+#
+#     # Ensure selected points are not collinear
+#     for i in range(len(matched_aligned) - 2):
+#         if not is_almost_collinear([matched_aligned[i], matched_aligned[i + 1], matched_aligned[i + 2]]):
+#             return np.array(matched_aligned[i:i + 3]), np.array(matched_ref[i:i + 3])
+#
+#     return None  # No good non-collinear set found
+#
+#
+#def refine_alignment(reference_geom, aligned_geom, distance_threshold=1, angle_threshold=5):
+#     """Refine alignment by filtering collinear points, finding best anchor points, and applying a rigid transformation."""
+#
+#     # Step 1: Remove collinear points first
+#     reference_geom = remove_collinear_vertices(reference_geom)
+#     aligned_geom = remove_collinear_vertices(aligned_geom)
+#
+#     # Step 2: Compute vertex angles
+#     ref_vertices = compute_vertex_angles(reference_geom)
+#     aligned_vertices = compute_vertex_angles(aligned_geom)
+#
+#     # Step 3: Find best matching anchor points
+#     anchors = find_best_anchors(ref_vertices, aligned_vertices, distance_threshold, angle_threshold)
+#
+#     if anchors is None:
+#         return aligned_geom  # Not enough good matches
+#
+#     matched_aligned, matched_ref = anchors
+#
+#     # Step 4: Apply transformation (now supports MultiPolygons!)
+#     return rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref)
+#
+#
+
+
+def rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref):
+    """Compute a rigid transformation and apply it to the polygon or MultiPolygon."""
+
+    # estimate  transformation: rotation, scale, translation
+    transform = estimate_transform('similarity', np.array(matched_aligned), np.array(matched_ref))
+
+    # apply transformation to the akte polygon
+    def transform_polygon(polygon):
+        transformed_coords = transform(np.array(polygon.exterior.coords))
+        transformed_polygon = Polygon(transformed_coords[:, :2])
+        return transformed_polygon if transformed_polygon.is_valid else polygon
+
+    if aligned_geom.geom_type == "Polygon":
+        return transform_polygon(aligned_geom)
+
+    elif aligned_geom.geom_type == "MultiPolygon":
+        transformed_polygons = [transform_polygon(poly) for poly in aligned_geom.geoms]
+        return MultiPolygon([poly for poly in transformed_polygons if poly.is_valid])
+
+    return aligned_geom
+
+
+def remove_collinear_vertices(polygon, tolerance=0.01):
+    """Remove nearly collinear points from a polygon using Shapely's simplify()."""
+    simplified_polygon = polygon.simplify(tolerance, preserve_topology=True)
+    return simplified_polygon if simplified_polygon.is_valid else polygon
+
+def compute_edges_with_angles(geom):
+    """Compute midpoints, angles, and lengths of edges for a Polygon or MultiPolygon."""
+    edges = []
+
+    if isinstance(geom, MultiPolygon):
+        polygons = list(geom.geoms)
+    else:
+        polygons = [geom]
+
+    for polygon in polygons:
+        coords = list(polygon.exterior.coords)
+
+        # get the midpoint, angle and length of each e
+        for i in range(len(coords) - 1):
+            p1, p2 = np.array(coords[i]), np.array(coords[i + 1])
+            midpoint = (p1 + p2) / 2
+            angle = np.arctan2(p2[1] - p1[1], p2[0] - p1[0])
+            length = np.linalg.norm(p2 - p1)
+            edges.append((midpoint, angle, length))
+
+    return edges
+
+
+def find_best_edge_anchors(ref_edges, aligned_edges, distance_threshold, angle_threshold, length_threshold=0.2):
+    """Find edge anchor points"""
+    ref_tree = KDTree([e[0] for e in ref_edges])
+    matched_aligned = []
+    matched_ref = []
+
+    for midpoint, angle, length in aligned_edges:
+        dist, idx = ref_tree.query(midpoint, k=1)
+        ref_midpoint, ref_angle, ref_length = ref_edges[idx]
+        print("angle ", abs(ref_angle - angle))
+        if (dist < distance_threshold and
+            abs(ref_angle - angle) < angle_threshold and
+            abs(ref_length - length) / ref_length < length_threshold):
+            matched_aligned.append(midpoint)
+            matched_ref.append(ref_midpoint)
+
+    if len(matched_aligned) < 3:
+        return None
+
+    # make sure the matched edges are not collinear
+    for i in range(len(matched_aligned) - 2):
+        if not is_almost_collinear([matched_aligned[i], matched_aligned[i + 1], matched_aligned[i + 2]]):
+            return np.array(matched_aligned[i:i + 3]), np.array(matched_ref[i:i + 3])
+
+    return None
+
+
+def refine_alignment(reference_geom, aligned_geom, distance_threshold=3, angle_threshold=3):
+    """Refine alignment by finding best anchor edges and applying a rigid transformation."""
+    reference_geom = remove_collinear_vertices(reference_geom)
+    aligned_geom = remove_collinear_vertices(aligned_geom)
+
+    ref_edges = compute_edges_with_angles(reference_geom)
+    aligned_edges = compute_edges_with_angles(aligned_geom)
+
+    anchors = find_best_edge_anchors(ref_edges, aligned_edges, distance_threshold, angle_threshold)
+
+    if anchors is None:
+        return aligned_geom
+
+    matched_aligned, matched_ref = anchors
+
+    return rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref)
+
+
+
 
 
 
@@ -828,62 +650,88 @@ for perceel in perceel_list:
 
     # If there are multiple parcels (parts[4] and beyond)
     if len(parts) > 4:
-        perceel_id = str(parts[1]) + str(parts[2]) + ''.join(parts[3:])
-        # Group parcels based on their KAD_GEM and SECTIE and union their geometries
+        perceel_id_full = str(parts[1]) + str(parts[2]) + ''.join(parts[3:])
         perceel_ids = []
-        all_geometries = []
         all_bgt_lokaal_ids = []
         all_bag_pnds = []
+
+        # Store percelen geometries to compute the total bbox
+        perceel_geometries = []
 
         for i in range(3, len(parts), 1):
             perceel_id = str(parts[1]) + str(parts[2]) + str(parts[i])
             perceel_ids.append(perceel_id)
             print(perceel_id)
+
             selection_perceel = kadpercelen[
-                kadpercelen.KAD_GEM.eq(parts[1]) & kadpercelen.SECTIE.eq(parts[2]) & kadpercelen.PERCEELNUM.eq(
-                    int(parts[i]))]
-            bbx = selection_perceel.geometry.bounds
-            bbox = f'{int(bbx.minx.iloc[0])},{int(bbx.miny.iloc[0])},{int(bbx.maxx.iloc[0])},{int(bbx.maxy.iloc[0])}'
-            selection_perceel['perceel_id'] = perceel_id
-            selection_perceel['perceel_id'] = selection_perceel['perceel_id'].astype(str)
+                (kadpercelen.KAD_GEM == parts[1]) &
+                (kadpercelen.SECTIE == parts[2]) &
+                (kadpercelen.PERCEELNUM == int(parts[i]))
+                ]
+            print("selection_perceel", selection_perceel)
 
-            params = {'bbox': bbox, 'bbox-crs': 'http://www.opengis.net/def/crs/EPSG/0/28992',
-                      'crs': 'http://www.opengis.net/def/crs/EPSG/0/28992'}
-            response = requests.get(api_bgt, params=params)
-            response_json = response.json()
+            perceel_geometries.append(selection_perceel.geometry.iloc[0])  # Store for bbox calculation
 
-            features = response_json.get('features', [])
-            bgt_data = []
-            for feature in features:
-                properties = feature.get('properties', {})
-                geometry = feature.get('geometry', {})
-                lokaal_id = properties.get('lokaal_id')
-                bag_pnd = properties.get('bag_pnd', None)
-                coordinates = geometry.get('coordinates', None)
-                bgt_data.append({'bgt_lokaal_id': lokaal_id, 'bag_pnd': bag_pnd, 'geometry': coordinates})
-                all_bgt_lokaal_ids.append(lokaal_id)
-                all_bag_pnds.append(bag_pnd)
+        # Compute total bounding box from all selected percelen
+        total_bounds = gp.GeoSeries(perceel_geometries).total_bounds
+        bbox = f'{int(total_bounds[0])},{int(total_bounds[1])},{int(total_bounds[2])},{int(total_bounds[3])}'
 
-            for item in bgt_data:
-                item['geometry'] = shape({'type': 'MultiPolygon', 'coordinates': item['geometry']})
+        print(f"Total bounding box: {bbox}")
 
-            bgt_geom_all_temp = gp.GeoDataFrame(bgt_data, geometry='geometry', crs=28992)
-            all_geometries.append(bgt_geom_all_temp)
+        # Make a single API request for the entire bbox
+        params = {'bbox': bbox, 'bbox-crs': 'http://www.opengis.net/def/crs/EPSG/0/28992',
+                  'crs': 'http://www.opengis.net/def/crs/EPSG/0/28992'}
+        response = requests.get(api_bgt, params=params)
+        response_json = response.json()
 
-        # After looping through all parcels, union the geometries
-        if len(all_geometries) > 1:
-            union_geom = all_geometries[0].unary_union
-        else:
-            union_geom = all_geometries[0].geometry.iloc[0]
+        features = response_json.get('features', [])
+        bgt_data = []
+        for feature in features:
+            properties = feature.get('properties', {})
+            geometry = feature.get('geometry', {})
+            lokaal_id = properties.get('lokaal_id')
+            bag_pnd = properties.get('bag_pnd', None)
+            coordinates = geometry.get('coordinates', None)
+            bgt_data.append({'bgt_lokaal_id': lokaal_id, 'bag_pnd': bag_pnd, 'geometry': coordinates})
+            all_bgt_lokaal_ids.append(lokaal_id)
+            all_bag_pnds.append(bag_pnd)
 
-        # Create the final GeoDataFrame for the unioned geometry
-        combined_perceel_id = '_'.join(perceel_ids)
-        bgt_geom_all = gp.GeoDataFrame(
-            [{'perceel_id': perceel_id,
-              'bgt_lokaal_id': ', '.join(set(all_bgt_lokaal_ids)),
-              'bag_pnd': ', '.join(set(all_bag_pnds)),
-              'geometry': union_geom}],
-            geometry='geometry', crs=28992)
+        for item in bgt_data:
+            item['geometry'] = shape({'type': 'MultiPolygon', 'coordinates': item['geometry']})
+
+        bgt_geom_all_temp = gp.GeoDataFrame(bgt_data, geometry='geometry', crs=28992)
+
+        # Combine all perceel geometries into a single MultiPolygon for filtering
+        perceel_union = gp.GeoSeries(perceel_geometries).unary_union
+        selection_perceel = gp.GeoDataFrame({'geometry': [perceel_union]}, crs=28992)
+
+        # Intersect before storing the geometry
+        join_bgt = gp.sjoin(bgt_geom_all_temp, selection_perceel, how='inner', predicate='intersects')
+        join_bgt["overlap_area"] = join_bgt.geometry.intersection(perceel_union).area
+
+        # Apply filtering before storing geometries
+        join_bgt = join_bgt[join_bgt["overlap_area"] >= 10]
+
+        # Union only the filtered geometries
+        if not join_bgt.empty:
+            union_geom = join_bgt.unary_union
+
+            # Create final GeoDataFrame
+            bgt_geom_all = gp.GeoDataFrame(
+                [{'perceel_id': perceel_id_full,
+                  'bgt_lokaal_id': ', '.join(set(all_bgt_lokaal_ids)),
+                  'bag_pnd': ', '.join(set(all_bag_pnds)),
+                  'geometry': union_geom}],
+                geometry='geometry', crs=28992)
+
+
+            bgt_geom_all.to_csv(os.path.join("werkmap", 'join_bgt_multi.csv'), index=True)
+
+        perceel_bgt = bgt_geom_all.set_crs('epsg:28992', allow_override=True)
+        perceel_bgt.to_csv(os.path.join("werkmap", 'perceel_bgt.csv'), index=True)
+        perceel_bgt = perceel_bgt[['bgt_lokaal_id', 'bag_pnd', 'geometry', 'perceel_id']]
+        perceel_bgt.plot()
+        plt.show()
 
 
     else:
@@ -918,18 +766,20 @@ for perceel in perceel_list:
 
         bgt_geom_all = gp.GeoDataFrame(bgt_data, geometry='geometry', crs=28992)
 
-    # now intersect with the actual geometry bc otherwise its too many polygons
-    join_bgt = gp.sjoin(bgt_geom_all, selection_perceel, how='inner', predicate='intersects')
-    join_bgt["overlap_area"] = join_bgt.geometry.intersection(selection_perceel.geometry.iloc[0]).area
 
-    join_bgt = join_bgt[join_bgt["overlap_area"] >= 2]
+        # now intersect with the actual geometry bc otherwise its too many polygons
+        join_bgt = gp.sjoin(bgt_geom_all, selection_perceel, how='inner', predicate='intersects')
+        join_bgt["overlap_area"] = join_bgt.geometry.intersection(selection_perceel.geometry.iloc[0]).area
+        join_bgt = join_bgt[join_bgt["overlap_area"] >= 2]
 
-    perceel_bgt = join_bgt.set_crs('epsg:28992', allow_override=True)
-    if 'perceel_id_left' in join_bgt.columns and 'perceel_id_right' in join_bgt.columns:
-        if (join_bgt['perceel_id_left'] == join_bgt['perceel_id_right']).all():
-            perceel_bgt = join_bgt.drop(columns=['perceel_id_right']).rename(columns={'perceel_id_left': 'perceel_id'})
+        perceel_bgt = join_bgt.set_crs('epsg:28992', allow_override=True)
+        if 'perceel_id_left' in join_bgt.columns and 'perceel_id_right' in join_bgt.columns:
+            if (join_bgt['perceel_id_left'] == join_bgt['perceel_id_right']).all():
+                perceel_bgt = join_bgt.drop(columns=['perceel_id_right']).rename(columns={'perceel_id_left': 'perceel_id'})
 
-    perceel_bgt = perceel_bgt[['bgt_lokaal_id', 'bag_pnd', 'geometry', 'perceel_id']]
+        perceel_bgt = perceel_bgt[['bgt_lokaal_id', 'bag_pnd', 'geometry', 'perceel_id']]
+
+
     # now get the rooms data
     with open(os.path.join(json_path, f'{perceel}.latest.json')) as f:
         data = json.load(f)
@@ -967,7 +817,10 @@ for perceel in perceel_list:
         geometry=geometry, crs="EPSG:28992",
         columns=['room', 'verdieping', 'appartement', 'ruimte', 'attachment'])
 
-    aktes_rooms['perceel_id'] = str(parts[1]) + str(parts[2]) + str(parts[3])
+    if len(parts) > 4:
+        aktes_rooms['perceel_id'] = str(parts[1]) + str(parts[2]) + ''.join(parts[3:])
+    else:
+        aktes_rooms['perceel_id'] = str(parts[1]) + str(parts[2]) + str(parts[3])
     aktes_rooms['perceel_id'] = aktes_rooms['perceel_id'].astype(str)
 
     # join rooms with perceel through perceel ID
@@ -975,14 +828,14 @@ for perceel in perceel_list:
     # geometry_x = the akte geometry
     pand_data.rename(columns={'geometry_x': 'geom_akte_all', "geometry_y": "geom_bgt"}, inplace=True)
     pand_data = pand_data.set_geometry('geom_akte_all')
-
+    pand_data.to_csv(os.path.join("werkmap", 'pand_data.csv'), index=True)
 
     # create a dataframe for the panden with the polygon outline of the BG
     rooms_bg = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
     pand_outline = rooms_bg.groupby('bgt_lokaal_id').agg({
         'geom_akte_all': lambda g: g.unary_union, 'perceel_id': 'first', 'bag_pnd': 'first', 'geom_bgt': 'first' })
     pand = gp.GeoDataFrame(pand_outline,geometry='geom_akte_all',crs=28992)
-
+    pand.to_csv(os.path.join("werkmap", 'pand.csv'), index=True)
     pand.rename(columns={'geom_akte_all': 'geom_akte_bg'}, inplace=True)
 
     # join the dataframes
@@ -1050,12 +903,10 @@ for perceel in perceel_list:
     # still need to translate the rooms too
     # pand_data['geom_akte_all'] = translate_polygon(pand_data['geom_akte_all'], translation_vector)
     pand = gp.GeoDataFrame(pand, geometry='geom_bgt', crs='EPSG:28992')
-    pand.plot()
-    plt.show()
+
 
     pand = gp.GeoDataFrame(pand, geometry='aligned_geometry', crs='EPSG:28992')
-    pand.plot()
-    plt.show()
+
     # grid search optimization for rotation and scale
     pand = grid_search(pand, 'geom_akte_bg', "aligned_geometry", "bgt_outline", alpha=0.2, buffer=1,
                                      angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
@@ -1070,6 +921,7 @@ for perceel in perceel_list:
     #
     # # Store back in DataFrame
     # pand.loc[0, 'optimized_geometry'] = transformed_geom
+    pand.set_geometry('bgt_outline', inplace=True)
 
     pand = gp.GeoDataFrame(pand, geometry='optimized_geometry', crs='EPSG:28992')
 
@@ -1095,7 +947,7 @@ panden2 = panden.drop(columns=['geom_akte_bg', 'bgt_outline', 'geom_bgt', 'align
 os.makedirs("werkmap", exist_ok=True)
 
 # Save the file in the "werkmap" folder
-panden2.to_file(os.path.join("werkmap", f"snap_test_othermet_rigid05.shp"), driver="ESRI Shapefile")
+panden2.to_file(os.path.join("werkmap", f"test_multiperceel_norefine.shp"), driver="ESRI Shapefile")
 
 # panden2.to_file( "gof.shp", driver="ESRI Shapefile")
 
