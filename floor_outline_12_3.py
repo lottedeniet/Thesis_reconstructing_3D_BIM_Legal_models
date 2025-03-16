@@ -79,7 +79,10 @@ floor_mapping = {
     "zevende": 7,
     "achtste": 8,
     "negende": 9,
-    "tiende": 10
+    "tiende": 10,
+    "1e": 1,
+    "2e": 2,
+    "3e": 3
 }
 
 
@@ -978,9 +981,22 @@ for perceel in perceel_list:
 
     pand_data = gp.GeoDataFrame(pand_data, geometry='optimized_rooms', crs='EPSG:28992')
     pand_data.to_csv(os.path.join("werkmap", 'pand_data_test.csv'), index=True)
-    ground_floor = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
+    # ground_floor = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
 
-    pand_data = grid_search(pand_data, 'optimized_rooms', ground_floor['optimized_rooms'], pand_data, 'aligned_rooms', good_fit, rooms=True, alpha=0.2)
+    pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
+    ground_floor_data = pand_data[pand_data['floor_index'] == 0]
+    ground_floor_data.plot()
+    plt.show()
+    ground_floor_outline = ground_floor_data.geometry.unary_union
+    floors = pand_data.groupby('verdieping')
+    for floor, floor_data in floors:
+        floor_data.plot()
+        plt.show()
+        floor_outline = floor_data.geometry.unary_union
+
+        similarity_score = shape_similarity_score(ground_floor_outline, floor_outline)
+
+        print("similarity score", similarity_score)
     all_panden_rooms.append(pand_data)
 
 panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
@@ -991,7 +1007,7 @@ print("Executed time: ", end_time - start_time)
 
 
 # Apply floor mapping
-panden_rooms['floor_index'] = panden_rooms['verdieping'].apply(map_floor)
+
 panden_rooms['optimized_rooms_3d'] = panden_rooms.apply(
     lambda row: extrude_to_3d(row['optimized_rooms'], floor_height=3, floor_index=row['floor_index']),
     axis=1)
