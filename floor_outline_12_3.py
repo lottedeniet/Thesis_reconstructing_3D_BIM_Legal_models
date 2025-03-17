@@ -149,7 +149,7 @@ def plot_shape_similarity(ref_geom, geom, buffer_distance=0.5):
     plt.title("Shape Similarity Visualization")
     plt.show()
 
-def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
+def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
     """
     Computes the shape similarity score based on the percentage of the geometry's boundary
     that falls within a buffered version of the reference geometry's boundary.
@@ -162,7 +162,7 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
     Returns:
     float: Similarity score (0 to 1), where 1 means complete alignment.
     """
-    plot_shape_similarity(ref_geom, geom)
+    # plot_shape_similarity(ref_geom, geom)
     # Get the boundary of the reference polygon and apply buffer
     ref_boundary = ref_geom.boundary.buffer(buffer_distance)
 
@@ -176,8 +176,6 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
     # Avoid division by zero
     if total_geom_length == 0:
         return 0.0
-
-
 
     return intersection_length / total_geom_length
 
@@ -276,7 +274,50 @@ def get_polygon_edges(polygon):
     return edges
 
 
-def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fit,rooms,
+def grid_search_room(pand_data, floor_geom, ground_floor_geom,
+                translation_step=1, max_translation=2.0):
+    """
+    Performs a grid search over translations to optimize shape similarity.
+    """
+
+    boundary_points = extract_boundary_points(ground_floor_geom)
+    max_translation = np.max(pdist(boundary_points))/2
+    print(max_translation)
+
+    translations = np.arange(-max_translation, max_translation + translation_step,
+                             translation_step)
+
+    # Generate all transformation combinations
+    transform_params = list(itertools.product(translations, translations))
+    def apply_transformations(dx, dy):
+
+        transformed_geometries = (floor_geom)
+        # Apply transformations
+        transformed_geometries = translate(transformed_geometries, xoff=dx, yoff=dy)
+
+        # Compute scores in parallel
+        score_sim = shape_similarity_score(ground_floor_geom, transformed_geometries)
+        score = score_sim
+        return transformed_geometries, score, (score_sim, (dx, dy))
+
+
+    # Run grid search in parallel
+    results = Parallel(n_jobs=-1)(delayed(apply_transformations)(dx, dy) for dx, dy in transform_params)
+
+    # Find the best transformation
+    best_score = -np.inf
+    best_geometries = None
+    best_params = None
+    for transformed_geometries, score, params in results:
+        if transformed_geometries is not None and score > best_score:
+            best_score = score
+            best_geometries = transformed_geometries
+            best_params = params
+
+    return best_geometries
+
+
+def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fit,
                 alpha,
                 buffer=0.5,
                 angle_step=1,
@@ -286,176 +327,117 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
     Performs a grid search over rotation angles, scales, and translations to optimize Goodness of Fit (GoF) and hausdorff distance.
     """
 
+    if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(pand[bgt_outline].iloc[0], MultiPolygon):
+        alpha = 0.8
 
-    # im transforming one room instead of all
+    # only apply translation when its multipolygons
+    if isinstance(pand[aligned_column].iloc[0], MultiPolygon) or isinstance(pand[bgt_outline].iloc[0],
+                                                                            MultiPolygon) or good_fit == False:
+        apply_translation = False
+    else:
+        apply_translation = False
 
-    if rooms:
+    # Compute max_translation dynamically based on the bgt_outline geometry
+    bgt_geom = pand[bgt_outline].iloc[0]
+    boundary_points = extract_boundary_points(bgt_geom)
+    max_translation = np.max(pdist(boundary_points))
 
-        if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(bgt_outline.iloc[0], MultiPolygon):
-            alpha = 0.8
+    angles = np.arange(-180, 180, angle_step)
+    scales = np.arange(scale_range[0], scale_range[1] + scale_step, scale_step)
+    translations = np.arange(-max_translation, max_translation + translation_step,
+                             translation_step) if apply_translation else np.array([0])
 
-        # Compute max_translation dynamically based on the bgt_outline geometry
-        bgt_geom = unary_union(bgt_outline)
-        boundary_points = extract_boundary_points(bgt_geom)
-        max_translation = np.max(pdist(boundary_points))
-        print(max_translation)
+    # Generate all transformation combinations
+    transform_params = list(itertools.product(scales, angles, translations, translations))
 
-        translations = np.arange(-max_translation, max_translation + translation_step,
-                                 translation_step)
-
-        # Generate all transformation combinations
-        transform_params = list(itertools.product(translations, translations))
-
-        def apply_transformations(dx, dy):
-            """ Apply scale, rotation, and translation if applicable. """
-            transformed_geometries = np.array(pand[aligned_column])
-            # Apply transformations
+    def apply_transformations(scale_factor, angle, dx, dy):
+        """ Apply scale, rotation, and translation if applicable. """
+        transformed_geometries = np.array(pand[aligned_column])
+        # Apply transformations
+        transformed_geometries = np.array(
+            [scale(g, xfact=scale_factor, yfact=scale_factor) for g in transformed_geometries])
+        transformed_geometries = np.array([rotate(g, angle, origin='centroid') for g in transformed_geometries])
+        if apply_translation:
             transformed_geometries = np.array([translate(g, xoff=dx, yoff=dy) for g in transformed_geometries])
 
-            # Compute scores in parallel
-            hausdorff_values = np.array(Parallel(n_jobs=-1)(
-                delayed(averaged_hausdorff_distance)(g, bgt_geom) for g in transformed_geometries))
-            mean_hausdorff = np.mean(hausdorff_values)
-            gof_scores = np.array(Parallel(n_jobs=-1)(
-                delayed(goodness_of_fit)(g, bgt_geom) for g in transformed_geometries))
-            mean_gof = np.mean(gof_scores)
-
-            score, score_gof, score_haus = combined_score(mean_gof, mean_hausdorff, alpha)
-
-            return transformed_geometries, score, (score_gof, score_haus, (dx, dy))
-
-        # Run grid search in parallel
-        results = Parallel(n_jobs=-1)(delayed(apply_transformations)(dx, dy) for dx, dy in transform_params)
-
-        # Find the best transformation
-        best_score = -np.inf
-        best_geometries = None
-        best_params = None
-        pand['optimized_rooms'] = None
-        for transformed_geometries, score, params in results:
-            if transformed_geometries is not None and score > best_score:
-                for value in transformed_geometries:
-                    pand['optimized_rooms'] = value
-                best_score = score
-                best_geometries = transformed_geometries
-                best_params = params
-        print("best_params ", best_params)
-        print(pand['optimized_rooms'].head())
-        pand['optimized_rooms'] = best_geometries
-        pand.set_geometry('optimized_rooms')
-        pand.plot()
-        plt.show()
-        return pand_data
-    else:
-
-        if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(pand[bgt_outline].iloc[0], MultiPolygon):
-            alpha = 0.8
-
-        # only apply translation when its multipolygons
-        if isinstance(pand[aligned_column].iloc[0], MultiPolygon) or isinstance(pand[bgt_outline].iloc[0], MultiPolygon) or good_fit == False:
-            apply_translation = False
+        if good_fit:
+            bgt_geometry = pand[bgt_outline].iloc[0].buffer(buffer)
         else:
-            apply_translation = False
+            bgt_geometry = pand[bgt_outline].iloc[0].buffer(buffer + 5)
 
-        # Compute max_translation dynamically based on the bgt_outline geometry
-        bgt_geom = pand[bgt_outline].iloc[0]
-        boundary_points = extract_boundary_points(bgt_geom)
-        max_translation = np.max(pdist(boundary_points))
+        valid_mask = np.array([g.within(bgt_geometry) for g in transformed_geometries])
+        if not valid_mask.any():
+            return None, None, None
+        transformed_geometries = transformed_geometries[valid_mask]
 
-        angles = np.arange(-180, 180, angle_step)
-        scales = np.arange(scale_range[0], scale_range[1] + scale_step, scale_step)
-        translations = np.arange(-max_translation, max_translation + translation_step,
-                                 translation_step) if apply_translation else np.array([0])
+        # Compute scores in parallel
+        hausdorff_values = np.array(Parallel(n_jobs=-1)(
+            delayed(averaged_hausdorff_distance)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
+        mean_hausdorff = np.mean(hausdorff_values)
+        gof_scores = np.array(
+            Parallel(n_jobs=-1)(delayed(goodness_of_fit)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
+        mean_gof = np.mean(gof_scores)
 
-        # Generate all transformation combinations
-        transform_params = list(itertools.product(scales, angles, translations, translations))
+        score, score_gof, score_haus = combined_score(mean_gof, mean_hausdorff, alpha)
 
-        def apply_transformations(scale_factor, angle, dx, dy):
-            """ Apply scale, rotation, and translation if applicable. """
-            transformed_geometries = np.array(pand[aligned_column])
-            # Apply transformations
-            transformed_geometries = np.array([scale(g, xfact=scale_factor, yfact=scale_factor) for g in transformed_geometries])
-            transformed_geometries = np.array([rotate(g, angle, origin='centroid') for g in transformed_geometries])
-            if apply_translation:
-                transformed_geometries = np.array([translate(g, xoff=dx, yoff=dy) for g in transformed_geometries])
+        return transformed_geometries, score, (score_gof, score_haus, scale_factor, angle, (dx, dy))
 
+    # Run grid search in parallel
+    results = Parallel(n_jobs=-1)(delayed(apply_transformations)(s, a, dx, dy) for s, a, dx, dy in transform_params)
 
-            if good_fit:
-                bgt_geometry = pand[bgt_outline].iloc[0].buffer(buffer)
-            else:
-                bgt_geometry = pand[bgt_outline].iloc[0].buffer(buffer + 5)
+    # Find the best transformation
+    best_score = -np.inf
+    best_geometries = None
+    best_params = None
+    pand_data['transformed_akte_bg'] = None
+    for transformed_geometries, score, params in results:
+        if transformed_geometries is not None and score > best_score:
+            for value in transformed_geometries:
+                pand_data['transformed_akte_bg'] = value
+            best_score = score
+            best_geometries = transformed_geometries
+            best_params = params
 
-            valid_mask = np.array([g.within(bgt_geometry) for g in transformed_geometries])
-            if not valid_mask.any():
-                return None, None, None
-            transformed_geometries = transformed_geometries[valid_mask]
+    # pand_data.set_geometry(pand_data['transformed_akte_bg'])
+    # pand_data.plot()
+    # plt.show()
 
-            # Compute scores in parallel
-            hausdorff_values = np.array(Parallel(n_jobs=-1)(delayed(averaged_hausdorff_distance)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
-            mean_hausdorff = np.mean(hausdorff_values)
-            gof_scores = np.array(Parallel(n_jobs=-1)(delayed(goodness_of_fit)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
-            mean_gof = np.mean(gof_scores)
+    common_centroid = pand.aligned_geometry.centroid.iloc[0]  # Get the first centroid from the Series
+    # Transform geometries
+    transformed_rooms = list(pand_data[room_geom])
 
-            score, score_gof, score_haus = combined_score(mean_gof, mean_hausdorff, alpha)
+    # Apply scale, rotation, and translation
+    if best_params is not None:
+        transformed_rooms = np.array(
+            [scale(g, xfact=best_params[2], yfact=best_params[2], origin=common_centroid) for g in transformed_rooms])
+        transformed_rooms = np.array([rotate(g, best_params[3], origin=common_centroid) for g in transformed_rooms])
 
-            return transformed_geometries, score, (score_gof, score_haus, scale_factor, angle, (dx, dy))
+    if apply_translation and best_params is not None:
+        transformed_rooms = np.array(
+            [translate(g, xoff=best_params[4][0], yoff=best_params[4][1]) for g in transformed_rooms])
 
-        # Run grid search in parallel
-        results = Parallel(n_jobs=-1)(delayed(apply_transformations)(s, a, dx, dy) for s, a, dx, dy in transform_params)
+    # Store results in DataFrame
+    pand_data['optimized_rooms'] = transformed_rooms
+    pand["optimized_geometry"] = best_geometries
 
-        # Find the best transformation
-        best_score = -np.inf
-        best_geometries = None
-        best_params = None
-        pand_data['transformed_akte_bg'] = None
-        for transformed_geometries, score, params in results:
-            if transformed_geometries is not None and score > best_score:
-                for value in transformed_geometries:
-                    pand_data['transformed_akte_bg'] = value
-                best_score = score
-                best_geometries = transformed_geometries
-                best_params = params
+    pand.reset_index(drop=True, inplace=True)
+    pand_data.reset_index(drop=True, inplace=True)
 
-        # pand_data.set_geometry(pand_data['transformed_akte_bg'])
-        # pand_data.plot()
-        # plt.show()
+    pand_data = pand_data.merge(pand[['bag_pnd', 'geom_akte_bg', 'bgt_outline']], on='bag_pnd', how='left')
 
-        common_centroid = pand.aligned_geometry.centroid.iloc[0]  # Get the first centroid from the Series
-        # Transform geometries
-        transformed_rooms = list(pand_data[room_geom])
+    if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
+        transformed_rooms = [
+            refine_alignment(pand_data["bgt_outline"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
+            for i, g in enumerate(transformed_rooms)]
 
-        # Apply scale, rotation, and translation
-        if best_params is not None:
-            transformed_rooms = np.array(
-                [scale(g, xfact=best_params[2], yfact=best_params[2], origin=common_centroid) for g in transformed_rooms])
-            transformed_rooms = np.array([rotate(g, best_params[3], origin=common_centroid) for g in transformed_rooms])
+    pand_data["optimized_rooms"] = transformed_rooms
+    #
+    # if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
+    #     transformed_rooms = [refine_alignment(pand_data["transformed_akte"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
+    #                        for i, g in enumerate(transformed_rooms)]
 
-        if apply_translation and best_params is not None:
-            transformed_rooms = np.array(
-                [translate(g, xoff=best_params[4][0], yoff=best_params[4][1]) for g in transformed_rooms])
-
-        # Store results in DataFrame
-        pand_data['optimized_rooms'] = transformed_rooms
-        pand["optimized_geometry"] = best_geometries
-
-        pand.reset_index(drop=True, inplace=True)
-        pand_data.reset_index(drop=True, inplace=True)
-
-        pand_data = pand_data.merge(pand[['bag_pnd', 'geom_akte_bg', 'bgt_outline']], on='bag_pnd', how='left')
-
-        if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
-            transformed_rooms = [refine_alignment(pand_data["bgt_outline"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
-                               for i, g in enumerate(transformed_rooms)]
-
-        pand_data["optimized_rooms"] = transformed_rooms
-        #
-        # if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
-        #     transformed_rooms = [refine_alignment(pand_data["transformed_akte"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
-        #                        for i, g in enumerate(transformed_rooms)]
-
-
-        return pand
     return pand
+
 
 def combined_score(gof, hausdorff, alpha):
     """
@@ -972,7 +954,7 @@ for perceel in perceel_list:
     # ========================================== OPTIMISATION =========================================================
 
     # grid search optimization for rotation and scale
-    pand = grid_search(pand,  "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit, rooms=False,
+    pand = grid_search(pand,  "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
                                     alpha=0.2, buffer=1,
                                      angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
                                      translation_step=1)
@@ -988,19 +970,31 @@ for perceel in perceel_list:
     ground_floor_data.plot()
     plt.show()
     ground_floor_outline = ground_floor_data.geometry.unary_union
-    floors = pand_data.groupby('verdieping')
-    for floor, floor_data in floors:
-        floor_data.plot()
-        plt.show()
+    floors = pand_data.groupby('floor_index')
+    optimized_geometries = {}
+
+    for floor_index, floor_data in floors:
+        print("floor_index:", floor_index)
+        if floor_index == -1:
+            below_floor_data = floors.get_group(floor_index + 1)
+        elif floor_index == 0:
+            below_floor_data = floors.get_group(floor_index)
+        else:
+            below_floor_data = floors.get_group(floor_index - 1)
+        print("below_floor", below_floor_data)
         floor_outline = floor_data.geometry.unary_union
+        below_outline = below_floor_data.geometry.unary_union
 
-        similarity_score = shape_similarity_score(ground_floor_outline, floor_outline)
+        similarity_score = shape_similarity_score(below_outline, floor_outline)
+        best_geom = grid_search_room(pand_data, floor_outline, below_outline, translation_step=0.2)
+        optimized_geometries[floor_index] = best_geom
+        print("Similarity score:", similarity_score)
 
-        print("similarity score", similarity_score)
+    pand_data['optimized_rooms'] = pand_data['floor_index'].map(optimized_geometries)
+
     all_panden_rooms.append(pand_data)
 
 panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
-panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
 end_time = time.time()
 print("Executed time: ", end_time - start_time)
@@ -1014,15 +1008,17 @@ panden_rooms['optimized_rooms_3d'] = panden_rooms.apply(
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms', crs='EPSG:28992')
 panden_rooms.set_geometry('optimized_rooms_3d')
-# panden_rooms.plot()
-# plt.show()
+panden_rooms.plot()
+plt.show()
 print(panden_rooms.info())
 # panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled'])
 # panden_rooms2.to_file(os.path.join("werkmap", f"optimized_rooms_edgematch.shp"), driver="ESRI Shapefile")
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
-panden_rooms2.to_file(os.path.join("werkmap", "optimized_rooms_test_4216.geojson"), driver="GeoJSON")
+panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
+
+panden_rooms2.to_file(os.path.join("werkmap", "grid_search_shapesim_02_nomax.geojson"), driver="GeoJSON")
 
 
 
