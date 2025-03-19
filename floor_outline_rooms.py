@@ -240,7 +240,6 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
                              for buffered_line in buffered_ref_lines
                              for multi_line in all_geom_lines
                              for line in multi_line.geoms)
-
     # Avoid division by zero
     if total_length == 0:
         return 0.0
@@ -348,7 +347,7 @@ def grid_search_room(pand_data, floor_geom, ground_floor_geom,
     """
     Performs a grid search over translations to optimize shape similarity.
     """
-
+    ground_floor_geom = gp.GeoSeries(ground_floor_geom)
     boundary_points = extract_boundary_points(ground_floor_geom.unary_union)
     max_translation = np.max(pdist(boundary_points))/4
     print(max_translation)
@@ -393,6 +392,7 @@ def grid_search_room(pand_data, floor_geom, ground_floor_geom,
     for transformed_geometries, score, params in results:
         if transformed_geometries is not None and score > best_score:
             best_score = score
+            print(best_score)
             best_geometries = transformed_geometries
             best_params = params
     print("best score", best_score)
@@ -1048,9 +1048,8 @@ for perceel in perceel_list:
     # ground_floor = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
 
     pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
-    ground_floor_data = pand_data[pand_data['floor_index'] == 0]
-    ground_floor_data.plot()
-    plt.show()
+    pand_data.set_geometry('optimized_rooms')
+
 
     floors = pand_data.groupby('floor_index')
     optimized_geometries = {}
@@ -1063,9 +1062,18 @@ for perceel in perceel_list:
             below_floor_data = floors.get_group(floor_index)
         else:
             below_floor_data = floors.get_group(floor_index - 1)
+
+        if floor_index - 1 in optimized_geometries and floor_index != 0:
+            print("below outline is", floor_index -1)
+            below_outline = optimized_geometries[floor_index - 1]
+            if below_outline.geom_type == "MultiPolygon":
+                below_outline = gp.GeoSeries([poly for poly in below_outline.geoms])
+        else:
+            below_outline = below_floor_data.geometry
         print("below_floor", below_floor_data)
+
         floor_outline = floor_data.geometry
-        below_outline = below_floor_data.geometry
+
 
         similarity_score = shape_similarity_score(below_outline, floor_outline)
         best_geom = grid_search_room(pand_data, floor_outline, below_outline, translation_step=0.05)
@@ -1101,7 +1109,7 @@ panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs=
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "4216grid_search_shapesim_withrooms02_005step_new.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "4216grid_search_shapesim_withrooms02_005step_new2.geojson"), driver="GeoJSON")
 
 
 
