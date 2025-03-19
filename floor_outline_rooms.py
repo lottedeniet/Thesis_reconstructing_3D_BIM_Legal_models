@@ -290,6 +290,36 @@ def calc_hausdorff(polygon, reference):
     return float('inf')
 
 
+def snap_floors_to_reference(best_geometries, ground_floor_geom, threshold=0.2, simplification_tolerance=0.1):
+    """
+    Snaps the floor geometry to the ground floor geometry using Shapely's snap function, after simplifying both geometries.
+
+    Parameters:
+        best_geometries (MultiPolygon): The optimized floor geometry from the grid search.
+        ground_floor_geom (GeoSeries): The reference ground floor geometry (GeoSeries containing Polygons).
+        threshold (float): Maximum distance threshold to consider snapping.
+        simplification_tolerance (float): Tolerance value for simplifying geometries.
+
+    Returns:
+        MultiPolygon: The translated floor geometry with better alignment.
+    """
+
+    # Ensure ground_floor_geom is a MultiPolygon (in case it's a single Polygon)
+    if isinstance(ground_floor_geom, Polygon):
+        ground_floor_geom = MultiPolygon([ground_floor_geom])
+
+    # Simplify both ground floor and best geometry (floor) geometries
+    simplified_ground = ground_floor_geom.simplify(simplification_tolerance, preserve_topology=True)
+    simplified_best = best_geometries.simplify(simplification_tolerance, preserve_topology=True)
+
+    # Combine all ground floor geometries into a single geometry (union)
+    ground_union = unary_union(simplified_ground)
+
+    # Snap the best geometries to the ground floor geometry
+    snapped_floors = snap(simplified_best, ground_union, threshold)
+
+    return snapped_floors
+
 def extract_boundary_points(geometry):
     """
     Extracts boundary points from a Polygon or MultiPolygon.
@@ -396,7 +426,9 @@ def grid_search_room(pand_data, floor_geom, ground_floor_geom,
             best_geometries = transformed_geometries
             best_params = params
     print("best score", best_score)
+    best_geometries = snap_floors_to_reference(best_geometries, ground_floor_geom)
     return best_geometries
+
 
 
 def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fit,
@@ -1109,7 +1141,7 @@ panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs=
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "4216grid_search_shapesim_withrooms02_005step_new2.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "4216grid_search_shapesim_snap_shapely02.geojson"), driver="GeoJSON")
 
 
 
