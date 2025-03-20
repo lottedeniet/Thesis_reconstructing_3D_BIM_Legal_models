@@ -1,7 +1,6 @@
 import os
 import json
 from statistics import mode
-
 import numpy as np
 import requests
 import geopandas as gp
@@ -14,12 +13,11 @@ from shapely.geometry import shape
 from shapely import geometry as geom
 from shapely.geometry import Polygon, MultiPolygon, Point
 import re
-import math
 import time
 from shapely.geometry.linestring import LineString
 from shapely.geometry.multilinestring import MultiLineString
-from shapely.measurement import hausdorff_distance, frechet_distance
-from shapely.ops import nearest_points, unary_union, snap, transform
+from shapely.measurement import hausdorff_distance
+from shapely.ops import unary_union, snap, transform
 import itertools
 from joblib import Parallel, delayed
 from scipy.spatial import KDTree
@@ -84,77 +82,77 @@ floor_mapping = {
     "tiende": 10,
     "1e": 1,
     "2e": 2,
-    "3e": 3
+    "3e": 3,
+    "4e": 4,
+    "5e": 5,
+    "6e": 6,
 }
 
 
-# Function to map floor names
 def map_floor(floor):
+    """"map the floor text to an index number, if it does not find a mapping, it returns -999"""
     if pd.isna(floor) or not isinstance(floor, str):
-        return -10
+        return -999
 
+    # if the floor text contains one of the map values, it returns the corresponding index
+    # for example "eerste verdieping" returns index 1
     floor = floor.lower().strip()
-
     for key in floor_mapping:
         if key in floor:
             return floor_mapping[key]
 
+    # if the key is not in the mapping, but it contains a number, that number will be returned
+    # for example "1e verdieping" returns index 1
     match = re.search(r'(\d+)', floor)
     if match:
         return int(match.group(1))
 
-    return -10
+    return -999
 
-# Function to extrude 2D polygons to 3D
 def extrude_to_3d(geometry, floor_height=3, floor_index=0):
+    """function to extrude geometry to 3D, with a predetermined floor height"""
     if geometry.is_empty:
         return None
 
-    # Helper function to convert to 3D coordinates
     def to_3d(x, y, z=floor_index * floor_height):
         return (x, y, z)
 
-    # If the geometry is a Polygon, apply the transformation
     if isinstance(geometry, Polygon):
         return transform(lambda x, y: to_3d(x, y), geometry)
 
-    # If the geometry is a MultiPolygon, apply the transformation to each Polygon inside it
     elif isinstance(geometry, MultiPolygon):
-        # Use the .geoms attribute to iterate over individual Polygons in the MultiPolygon
         transformed_polygons = [transform(lambda x, y: to_3d(x, y), poly) for poly in geometry.geoms]
         return MultiPolygon(transformed_polygons)
 
-    # If the geometry is neither a Polygon nor MultiPolygon, return None
     return None
 
 
 def extract_multilines(geom):
-    """ Extracts exterior and interior boundaries separately as MultiLineString (without unioning). """
+    """ Extract exterior and interior geometries (LOOK AT) """
     lines = []
 
     if isinstance(geom, Polygon):
-        lines.append(LineString(geom.exterior.coords))  # Outer boundary
-        lines.extend(LineString(ring.coords) for ring in geom.interiors)  # Inner holes
+        lines.append(LineString(geom.exterior.coords))
+        lines.extend(LineString(ring.coords) for ring in geom.interiors)
 
     elif isinstance(geom, MultiPolygon):
         for poly in geom.geoms:
-            lines.append(LineString(poly.exterior.coords))  # Outer boundary
-            lines.extend(LineString(ring.coords) for ring in poly.interiors)  # Inner holes
+            lines.append(LineString(poly.exterior.coords))
+            lines.extend(LineString(ring.coords) for ring in poly.interiors)
 
-    return MultiLineString(lines)  # Returns all lines separately
+    return MultiLineString(lines)
 
 
-def plot_geometries(ground_floor_geom, transformed_geometries, buffer_distance=0.2):
-    """ Plots the ground floor geometry, its buffered version, and the best transformed geometries. """
+def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2):
+    """ plots the reference floor geometry, its buffered version, and the best transformed geometries. """
     fig, ax = plt.subplots(figsize=(8, 8))
 
-    # If it's a GeoSeries, get individual geometries (NO union)
-    if isinstance(ground_floor_geom, gp.GeoSeries):
-        geometries = ground_floor_geom.geometry
+    if isinstance(ref_floor_geom, gp.GeoSeries):
+        geometries = ref_floor_geom.geometry
     else:
-        geometries = [ground_floor_geom]
+        geometries = [ref_floor_geom]
 
-    # Extract lines for each geometry
+    # plot the lines instead of the polygons
     all_lines = []
     for geom in geometries:
         if isinstance(geom, Polygon):
@@ -163,53 +161,45 @@ def plot_geometries(ground_floor_geom, transformed_geometries, buffer_distance=0
             for poly in geom.geoms:
                 all_lines.append(extract_multilines(poly))
 
-    # Buffer the extracted lines (each separately)
     buffered_lines = [line.buffer(buffer_distance) for multi_line in all_lines for line in multi_line.geoms]
 
-    # Plot original ground floor outline
     for geom in geometries:
         if isinstance(geom, Polygon):
-            plot_polygon(geom, ax=ax, facecolor='none', edgecolor='black', linewidth=1, label="Ground Floor")
+            plot_polygon(geom, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label="Ground Floor")
         elif isinstance(geom, MultiPolygon):
             for poly in geom.geoms:
-                plot_polygon(poly, ax=ax, facecolor='none', edgecolor='black', linewidth=1, label="Ground Floor")
+                plot_polygon(poly, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label="Ground Floor")
 
-    # Plot buffered inner & outer lines separately
     for buffered_line in buffered_lines:
-        plot_polygon(buffered_line, ax=ax, facecolor='none', edgecolor='blue', linestyle='dashed', linewidth=1.5,
+        plot_polygon(buffered_line, ax=ax, facecolor='none',add_points=False, edgecolor='blue', linestyle='dashed', linewidth=1.5,
                      label="Buffered Lines")
 
-    # Plot transformed geometries
     if isinstance(transformed_geometries, Polygon):
         transformed_geometries = MultiPolygon([transformed_geometries])
 
     for poly in transformed_geometries.geoms:
-        plot_polygon(poly, ax=ax, facecolor='none', edgecolor='red', linewidth=1, label="Transformed Geometry")
+        plot_polygon(poly, ax=ax, facecolor='none', edgecolor='red', add_points=False, linewidth=1, label="Transformed Geometry")
 
-    # Labels and legend
-    ax.set_title("Shape Similarity Visualization")
+    ax.set_title("Shape Similarity")
     plt.show()
 
 
 def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
     """
-    Computes the shape similarity score based on the percentage of the geometry's boundary
-    that falls within a buffered version of the reference geometry's boundary.
-
-    Parameters:
-    ref_geom (Polygon or MultiPolygon or GeoSeries): Reference polygon geometry.
-    geom (Polygon or MultiPolygon or GeoSeries): Geometry to compare.
-    buffer_distance (float): Buffer distance applied to the reference polygon's boundary.
+    Computes the shape similarity score based on the percentage of the floors boundary
+    that falls within a buffered version of the reference floors boundary.
 
     Returns:
     float: Similarity score (0 to 1), where 1 means complete alignment.
+    (LOOK AT: returns sometimes scores above 1, clean up types)
     """
-    # Handle different geometry types for reference
+
     if isinstance(ref_geom, gp.GeoSeries):
         ref_geometries = ref_geom.geometry
     else:
         ref_geometries = [ref_geom]
 
+    # extract the lines instead of the polygons
     all_ref_lines = []
     for rgeom in ref_geometries:
         if isinstance(rgeom, Polygon):
@@ -218,9 +208,9 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
             for poly in rgeom.geoms:
                 all_ref_lines.append(extract_multilines(poly))
 
+    # buffer the lines of the floor below
     buffered_ref_lines = [line.buffer(buffer_distance) for multi_line in all_ref_lines for line in multi_line.geoms]
 
-    # Handle different geometry types for comparison geometry
     if isinstance(geom, gp.GeoSeries):
         geometries = geom.geometry
     else:
@@ -234,13 +224,14 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
             for poly in g.geoms:
                 all_geom_lines.append(extract_multilines(poly))
 
-    # Compute intersection of the geometry's boundary with buffered reference boundary
+
     total_length = sum(line.length for multi_line in all_geom_lines for line in multi_line.geoms)
+    # compute the intersection of the floor lines that fall in the buffered lines
     intersected_length = sum(line.intersection(buffered_line).length
                              for buffered_line in buffered_ref_lines
                              for multi_line in all_geom_lines
                              for line in multi_line.geoms)
-    # Avoid division by zero
+
     if total_length == 0:
         return 0.0
 
@@ -283,46 +274,36 @@ def intersection_over_union(polygon, reference):
 
 def calc_hausdorff(polygon, reference):
     """"
-    Greatest distance between any point in A and the closest point in B
+    greatest distance between any point in the polygon and the closest point in the reference
     """
     if isinstance(polygon, (Polygon, MultiPolygon)) and isinstance(reference, (Polygon, MultiPolygon)):
         return hausdorff_distance(polygon, reference)
     return float('inf')
 
 
-def snap_floors_to_reference(best_geometries, ground_floor_geom, threshold=0.2, simplification_tolerance=0.1):
+def snap_floors_to_reference(best_geometries, below_floor_geom, threshold=0.2, simplification_tolerance=0.1):
     """
-    Snaps the floor geometry to the ground floor geometry using Shapely's snap function, after simplifying both geometries.
-
-    Parameters:
-        best_geometries (MultiPolygon): The optimized floor geometry from the grid search.
-        ground_floor_geom (GeoSeries): The reference ground floor geometry (GeoSeries containing Polygons).
-        threshold (float): Maximum distance threshold to consider snapping.
-        simplification_tolerance (float): Tolerance value for simplifying geometries.
-
-    Returns:
-        MultiPolygon: The translated floor geometry with better alignment.
+    snaps the floor geometry to the reference floor (either the ground floor, or the floor below the current floor) using Shapely's snap function, after simplifying.
     """
 
-    # Ensure ground_floor_geom is a MultiPolygon (in case it's a single Polygon)
-    if isinstance(ground_floor_geom, Polygon):
-        ground_floor_geom = MultiPolygon([ground_floor_geom])
+    if isinstance(below_floor_geom, Polygon):
+        below_floor_geom = MultiPolygon([below_floor_geom])
 
-    # Simplify both ground floor and best geometry (floor) geometries
-    simplified_ground = ground_floor_geom.simplify(simplification_tolerance, preserve_topology=True)
+    # the polygons are simplfied to remove any unnecessary vertices which could impact the snapping
+    simplified_below = below_floor_geom.simplify(simplification_tolerance, preserve_topology=True)
     simplified_best = best_geometries.simplify(simplification_tolerance, preserve_topology=True)
 
-    # Combine all ground floor geometries into a single geometry (union)
-    ground_union = unary_union(simplified_ground)
+    # the union of the floor below, to ensure we only snap the outside boundary, not the interior
+    below_union = unary_union(simplified_below)
 
-    # Snap the best geometries to the ground floor geometry
-    snapped_floors = snap(simplified_best, ground_union, threshold)
+    # snap the best geometries to the reference floor geometry
+    snapped_floors = snap(simplified_best, below_union, threshold)
 
     return snapped_floors
 
 def extract_boundary_points(geometry):
     """
-    Extracts boundary points from a Polygon or MultiPolygon.
+    extracts the boundary for polygons and multipolygons
     """
     if isinstance(geometry, Polygon):
         return np.array(geometry.exterior.coords)
@@ -333,12 +314,12 @@ def extract_boundary_points(geometry):
 
 def averaged_hausdorff_distance(polygon, reference):
     """
-    Computes the Averaged Hausdorff Distance between two geometries.
+    computes the averaged Hausdorff distance between the polygon and its reference.
     """
     if not isinstance(polygon, (Polygon, MultiPolygon)) or not isinstance(reference, (Polygon, MultiPolygon)):
         return float('inf')
 
-    # Extract boundary points
+    # extract boundary points
     polygon_coords = extract_boundary_points(polygon)
     reference_coords = extract_boundary_points(reference)
 
@@ -358,11 +339,10 @@ def averaged_hausdorff_distance(polygon, reference):
 
 
 def get_polygon_edges(polygon):
-    """Extracts edges (as line segments) from a polygon."""
+    """extracts edges (as line segments) from a polygon."""
     edges = []
 
     if isinstance(polygon, MultiPolygon):
-        # Process each polygon separately
         for poly in polygon.geoms:
             edges.extend(get_polygon_edges(poly))
     elif isinstance(polygon, Polygon):
@@ -372,10 +352,10 @@ def get_polygon_edges(polygon):
     return edges
 
 
-def grid_search_room(pand_data, floor_geom, ground_floor_geom,
-                translation_step=0.1, max_translation=2.0):
+def grid_search_room(floor_geom, ground_floor_geom,
+                translation_step=0.1):
     """
-    Performs a grid search over translations to optimize shape similarity.
+    performs a grid search over translations to optimize shape similarity.
     """
     ground_floor_geom = gp.GeoSeries(ground_floor_geom)
     boundary_points = extract_boundary_points(ground_floor_geom.unary_union)
@@ -422,7 +402,6 @@ def grid_search_room(pand_data, floor_geom, ground_floor_geom,
     for transformed_geometries, score, params in results:
         if transformed_geometries is not None and score > best_score:
             best_score = score
-            print(best_score)
             best_geometries = transformed_geometries
             best_params = params
     print("best score", best_score)
@@ -444,10 +423,11 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
     if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(pand[bgt_outline].iloc[0], MultiPolygon):
         alpha = 0.8
 
+
     # only apply translation when its multipolygons
     if isinstance(pand[aligned_column].iloc[0], MultiPolygon) or isinstance(pand[bgt_outline].iloc[0],
                                                                             MultiPolygon) or good_fit == False:
-        apply_translation = False
+        apply_translation = True
     else:
         apply_translation = False
 
@@ -617,7 +597,6 @@ def rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref):
 def transform_polygon(polygon, transform):
     transformed_coords = transform(np.array(polygon.exterior.coords))
     transformed_polygon = Polygon(transformed_coords[:, :2])
-    print("transformed")
     return transformed_polygon if transformed_polygon.is_valid else polygon
 
 
@@ -1080,6 +1059,7 @@ for perceel in perceel_list:
     # ground_floor = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
 
     pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
+    pand_data = pand_data[pand_data['floor_index'] != -999]
     pand_data.set_geometry('optimized_rooms')
 
 
@@ -1108,7 +1088,7 @@ for perceel in perceel_list:
 
 
         similarity_score = shape_similarity_score(below_outline, floor_outline)
-        best_geom = grid_search_room(pand_data, floor_outline, below_outline, translation_step=0.05)
+        best_geom = grid_search_room(floor_outline, below_outline, translation_step=0.05)
         plot_geometries(below_outline, best_geom)
         optimized_geometries[floor_index] = best_geom
         print("Similarity score:", similarity_score)
@@ -1141,42 +1121,4 @@ panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs=
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "4216grid_search_shapesim_snap_shapely02.geojson"), driver="GeoJSON")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+panden_rooms2.to_file(os.path.join("werkmap", "allgrid_search_shapesim_snap.geojson"), driver="GeoJSON")
