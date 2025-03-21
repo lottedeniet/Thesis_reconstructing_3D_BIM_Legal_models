@@ -423,6 +423,7 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
     if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(pand[bgt_outline].iloc[0], MultiPolygon):
         alpha = 0.8
 
+    print(alpha)
 
     # only apply translation when its multipolygons
     if isinstance(pand[aligned_column].iloc[0], MultiPolygon) or isinstance(pand[bgt_outline].iloc[0],
@@ -434,7 +435,7 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
     # Compute max_translation dynamically based on the bgt_outline geometry
     bgt_geom = pand[bgt_outline].iloc[0]
     boundary_points = extract_boundary_points(bgt_geom)
-    max_translation = np.max(pdist(boundary_points))
+    max_translation = np.max(pdist(boundary_points))/4
 
     angles = np.arange(-180, 180, angle_step)
     scales = np.arange(scale_range[0], scale_range[1] + scale_step, scale_step)
@@ -448,11 +449,11 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
         """ Apply scale, rotation, and translation if applicable. """
         transformed_geometries = np.array(pand[aligned_column])
         # Apply transformations
-        transformed_geometries = np.array(
-            [scale(g, xfact=scale_factor, yfact=scale_factor) for g in transformed_geometries])
+        transformed_geometries = np.array([scale(g, xfact=scale_factor, yfact=scale_factor) for g in transformed_geometries])
         transformed_geometries = np.array([rotate(g, angle, origin='centroid') for g in transformed_geometries])
         if apply_translation:
             transformed_geometries = np.array([translate(g, xoff=dx, yoff=dy) for g in transformed_geometries])
+
 
         if good_fit:
             bgt_geometry = pand[bgt_outline].iloc[0].buffer(buffer)
@@ -465,11 +466,9 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
         transformed_geometries = transformed_geometries[valid_mask]
 
         # Compute scores in parallel
-        hausdorff_values = np.array(Parallel(n_jobs=-1)(
-            delayed(averaged_hausdorff_distance)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
+        hausdorff_values = np.array(Parallel(n_jobs=-1)(delayed(averaged_hausdorff_distance)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
         mean_hausdorff = np.mean(hausdorff_values)
-        gof_scores = np.array(
-            Parallel(n_jobs=-1)(delayed(goodness_of_fit)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
+        gof_scores = np.array(Parallel(n_jobs=-1)(delayed(goodness_of_fit)(g, pand[bgt_outline].iloc[0]) for g in transformed_geometries))
         mean_gof = np.mean(gof_scores)
 
         score, score_gof, score_haus = combined_score(mean_gof, mean_hausdorff, alpha)
@@ -519,18 +518,15 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom, good_fi
 
     pand_data = pand_data.merge(pand[['bag_pnd', 'geom_akte_bg', 'bgt_outline']], on='bag_pnd', how='left')
 
+    pand_data["optimized_rooms"] = transformed_rooms
+
     if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
-        transformed_rooms = [
-            refine_alignment(pand_data["bgt_outline"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
-            for i, g in enumerate(transformed_rooms)]
+        transformed_rooms = [refine_alignment(pand_data["bgt_outline"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
+                           for i, g in enumerate(transformed_rooms)]
 
     pand_data["optimized_rooms"] = transformed_rooms
-    #
-    # if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None:
-    #     transformed_rooms = [refine_alignment(pand_data["transformed_akte"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
-    #                        for i, g in enumerate(transformed_rooms)]
-
     return pand
+
 
 
 def combined_score(gof, hausdorff, alpha):
@@ -654,7 +650,7 @@ def find_best_edge_anchors(ref_edges, aligned_edges, distance_threshold, angle_t
     return None
 
 
-def refine_alignment(reference_geom, aligned_geom, geom_rooms, distance_threshold=3, angle_threshold=3):
+def refine_alignment(reference_geom, aligned_geom, geom_rooms, distance_threshold=5, angle_threshold=3):
     """Refine alignment by finding best anchor edges and applying a rigid transformation."""
     reference_geom = remove_collinear_vertices(reference_geom)
     aligned_geom = remove_collinear_vertices(aligned_geom)
@@ -1047,10 +1043,10 @@ for perceel in perceel_list:
     # ========================================== OPTIMISATION =========================================================
 
     # grid search optimization for rotation and scale
-    pand = grid_search(pand,  "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
-                                    alpha=0.2, buffer=1,
-                                     angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
-                                     translation_step=1)
+    pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
+                       alpha=0.2, buffer=1,
+                       angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
+                       translation_step=1)
 
     pand_data.to_csv(os.path.join("werkmap", 'pand_data_nagrid_rooms.csv'), index=True)
 
@@ -1088,7 +1084,7 @@ for perceel in perceel_list:
 
 
         similarity_score = shape_similarity_score(below_outline, floor_outline)
-        best_geom = grid_search_room(floor_outline, below_outline, translation_step=0.05)
+        best_geom = grid_search_room(floor_outline, below_outline, translation_step=0.2)
         plot_geometries(below_outline, best_geom)
         optimized_geometries[floor_index] = best_geom
         print("Similarity score:", similarity_score)
@@ -1121,4 +1117,4 @@ panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs=
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "allgrid_search_shapesim_snap.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "georef_test.geojson"), driver="GeoJSON")
