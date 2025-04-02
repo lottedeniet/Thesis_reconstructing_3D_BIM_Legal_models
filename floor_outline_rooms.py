@@ -184,7 +184,7 @@ def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2)
     plt.show()
 
 
-def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
+def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
     """
     Computes the shape similarity score based on the percentage of the floors boundary
     that falls within a buffered version of the reference floors boundary.
@@ -353,13 +353,13 @@ def get_polygon_edges(polygon):
 
 
 def grid_search_room(floor_geom, ground_floor_geom,
-                translation_step=0.1):
+                translation_step=0.2):
     """
     performs a grid search over translations to optimize shape similarity.
     """
     ground_floor_geom = gp.GeoSeries(ground_floor_geom)
     boundary_points = extract_boundary_points(ground_floor_geom.unary_union)
-    max_translation = np.max(pdist(boundary_points))/4
+    max_translation = np.max(pdist(boundary_points))/2
     print(max_translation)
 
     if isinstance(floor_geom, Polygon):
@@ -1038,11 +1038,17 @@ for perceel in perceel_list:
 
     score = calculate_polygon_score(pand['aligned_geometry'], pand['bgt_outline'])
     good_fit = True if score > 0.76 else False
+    good_fit = True
 
 
     # ========================================== OPTIMISATION =========================================================
 
     # grid search optimization for rotation and scale
+
+    pand.drop_duplicates()
+    pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id"])
+    pand_data.drop_duplicates()
+
     pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
                        alpha=0.2, buffer=1,
                        angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
@@ -1117,4 +1123,4 @@ panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs=
 panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "georef_test.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "test.geojson"), driver="GeoJSON")
