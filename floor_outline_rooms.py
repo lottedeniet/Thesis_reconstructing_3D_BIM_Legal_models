@@ -23,6 +23,8 @@ from joblib import Parallel, delayed
 from scipy.spatial import KDTree
 from shapely.plotting import plot_polygon
 from skimage.transform import estimate_transform
+import seaborn as sns
+from tqdm import tqdm
 
 kad_path = r'C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
 json_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
@@ -393,8 +395,11 @@ def grid_search_room(floor_geom, ground_floor_geom,
 
 
     # Run grid search in parallel
-    results = Parallel(n_jobs=-1)(delayed(apply_transformations)(dx, dy) for dx, dy in transform_params)
-
+    total_combinations = len(transform_params)
+    results = Parallel(n_jobs=-1)(
+        delayed(apply_transformations)(dx, dy)
+        for dx, dy in tqdm(transform_params, total=total_combinations, desc="Grid Search Progress")
+    )
     # Find the best transformation
     best_score = -np.inf
     best_geometries = None
@@ -740,6 +745,21 @@ def calculate_polygon_score(polygon1, polygon2, simplify_tolerance=0.01, distanc
     similarity_score = (edge_similarity + distance_weight * distance_similarity) / (1 + distance_weight)
     return similarity_score
 
+
+def fetch_3dbag_data(bag_id):
+    """Fetch data from 3DBAG API using the BAG identificatie."""
+    formatted_id = f"NL.IMBAG.Pand.{bag_id}"
+    url = f"https://api.3dbag.nl/collections/pand/items/{formatted_id}"
+
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Failed to fetch data for {bag_id}. Status Code: {response.status_code}")
+        return None
+
+
 #========================================== START CODE ================================================================
 # start code
 start_time = time.time()
@@ -1054,16 +1074,16 @@ for perceel in perceel_list:
                        angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
                        translation_step=1)
 
-    pand_data.to_csv(os.path.join("werkmap", 'pand_data_nagrid_rooms.csv'), index=True)
+
+
+    # pand_data2 = pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id", "geom_bgt"])
+    # pand_data2 = pand_data.drop_duplicates()
 
     pand_data = gp.GeoDataFrame(pand_data, geometry='optimized_rooms', crs='EPSG:28992')
-    pand_data.to_csv(os.path.join("werkmap", 'pand_data_test.csv'), index=True)
-    # ground_floor = pand_data[pand_data['verdieping'].fillna('').str.lower().str.contains("begane grond")]
 
     pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
     pand_data = pand_data[pand_data['floor_index'] != -999]
     pand_data.set_geometry('optimized_rooms')
-
 
     floors = pand_data.groupby('floor_index')
     optimized_geometries = {}
@@ -1090,12 +1110,156 @@ for perceel in perceel_list:
 
 
         similarity_score = shape_similarity_score(below_outline, floor_outline)
-        best_geom = grid_search_room(floor_outline, below_outline, translation_step=0.2)
+        best_geom = grid_search_room(floor_outline, below_outline, translation_step=0.5)
         plot_geometries(below_outline, best_geom)
         optimized_geometries[floor_index] = best_geom
         print("Similarity score:", similarity_score)
 
     pand_data['optimized_rooms'] = pand_data['floor_index'].map(optimized_geometries)
+
+    #============================== Height Estimate ==========================================
+
+    null_verdieping_rooms = pand_data[pand_data['verdieping'].isna()]
+    if null_verdieping_rooms.empty:
+        # get the 3dbag data
+        bag_height_mapping = {}
+
+        # Extract unique BAG IDs from pand_data_full
+        unique_bag_ids = set()
+        for index, row in pand_data.iterrows():
+            bag_ids = str(row["bag_pnd"]).split(",")  # Handle multiple IDs
+            for bag_id in bag_ids:
+                bag_id = bag_id.strip()
+                unique_bag_ids.add(bag_id)
+
+        # Process each BAG ID
+        for bag_id in unique_bag_ids:
+            data = fetch_3dbag_data(bag_id)
+
+            # Default height if data is missing
+            if data is None:
+                print(f"No data found for bag id: {bag_id}, using default height.")
+                bag_height_mapping[bag_id] = 2.8
+                continue
+
+            # Extract attributes from 3DBAG data
+            else:
+                bag_info = data["feature"]["CityObjects"][f"NL.IMBAG.Pand.{bag_id}"]["attributes"]
+                b3_h_dak_max = bag_info.get("b3_h_dak_max")
+                b3_h_maaiveld = bag_info.get("b3_h_maaiveld")
+                total_pand_height = b3_h_dak_max - b3_h_maaiveld
+
+                # Calculate total floors count (assuming floors is defined somewhere)
+                total_floors = sum(1 for floor_index, _ in floors if floor_index >= 0)
+
+
+                extrusion_height = total_pand_height / total_floors if total_floors > 0 else 2.8
+                bag_height_mapping[bag_id] = extrusion_height
+
+
+        # Assign computed heights to pand_data_full
+        def get_extrusion_height(bag_pnd):
+            bag_ids = str(bag_pnd).split(",")
+            heights = [bag_height_mapping.get(bag_id.strip(), 2.8) for bag_id in bag_ids]
+            return max(heights)  # Take the maximum height if multiple BAG IDs
+
+
+        pand_data["extrusion_height"] = pand_data["bag_pnd"].apply(get_extrusion_height)
+
+        # Print to verify
+        print(pand_data[["bag_pnd", "extrusion_height"]])
+
+
+
+
+    else:
+        # Assign a new group identifier (e.g., 'section')
+        null_verdieping_rooms['floor_index'] = -100  # Use a unique index
+
+        # Process these rooms separately
+        section_geometry = null_verdieping_rooms.geometry
+
+        y_values = []
+
+        for geom in section_geometry:
+            if geom is not None:
+                # Convert MultiPolygon to individual Polygons
+                if geom.geom_type == "MultiPolygon":
+                    for poly in geom.geoms:
+                        y_values.extend([point[1] for point in poly.exterior.coords])
+                elif geom.geom_type == "Polygon":
+                    y_values.extend([point[1] for point in geom.exterior.coords])
+
+        # Convert to NumPy array for plotting
+        y_values = np.array(y_values)
+
+
+        from sklearn.cluster import KMeans, DBSCAN
+
+        y_values_reshaped = y_values.reshape(-1, 1)
+
+        # DBSCAN - detect clusters without knowing the amount of clusters beforehand
+        # epsilon = max distance between floors to be considered part of the same cluster
+        dbscan = DBSCAN(eps=0.5, min_samples=1)
+        floor_indices = dbscan.fit_predict(y_values_reshaped)
+        num_floors= max(floor_indices) + 1
+
+        # Plot histogram
+        plt.figure(figsize=(8, 5))
+        plt.hist(y_values, bins=num_floors, edgecolor="black", alpha=0.7)
+        plt.xlabel("Y-Coordinate")
+        plt.ylabel("Frequency")
+        plt.title("Histogram of Y-Values in Section")
+        plt.grid(axis="y", linestyle="--", alpha=0.5)
+
+        # Show plot
+        plt.show()
+
+        plt.figure(figsize=(8, 5))
+        sns.scatterplot(x=np.zeros_like(y_values), y=y_values, hue=floor_indices, palette="viridis", s=20)
+        plt.xlabel("Dummy X-axis")
+        plt.ylabel("Y-Coordinate")
+        plt.title("DBSCAN Floor Clustering")
+        plt.show()
+        print("DBSCAN clustered floors:", floor_indices)
+
+        kmeans = KMeans(n_clusters=num_floors, random_state=42)
+        kmeans.fit(y_values_reshaped)
+
+        # Assign each y-value to a cluster (floor)
+        floor_labels = kmeans.labels_
+
+        # Print cluster centers (approximate floor heights)
+        print("Estimated Floor Heights:", kmeans.cluster_centers_)
+
+
+        # get the extrusion heights
+        sorted_centers = np.sort(kmeans.cluster_centers_, axis=0)
+        print("Sorted Centers:", sorted_centers)
+        plt.figure(figsize=(8, 5))
+        sns.scatterplot(x=np.zeros_like(y_values), y=y_values, hue=floor_labels, palette="tab10", s=20)
+        plt.scatter(np.zeros_like(sorted_centers), sorted_centers, c="red", marker="x", label="Estimated Floor Heights")
+        plt.xlabel("Dummy X-axis")
+        plt.ylabel("Y-Coordinate")
+        plt.title("KMeans Clustered Floor Heights")
+        plt.legend()
+        plt.show()
+        # Calculate the extrusion height (difference in height between each floor)
+        extrusion_heights = np.diff(sorted_centers, axis=0).flatten()  # Flatten to get 1D array of differences
+        print("Extrusion Heights:", extrusion_heights)
+
+        # Create a mapping of floor indices to the extrusion height values
+        floor_to_extrusion = {index: extrusion_heights[i]
+                              for i, index in enumerate(sorted(pand_data['floor_index'].unique()))}
+
+        # Assign the extrusion height to each row based on the 'floor_index'
+        pand_data['extrusion_height'] = pand_data['floor_index'].map(floor_to_extrusion)
+
+    # Print the updated dataframe with extrusion heights
+    print(pand_data[['verdieping', 'extrusion_height']])
+
+
+
 
     all_panden_rooms.append(pand_data)
 
@@ -1120,7 +1284,7 @@ print(panden_rooms.info())
 # panden_rooms2.to_file(os.path.join("werkmap", f"optimized_rooms_edgematch.shp"), driver="ESRI Shapefile")
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
-panden_rooms2 = panden_rooms.drop(columns=['geom_bgt',  'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
+panden_rooms2 = panden_rooms[['optimized_rooms_3d', 'extrusion_height']]
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "test.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "3211test.geojson"), driver="GeoJSON")
