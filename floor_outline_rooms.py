@@ -27,7 +27,7 @@ import seaborn as sns
 from tqdm import tqdm
 
 kad_path = r'C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\aanvullende_data\Hilversum\Percelen_aktes_Hilversum.shp'
-json_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest"
+json_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\original_data\gevectoriseerde_set\hilversum_set\observations\snapshots\latest_test"
 out_path = r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\github_code\thesis\werkmap\output"
 api_bgt = 'https://api.pdok.nl/lv/bgt/ogc/v1/collections/pand/items'
 files = os.listdir(json_path)
@@ -111,12 +111,12 @@ def map_floor(floor):
 
     return -999
 
-def extrude_to_3d(geometry, floor_height=3, floor_index=0):
+def extrude_to_3d(geometry, maaiveld, floor_height=3, floor_index=0):
     """function to extrude geometry to 3D, with a predetermined floor height"""
     if geometry.is_empty:
         return None
 
-    def to_3d(x, y, z=floor_index * floor_height):
+    def to_3d(x, y, z=(floor_index * floor_height)+maaiveld):
         return (x, y, z)
 
     if isinstance(geometry, Polygon):
@@ -186,14 +186,13 @@ def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2)
     plt.show()
 
 
-def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
+def shape_similarity_score(ref_geom, geom, buffer_distance=0.2):
     """
-    Computes the shape similarity score based on the percentage of the floors boundary
-    that falls within a buffered version of the reference floors boundary.
+    Computes the shape similarity score based on the percentage of the floor boundary
+    that falls within a buffered version of the reference floor boundary.
 
     Returns:
     float: Similarity score (0 to 1), where 1 means complete alignment.
-    (LOOK AT: returns sometimes scores above 1, clean up types)
     """
 
     if isinstance(ref_geom, gp.GeoSeries):
@@ -201,7 +200,7 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
     else:
         ref_geometries = [ref_geom]
 
-    # extract the lines instead of the polygons
+    # Extract lines instead of polygons
     all_ref_lines = []
     for rgeom in ref_geometries:
         if isinstance(rgeom, Polygon):
@@ -210,8 +209,9 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
             for poly in rgeom.geoms:
                 all_ref_lines.append(extract_multilines(poly))
 
-    # buffer the lines of the floor below
-    buffered_ref_lines = [line.buffer(buffer_distance) for multi_line in all_ref_lines for line in multi_line.geoms]
+    # Buffer the reference lines and merge to avoid double counting
+    buffered_ref_union = unary_union(
+        [line.buffer(buffer_distance) for multi_line in all_ref_lines for line in multi_line.geoms])
 
     if isinstance(geom, gp.GeoSeries):
         geometries = geom.geometry
@@ -226,18 +226,18 @@ def shape_similarity_score(ref_geom, geom, buffer_distance=0.5):
             for poly in g.geoms:
                 all_geom_lines.append(extract_multilines(poly))
 
-
     total_length = sum(line.length for multi_line in all_geom_lines for line in multi_line.geoms)
-    # compute the intersection of the floor lines that fall in the buffered lines
-    intersected_length = sum(line.intersection(buffered_line).length
-                             for buffered_line in buffered_ref_lines
+
+    # Compute the intersection length with the merged buffered reference
+    intersected_length = sum(line.intersection(buffered_ref_union).length
                              for multi_line in all_geom_lines
                              for line in multi_line.geoms)
 
     if total_length == 0:
         return 0.0
 
-    return intersected_length / total_length
+    # Ensure score is within [0,1]
+    return min(1.0, max(0.0, intersected_length / total_length))
 
 
 
@@ -361,7 +361,9 @@ def grid_search_room(floor_geom, ground_floor_geom,
     """
     ground_floor_geom = gp.GeoSeries(ground_floor_geom)
     boundary_points = extract_boundary_points(ground_floor_geom.unary_union)
-    max_translation = np.max(pdist(boundary_points))/2
+    max_translation = np.max(pdist(boundary_points))/6
+    max_translation_y = 0.5
+
     print(max_translation)
 
     if isinstance(floor_geom, Polygon):
@@ -377,11 +379,12 @@ def grid_search_room(floor_geom, ground_floor_geom,
     else:
         ground_floor_polygons = [geom for geom in ground_floor_geom if geom.is_valid]
         ground_floor_multipolygon = MultiPolygon(ground_floor_polygons)
-    translations = np.arange(-max_translation, max_translation + translation_step,
+    translations_x = np.arange(-max_translation, max_translation + translation_step,
                              translation_step)
-
+    translations_y = np.arange(-max_translation_y, max_translation_y + translation_step,
+                             translation_step)
     # Generate all transformation combinations
-    transform_params = list(itertools.product(translations, translations))
+    transform_params = list(itertools.product(translations_x, translations_y))
     def apply_transformations(dx, dy):
 
         transformed_geometries = (floor_multipolygon)
@@ -671,10 +674,10 @@ def refine_alignment(reference_geom, aligned_geom, geom_rooms, distance_threshol
     matched_aligned, matched_ref = anchors
 
     transform =  rigid_transform_polygon(aligned_geom, matched_aligned, matched_ref)
-    if aligned_geom.geom_type == "Polygon":
+    if geom_rooms.geom_type == "Polygon":
         return transform_polygon(geom_rooms, transform)
 
-    elif aligned_geom.geom_type == "MultiPolygon":
+    elif geom_rooms.geom_type == "MultiPolygon":
         transformed_polygons = [transform_polygon(poly, transform) for poly in geom_rooms.geoms]
         return MultiPolygon([poly for poly in transformed_polygons if poly.is_valid])
 
@@ -1024,6 +1027,7 @@ for perceel in perceel_list:
 
 
 
+
     # allign centroids -> translation
     pand.set_geometry('geom_akte_bg_scaled', inplace=True)
     bgt_centroid = unary_union(pand.bgt_outline).centroid
@@ -1047,8 +1051,10 @@ for perceel in perceel_list:
 
     for floor, floor_data in floors:
         floor_centroid = floor_data.geometry.unary_union.centroid
-        translation_vector = (bgt_centroid.x - floor_centroid.x,
-                              bgt_centroid.y - floor_centroid.y)
+        relative_x_offset = floor_centroid.x - building_centroid.x
+        relative_y_offset = floor_centroid.y - building_centroid.y
+        translation_vector = (bgt_centroid.x - floor_centroid.x + relative_x_offset,
+                              bgt_centroid.y - floor_centroid.y + relative_y_offset)
 
         pand_data.loc[floor_data.index, 'aligned_rooms'] = floor_data.geometry.apply(
             lambda geom: translate(geom, xoff=translation_vector[0], yoff=translation_vector[1])
@@ -1056,34 +1062,51 @@ for perceel in perceel_list:
 
     pand_data = gp.GeoDataFrame(pand_data, geometry='aligned_rooms', crs='EPSG:28992')
 
-    score = calculate_polygon_score(pand['aligned_geometry'], pand['bgt_outline'])
-    good_fit = True if score > 0.76 else False
-    good_fit = True
 
-
-    # ========================================== OPTIMISATION =========================================================
-
-    # grid search optimization for rotation and scale
-
-    pand.drop_duplicates()
-    pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id"])
-    pand_data.drop_duplicates()
-
-    pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
-                       alpha=0.2, buffer=1,
-                       angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
-                       translation_step=1)
-
-
-
-    # pand_data2 = pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id", "geom_bgt"])
-    # pand_data2 = pand_data.drop_duplicates()
-
-    pand_data = gp.GeoDataFrame(pand_data, geometry='optimized_rooms', crs='EPSG:28992')
+    pand_data = gp.GeoDataFrame(pand_data, geometry='aligned_rooms', crs='EPSG:28992')
 
     pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
     pand_data = pand_data[pand_data['floor_index'] != -999]
-    pand_data.set_geometry('optimized_rooms')
+    pand_data.set_geometry('aligned_rooms')
+
+    # Compute the reference X-centroid from the ground floor (index 0)
+    ground_floor = pand_data[pand_data['floor_index'] == 0]
+    reference_x = ground_floor.geometry.unary_union.centroid.x
+
+
+    # Shift each floor so that its centroid.x matches the ground floor centroid.x
+    for floor_index, floor_data in pand_data.groupby('floor_index'):
+        floor_x_centroid = floor_data.geometry.unary_union.centroid.x
+        x_shift = reference_x - floor_x_centroid
+
+        # Apply the shift (only in X direction)
+        pand_data.loc[floor_data.index, 'aligned_rooms'] = floor_data.geometry.apply(
+            lambda geom: translate(geom, xoff=x_shift, yoff=0)
+        )
+
+
+    # # translate the rooms on top of each other
+    # pand_data = gp.GeoDataFrame(pand_data, geometry='geom_akte_all', crs='EPSG:28992')
+    # pand_data.set_geometry('geom_akte_all_scaled', inplace=True)
+    #
+    # floors = pand_data.groupby('verdieping')
+    #
+    # pand_data['aligned_rooms'] = None
+    #
+    # for floor, floor_data in floors:
+    #     floor_centroid = floor_data.geometry.unary_union.centroid
+    #     translation_vector = (bgt_centroid.x - floor_centroid.x,
+    #                           bgt_centroid.y - floor_centroid.y)
+    #
+    #     pand_data.loc[floor_data.index, 'aligned_rooms'] = floor_data.geometry.apply(
+    #         lambda geom: translate(geom, xoff=translation_vector[0], yoff=translation_vector[1])
+    #     )
+    #
+    # pand_data = gp.GeoDataFrame(pand_data, geometry='aligned_rooms', crs='EPSG:28992')
+
+    score = calculate_polygon_score(pand['aligned_geometry'], pand['bgt_outline'])
+    good_fit = True if score > 0.76 else False
+    good_fit = True
 
     floors = pand_data.groupby('floor_index')
     optimized_geometries = {}
@@ -1115,62 +1138,76 @@ for perceel in perceel_list:
         optimized_geometries[floor_index] = best_geom
         print("Similarity score:", similarity_score)
 
-    pand_data['optimized_rooms'] = pand_data['floor_index'].map(optimized_geometries)
+    pand_data['aligned_rooms'] = pand_data['floor_index'].map(optimized_geometries)
+
+    # ========================================== OPTIMISATION =========================================================
+
+    # grid search optimization for rotation and scale
+
+    pand.drop_duplicates()
+    pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id"])
+    pand_data.drop_duplicates()
+
+    pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms", good_fit,
+                       alpha=0.2, buffer=1,
+                       angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
+                       translation_step=1)
+
+    # pand_data2 = pand_data.drop(columns=["bag_pnd", "bgt_lokaal_id", "geom_bgt"])
+    # pand_data2 = pand_data.drop_duplicates()
+
+    pand_data = gp.GeoDataFrame(pand_data, geometry='optimized_rooms', crs='EPSG:28992')
+
+    # pand_data['floor_index'] = pand_data['verdieping'].apply(map_floor)
+    # pand_data = pand_data[pand_data['floor_index'] != -999]
+    # pand_data.set_geometry('optimized_rooms')
+
 
     #============================== Height Estimate ==========================================
 
     null_verdieping_rooms = pand_data[pand_data['verdieping'].isna()]
+    # get the 3dbag data
+    bag_height_mapping = {}
+
+    # Extract unique BAG IDs from pand_data_full
+    unique_bag_ids = set()
+    for index, row in pand_data.iterrows():
+        bag_ids = str(row["bag_pnd"]).split(",")
+        for bag_id in bag_ids:
+            bag_id = bag_id.strip()
+            unique_bag_ids.add(bag_id)
+    print("unique_bag_ids", unique_bag_ids)
+    # Process each BAG ID
+    for bag_id in unique_bag_ids:
+        data = fetch_3dbag_data(bag_id)
+
+        # Default height if data is missing
+        if data is None:
+            print(f"No data found for bag id: {bag_id}, using default height.")
+            pand_data = pand_data[pand_data['bag_pnd'] != bag_id]
+            # pand_data.loc[pand_data["bag_pnd"] == bag_id, "extrusion_height"] = 2.8
+            # pand_data.loc[pand_data["bag_pnd"] == bag_id, "maaiveld"] = 0
+
+
+        # Extract attributes from 3DBAG data
+        else:
+            bag_info = data["feature"]["CityObjects"][f"NL.IMBAG.Pand.{bag_id}"]["attributes"]
+            b3_h_dak_max = bag_info.get("b3_h_dak_max")
+            b3_h_maaiveld = bag_info.get("b3_h_maaiveld")
+            total_pand_height = b3_h_dak_max - b3_h_maaiveld
+
+            # Calculate total floors count (assuming floors is defined somewhere)
+            total_floors = sum(1 for floor_index, _ in floors if floor_index >= 0)
+            extrusion_height = total_pand_height / total_floors if total_floors > 0 else 2.8
+            print(bag_id)
+            print(pand_data["bag_pnd"].head())
+            pand_data.loc[pand_data["bag_pnd"].str.contains(bag_id, na=False), "extrusion_height"] = extrusion_height
+            pand_data.loc[pand_data["bag_pnd"].str.contains(bag_id, na=False), "maaiveld"] = b3_h_maaiveld
+
     if null_verdieping_rooms.empty:
-        # get the 3dbag data
-        bag_height_mapping = {}
-
-        # Extract unique BAG IDs from pand_data_full
-        unique_bag_ids = set()
-        for index, row in pand_data.iterrows():
-            bag_ids = str(row["bag_pnd"]).split(",")  # Handle multiple IDs
-            for bag_id in bag_ids:
-                bag_id = bag_id.strip()
-                unique_bag_ids.add(bag_id)
-
-        # Process each BAG ID
-        for bag_id in unique_bag_ids:
-            data = fetch_3dbag_data(bag_id)
-
-            # Default height if data is missing
-            if data is None:
-                print(f"No data found for bag id: {bag_id}, using default height.")
-                bag_height_mapping[bag_id] = 2.8
-                continue
-
-            # Extract attributes from 3DBAG data
-            else:
-                bag_info = data["feature"]["CityObjects"][f"NL.IMBAG.Pand.{bag_id}"]["attributes"]
-                b3_h_dak_max = bag_info.get("b3_h_dak_max")
-                b3_h_maaiveld = bag_info.get("b3_h_maaiveld")
-                total_pand_height = b3_h_dak_max - b3_h_maaiveld
-
-                # Calculate total floors count (assuming floors is defined somewhere)
-                total_floors = sum(1 for floor_index, _ in floors if floor_index >= 0)
-
-
-                extrusion_height = total_pand_height / total_floors if total_floors > 0 else 2.8
-                bag_height_mapping[bag_id] = extrusion_height
-
-
-        # Assign computed heights to pand_data_full
-        def get_extrusion_height(bag_pnd):
-            bag_ids = str(bag_pnd).split(",")
-            heights = [bag_height_mapping.get(bag_id.strip(), 2.8) for bag_id in bag_ids]
-            return max(heights)  # Take the maximum height if multiple BAG IDs
-
-
-        pand_data["extrusion_height"] = pand_data["bag_pnd"].apply(get_extrusion_height)
-
-        # Print to verify
-        print(pand_data[["bag_pnd", "extrusion_height"]])
-
-
-
+        for floor_index, floor_data in floors:
+            if floor_index < 0:
+                pand_data.loc[pand_data["floor_index"] == floor_index, "extrusion_height"] = 2.3
 
     else:
         # Assign a new group identifier (e.g., 'section')
@@ -1193,7 +1230,6 @@ for perceel in perceel_list:
         # Convert to NumPy array for plotting
         y_values = np.array(y_values)
 
-
         from sklearn.cluster import KMeans, DBSCAN
 
         y_values_reshaped = y_values.reshape(-1, 1)
@@ -1202,7 +1238,7 @@ for perceel in perceel_list:
         # epsilon = max distance between floors to be considered part of the same cluster
         dbscan = DBSCAN(eps=0.5, min_samples=1)
         floor_indices = dbscan.fit_predict(y_values_reshaped)
-        num_floors= max(floor_indices) + 1
+        num_floors = max(floor_indices) + 1
 
         # Plot histogram
         plt.figure(figsize=(8, 5))
@@ -1232,7 +1268,6 @@ for perceel in perceel_list:
         # Print cluster centers (approximate floor heights)
         print("Estimated Floor Heights:", kmeans.cluster_centers_)
 
-
         # get the extrusion heights
         sorted_centers = np.sort(kmeans.cluster_centers_, axis=0)
         print("Sorted Centers:", sorted_centers)
@@ -1255,12 +1290,10 @@ for perceel in perceel_list:
         # Assign the extrusion height to each row based on the 'floor_index'
         pand_data['extrusion_height'] = pand_data['floor_index'].map(floor_to_extrusion)
 
-    # Print the updated dataframe with extrusion heights
     print(pand_data[['verdieping', 'extrusion_height']])
-
-
-
-
+    pand_data.set_geometry('optimized_rooms')
+    pand_data.plot()
+    plt.show()
     all_panden_rooms.append(pand_data)
 
 panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
@@ -1268,14 +1301,13 @@ panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
 end_time = time.time()
 print("Executed time: ", end_time - start_time)
 
-
 # Apply floor mapping
 
 panden_rooms['optimized_rooms_3d'] = panden_rooms.apply(
-    lambda row: extrude_to_3d(row['optimized_rooms'], floor_height=3, floor_index=row['floor_index']),
+    lambda row: extrude_to_3d(row['optimized_rooms'], row['maaiveld'],floor_height=row['extrusion_height'], floor_index=row['floor_index']),
     axis=1)
 
-panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms', crs='EPSG:28992')
+panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
 panden_rooms.set_geometry('optimized_rooms_3d')
 panden_rooms.plot()
 plt.show()
@@ -1284,7 +1316,8 @@ print(panden_rooms.info())
 # panden_rooms2.to_file(os.path.join("werkmap", f"optimized_rooms_edgematch.shp"), driver="ESRI Shapefile")
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
-panden_rooms2 = panden_rooms[['optimized_rooms_3d', 'extrusion_height']]
+panden_rooms2 = panden_rooms.drop(
+    columns=['geom_bgt', 'aligned_rooms', 'geom_akte_all', 'geom_akte_all_scaled', 'optimized_rooms'])
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", "3211test.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", "testfloors.geojson"), driver="GeoJSON")
