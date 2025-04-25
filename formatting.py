@@ -1,45 +1,29 @@
 import ifcopenshell.api
 import geopandas as gpd
-import shapely
+import pandas as pd
 from shapely import wkt
-from shapely.geometry import mapping
-import os
 import ifcopenshell.api.root
 import ifcopenshell.api.unit
 import ifcopenshell.api.context
 import ifcopenshell.api.project
-import ifcopenshell.api.spatial
-import ifcopenshell.api.geometry
 import ifcopenshell.api.aggregate
-from matplotlib import pyplot as plt
+
 
 gdf = gpd.read_file(r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\github_code\thesis\werkmap\separate_pand_rooms.csv")  # or construct it another way
+gdf["appartement"] = pd.to_numeric(gdf["appartement"], errors="coerce").astype("Int64")
+storey_inclusion = False
+
 print(gdf.info())
 print(gdf.head(5))
 
-import geopandas as gpd
-import ifcopenshell
-import ifcopenshell.api
 import os
-
-from shapely.geometry import Polygon, MultiPolygon
-import ifcopenshell.api
-import ifcopenshell.util.element
-from shapely.geometry import Polygon, MultiPolygon
-import ifcopenshell
-import ifcopenshell.api
-
-
-from shapely.geometry import Polygon, MultiPolygon
-
-
 from shapely.geometry import Polygon, MultiPolygon
 import ifcopenshell
 
 
 
+guid = ifcopenshell.guid.new()
 
-from ifcopenshell.api import run
 
 def create_cartesian_point(model, coords):
     # Create IfcCartesianPoint and assign coordinate aggregate manually
@@ -102,6 +86,8 @@ def make_extruded_brep(model, context, geom, height, z_offset):
         Items=[extruded_solid],
     )
 
+
+
     # Return the shape representation with the offset applied
     print(z_offset+ height)
     return shape_rep, z_offset + height
@@ -115,7 +101,7 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
     model = ifcopenshell.api.project.create_file()
 
     # Create core project structure
-    project = ifcopenshell.api.root.create_entity(model, ifc_class="IfcProject", name=f"Project_{bag_pnd}")
+    project = model.create_entity("IfcProject", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalApartmentComplex")
     ifcopenshell.api.unit.assign_unit(model)
 
     context = ifcopenshell.api.context.add_context(model, context_type="Model")
@@ -124,8 +110,8 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
                                                 target_view="MODEL_VIEW",
                                                 parent=context)
 
-    site = ifcopenshell.api.root.create_entity(model, ifc_class="IfcSite", name=f"Site_{bag_pnd}")
-    building = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuilding", name=f"Building_{bag_pnd}")
+    site = model.create_entity("IfcSite", GlobalId=ifcopenshell.guid.new())
+    building = model.create_entity("IfcBuilding", GlobalId=ifcopenshell.guid.new(), Description="ApartmentComplex")
     ifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])
     ifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])
 
@@ -135,12 +121,49 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
     for floor_idx, floor_rooms in rooms.groupby("floor_index"):
         print(rooms["floor_index"].value_counts())
 
-        storey = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuildingStorey", name=f"Storey_{floor_idx}")
-        ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
-        storeys[floor_idx] = storey
+        #optional add storeys
+        if storey_inclusion:
+            storey = model.create_entity("IfcBuildingStorey", Name=f"Storey_{floor_idx}", GlobalId=ifcopenshell.guid.new())
+            ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
+            storeys[floor_idx] = storey
         floor_height = floor_rooms["extrusion_height"].astype(float).max()
         # Iterate over each room and create extrusion
         for _, room in floor_rooms.iterrows():
+            apartmentindex = room["appartement"]
+            if pd.isnull(room["appartement"]):
+                apartmentunit = model.create_entity("IfcGroup", GlobalId=ifcopenshell.guid.new(),
+                                                    Description="SharedPart")
+
+            else:
+                apartmentunit = model.create_entity("IfcGroup", GlobalId=ifcopenshell.guid.new(),
+                                                    Description="ApartmentUnit")
+
+                apartment_index_prop = model.create_entity("IfcPropertySingleValue",
+                                                           Name="apartmentIndex",
+                                                           NominalValue=model.createIfcInteger(apartmentindex),
+                                                           Unit=None
+                                                           )
+
+                property_set = model.create_entity("IfcPropertySet",
+                                                   GlobalId=ifcopenshell.guid.new(),
+                                                   Name="Pset_ApartmentUnit",
+                                                   HasProperties=[apartment_index_prop]
+                                                   )
+
+                model.create_entity("IfcRelDefinesByProperties",
+                                    GlobalId=ifcopenshell.guid.new(),
+                                    RelatingPropertyDefinition=property_set,
+                                    RelatedObjects=[apartmentunit]
+                                    )
+
+            ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[apartmentunit])
+            if storey_inclusion:
+                ifcopenshell.api.aggregate.assign_object(model, relating_object=storeys[room["floor_index"]],
+                                                         products=[apartmentunit])
+
+            legalspace = model.create_entity("IfcZone", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalSpace")
+            ifcopenshell.api.aggregate.assign_object(model, relating_object=apartmentunit, products=[legalspace])
+
             print(room['ruimte'])
             try:
                 geom = wkt.loads(room["optimized_rooms_3d"])  # Load the geometry (WKT)
@@ -154,11 +177,9 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
                 continue
 
             # Create IfcSpace for room
-            space = ifcopenshell.api.run("root.create_entity", model, {
-                "ifc_class": "IfcSpace",
-                "name": f"Room_{room['ruimte']}",
-            })
-
+            space = model.create_entity("IfcSpace", Name=f"{room['ruimte']}", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalSpaceUnit")
+            print(space)
+            print(space.is_a())
             # Get extrusion height
             extrusion_height = float(room["extrusion_height"])  # Assuming this is in your DataFrame
             print(extrusion_height)
@@ -177,14 +198,76 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
             space.Representation = rep
             print(rep.ContextOfItems)
             print(rep.Items)
+            print(dir(space))
 
-            # Assign to spatial structure and placement
-            ifcopenshell.api.run("spatial.assign_container", model,
-                                 products=[space],
-                                 relating_structure=storeys[room["floor_index"]])
+            # create the level property of space
+            space_level_prop = model.create_entity("IfcPropertySingleValue",
+                                                       Name="level",
+                                                       NominalValue=model.createIfcInteger(floor_idx),
+                                                       Unit=None
+                                                       )
+
+            property_set_level = model.create_entity("IfcPropertySet",
+                                               GlobalId=ifcopenshell.guid.new(),
+                                               Name="Pset_BIMLegalSpaceUnit",
+                                               HasProperties=[space_level_prop]
+                                               )
+
+            model.create_entity("IfcRelDefinesByProperties",
+                                GlobalId=ifcopenshell.guid.new(),
+                                RelatingPropertyDefinition=property_set_level,
+                                RelatedObjects=[space]
+                                )
+
+            # create the surfacearea property of space
+            space_surfacearea_prop = model.create_entity("IfcPropertySingleValue",
+                                                   Name="surfaceArea",
+                                                   NominalValue=model.createIfcReal(0.0),
+                                                   Unit=None
+                                                   )
+
+            property_set_surf = model.create_entity("IfcPropertySet",
+                                               GlobalId=ifcopenshell.guid.new(),
+                                               Name="Pset_BIMLegalSpaceUnit",
+                                               HasProperties=[space_surfacearea_prop]
+                                               )
+
+            model.create_entity("IfcRelDefinesByProperties",
+                                GlobalId=ifcopenshell.guid.new(),
+                                RelatingPropertyDefinition=property_set_surf,
+                                RelatedObjects=[space]
+                                )
+
+            # create the unit type
+            space_unit_prop = model.create_entity("IfcPropertySingleValue",
+                                                   Name="bimLegalSpaceUnitType",
+                                                   NominalValue=model.createIfcLabel("m"),
+                                                   Unit=None
+                                                   )
+
+            property_set_unit = model.create_entity("IfcPropertySet",
+                                               GlobalId=ifcopenshell.guid.new(),
+                                               Name="Pset_BIMLegalSpaceUnit",
+                                               HasProperties=[space_unit_prop]
+                                               )
+
+            model.create_entity("IfcRelDefinesByProperties",
+                                GlobalId=ifcopenshell.guid.new(),
+                                RelatingPropertyDefinition=property_set_unit,
+                                RelatedObjects=[space]
+                                )
+
+
+            ifcopenshell.api.aggregate.assign_object(model, relating_object=legalspace, products=[space])
+
+            if storey_inclusion:
+                ifcopenshell.api.aggregate.assign_object(model, relating_object=storeys[room["floor_index"]], products=[space])
+
+                ifcopenshell.api.run("spatial.assign_container", model,
+                                     products=[space],
+                                     relating_structure=storeys[room["floor_index"]])
 
             space.ObjectPlacement = create_local_placement(model, 0.0, 0.0, z_offset)
-            print(f"Added space {space.Name} to storey {room['floor_index']}")
             print(f"Created {space.is_a()} with name {space.Name}")
 
         z_offset += float(floor_height)
