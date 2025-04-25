@@ -1,5 +1,6 @@
 import ifcopenshell.api
 import geopandas as gpd
+import shapely
 from shapely import wkt
 from shapely.geometry import mapping
 import os
@@ -10,6 +11,7 @@ import ifcopenshell.api.project
 import ifcopenshell.api.spatial
 import ifcopenshell.api.geometry
 import ifcopenshell.api.aggregate
+from matplotlib import pyplot as plt
 
 gdf = gpd.read_file(r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\github_code\thesis\werkmap\separate_pand_rooms.csv")  # or construct it another way
 print(gdf.info())
@@ -27,7 +29,52 @@ from shapely.geometry import Polygon, MultiPolygon
 import ifcopenshell
 import ifcopenshell.api
 
-def make_faceted_brep(model, context, geom):
+
+from shapely.geometry import Polygon, MultiPolygon
+
+
+from shapely.geometry import Polygon, MultiPolygon
+import ifcopenshell
+
+
+
+
+from ifcopenshell.api import run
+
+def create_cartesian_point(model, coords):
+    # Create IfcCartesianPoint and assign coordinate aggregate manually
+    point = model.create_entity("IfcCartesianPoint")
+    point.__dict__["wrapped_data"].set_argument("Coordinates", coords)
+    return point
+
+def create_direction(model, ratios):
+    direction = model.create_entity("IfcDirection")
+    direction.__dict__["wrapped_data"].set_argument("DirectionRatios", ratios)
+    return direction
+
+def create_local_placement(model, x=0.0, y=0.0, z=0.0):
+    point = model.create_entity("IfcCartesianPoint", Coordinates=((x, y, z)))
+    dir_z = model.create_entity("IfcDirection", DirectionRatios=(0.0, 0.0, 1.0))
+    dir_x = model.create_entity("IfcDirection", DirectionRatios=(1.0, 0.0, 0.0))
+
+    axis2placement = model.create_entity(
+        "IfcAxis2Placement3D",
+        Location=point,
+        Axis=dir_z,
+        RefDirection=dir_x
+    )
+
+    return model.create_entity(
+        "IfcLocalPlacement",
+        PlacementRelTo=None,
+        RelativePlacement=axis2placement
+    )
+
+
+
+
+def make_extruded_brep(model, context, geom, height, z_offset):
+    # Ensure the geometry is a Polygon
     if isinstance(geom, Polygon):
         polygons = [geom]
     elif isinstance(geom, MultiPolygon):
@@ -35,82 +82,34 @@ def make_faceted_brep(model, context, geom):
     else:
         raise ValueError("Expected Polygon or MultiPolygon")
 
-    faces = []
-    for poly in polygons:
-        if not poly.exterior:
-            continue
+    # Create a profile for the extrusion
+    profile = model.create_entity("IfcArbitraryClosedProfileDef",
+                                  ProfileType="AREA",
+                                  OuterCurve=model.create_entity("IfcPolyline", Points=[model.create_entity("IfcCartesianPoint", Coordinates=list(pt)) for pt in polygons[0].exterior.coords]))
 
-        # Outer loop
-        outer_pts = [model.create_entity("IfcCartesianPoint", Coordinates=list(pt)) for pt in poly.exterior.coords]
-        polyloop = model.create_entity("IfcPolyLoop", Polygon=outer_pts)
-        outer_bound = model.create_entity("IfcFaceOuterBound", Bound=polyloop, Orientation=True)
+    # Extrude the profile
+    extruded_solid = model.create_entity("IfcExtrudedAreaSolid",
+                                         SweptArea=profile,
+                                         ExtrudedDirection=model.create_entity("IfcDirection", DirectionRatios=[0.0, 0.0, 1.0]),
+                                         Depth=height)
 
-        # Inner loops
-        inner_bounds = []
-        for hole in poly.interiors:
-            inner_pts = [model.create_entity("IfcCartesianPoint", Coordinates=list(pt)) for pt in hole.coords]
-            inner_loop = model.create_entity("IfcPolyLoop", Polygon=inner_pts)
-            inner_bound = model.create_entity("IfcFaceBound", Bound=inner_loop, Orientation=True)
-            inner_bounds.append(inner_bound)
-
-        face = model.create_entity("IfcFace", Bounds=[outer_bound] + inner_bounds)
-        faces.append(face)
-
-    shell = model.create_entity("IfcClosedShell", CfsFaces=faces)
-    brep = model.create_entity("IfcFacetedBrep", Outer=shell)
-
+    # Create the shape representation
     shape_rep = model.create_entity(
         "IfcShapeRepresentation",
         ContextOfItems=context,
         RepresentationIdentifier="Body",
-        RepresentationType="Brep",
-        Items=[brep],
+        RepresentationType="SweptSolid",
+        Items=[extruded_solid],
     )
 
-    return shape_rep
+    # Return the shape representation with the offset applied
+    print(z_offset+ height)
+    return shape_rep, z_offset + height
 
 
-def create_faceted_brep(model, context, geom):
-    if isinstance(geom, Polygon):
-        polygons = [geom]
-    elif isinstance(geom, MultiPolygon):
-        polygons = list(geom.geoms)
-    else:
-        raise ValueError("Geometry must be Polygon or MultiPolygon")
+# Before grouping
+gdf["floor_index"] = gdf["floor_index"].astype(int)
 
-    faces = []
-    for poly in polygons:
-        if not poly.is_valid:
-            continue
-
-        # Convert exterior ring
-        outer = [(x, y, z) for x, y, z in poly.exterior.coords]
-        outer_loop = ifcopenshell.api.run("geometry.add_polyloop", model, points=outer)
-
-        # Convert inner rings (holes)
-        inner_loops = []
-        for interior in poly.interiors:
-            inner = [(x, y, z) for x, y, z in interior.coords]
-            loop = ifcopenshell.api.run("geometry.add_polyloop", model, points=inner)
-            inner_loops.append(loop)
-
-        face = ifcopenshell.api.run("geometry.add_face", model, outer=outer_loop, inners=inner_loops)
-        faces.append(face)
-
-    shell = ifcopenshell.api.run("geometry.add_closed_shell", model, faces=faces)
-    brep = ifcopenshell.api.run("geometry.add_faceted_brep", model, shell=shell)
-
-    # Wrap in a representation
-    representation = ifcopenshell.api.run("geometry.add_representation", model,
-        context=context,
-        items=[brep],
-        representation_type="Brep",
-        representation_identifier="Body"
-    )
-    return representation
-
-
-# Iterate over each unique bag_pnd (one project per bag_pnd)
 for bag_pnd, rooms in gdf.groupby("bag_pnd"):
     # Create a new model
     model = ifcopenshell.api.project.create_file()
@@ -127,58 +126,77 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
 
     site = ifcopenshell.api.root.create_entity(model, ifc_class="IfcSite", name=f"Site_{bag_pnd}")
     building = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuilding", name=f"Building_{bag_pnd}")
-    storey = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuildingStorey", name="Ground Floor")
-
     ifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])
     ifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])
-    ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
 
-    for _, room in rooms.iterrows():
-        geom = room["optimized_rooms_3d"]
+    storeys = {}
+    z_offset = 0.0  # Initialize Z offset for stacking floors
 
-        # Ensure valid 3D geometry
-        try:
-            geom = wkt.loads(room["optimized_rooms_3d"])
-        except Exception as e:
-            print(f"Error parsing geometry for room {room['room_id']}: {e}")
-            continue
+    for floor_idx, floor_rooms in rooms.groupby("floor_index"):
+        print(rooms["floor_index"].value_counts())
 
-        if not geom.has_z:
-            print(f"Skipping room without 3D geometry: {room['room_id']}")
-            continue
+        storey = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuildingStorey", name=f"Storey_{floor_idx}")
+        ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
+        storeys[floor_idx] = storey
+        floor_height = floor_rooms["extrusion_height"].astype(float).max()
+        # Iterate over each room and create extrusion
+        for _, room in floor_rooms.iterrows():
+            print(room['ruimte'])
+            try:
+                geom = wkt.loads(room["optimized_rooms_3d"])  # Load the geometry (WKT)
+                print(f"Room {room['ruimte']} | Floor {floor_idx} | Geom hash: {hash(geom.wkt)}")
+            except Exception as e:
+                print(f"Error parsing geometry for room {room['room']}: {e}")
+                continue
 
-        # Create IfcSpace
-        space = ifcopenshell.api.run("root.create_entity", model, {
-            "ifc_class": "IfcSpace",
-            "name": f"Room_{room['ruimte']}",
-        })
+            if not geom.has_z:  # Skip if no 3D geometry
+                print(f"Skipping room without 3D geometry: {room['room']}")
+                continue
 
-        # Assign to storey
-        ifcopenshell.api.run(
-            "spatial.assign_container",
-            model,
-            products=[space],
-            relating_structure=storey
-        )
+            # Create IfcSpace for room
+            space = ifcopenshell.api.run("root.create_entity", model, {
+                "ifc_class": "IfcSpace",
+                "name": f"Room_{room['ruimte']}",
+            })
 
-        # Default placement (origin)
-        ifcopenshell.api.run(
-            "geometry.edit_object_placement",
-            model,
-            product=space
-        )
+            # Get extrusion height
+            extrusion_height = float(room["extrusion_height"])  # Assuming this is in your DataFrame
+            print(extrusion_height)
 
-        # Generate IFC geometry from shapely 3D polygon
-        try:
-            shape = make_faceted_brep(model, body, geom)
-            ifcopenshell.api.run("geometry.assign_representation", model,
-                                 product=space,
-                                 representation=shape,
-                                 )
-        except Exception as e:
-            print(f"Failed to create faceted brep for room {room['ruimte']}: {e}")
+            # Create the faceted BREP with the updated Z offset
+            print(f"Room: {room['ruimte']}, Geometry: {geom.wkt[:60]}..., Height: {extrusion_height}")
 
-    # Save the file
-    filename = os.path.join("werkmap", f"project_{bag_pnd}.ifc")
-    model.write(filename)
-    print(f"Saved IFC for {bag_pnd} to {filename}")
+            try:
+                rep, new_z_offset = make_extruded_brep(model, body, geom, extrusion_height, z_offset)
+
+            except Exception as e:
+                print(f"Error creating extruded solid for room {room['ruimte']}: {e}")
+                continue
+
+            # Assign representation to space
+            space.Representation = rep
+            print(rep.ContextOfItems)
+            print(rep.Items)
+
+            # Assign to spatial structure and placement
+            ifcopenshell.api.run("spatial.assign_container", model,
+                                 products=[space],
+                                 relating_structure=storeys[room["floor_index"]])
+
+            space.ObjectPlacement = create_local_placement(model, 0.0, 0.0, z_offset)
+            print(f"Added space {space.Name} to storey {room['floor_index']}")
+            print(f"Created {space.is_a()} with name {space.Name}")
+
+        z_offset += float(floor_height)
+
+# Ensure the output directory exists
+output_dir = "werkmap"
+os.makedirs(output_dir, exist_ok=True)
+
+
+# Plot (only X/Y will be shown, Z is ignored)
+
+# Save the file
+filename = os.path.join(output_dir, f"project_{bag_pnd}.ifc")
+model.write(filename)
+print(f"Saved IFC for {bag_pnd} to {filename}")
