@@ -8,10 +8,9 @@ import ifcopenshell.api.context
 import ifcopenshell.api.project
 import ifcopenshell.api.aggregate
 
-
 gdf = gpd.read_file(r"C:\Users\NietLottede\OneDrive - Kadaster\Documenten\Lotte\github_code\thesis\werkmap\separate_pand_rooms.csv")  # or construct it another way
 gdf["appartement"] = pd.to_numeric(gdf["appartement"], errors="coerce").astype("Int64")
-storey_inclusion = False
+storey_inclusion = True
 
 print(gdf.info())
 print(gdf.head(5))
@@ -101,7 +100,7 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
     model = ifcopenshell.api.project.create_file()
 
     # Create core project structure
-    project = model.create_entity("IfcProject", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalApartmentComplex")
+    project = model.create_entity("IfcProject", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalApartmentComplex", Name="IfcProject")
     ifcopenshell.api.unit.assign_unit(model)
 
     context = ifcopenshell.api.context.add_context(model, context_type="Model")
@@ -110,8 +109,8 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
                                                 target_view="MODEL_VIEW",
                                                 parent=context)
 
-    site = model.create_entity("IfcSite", GlobalId=ifcopenshell.guid.new())
-    building = model.create_entity("IfcBuilding", GlobalId=ifcopenshell.guid.new(), Description="ApartmentComplex")
+    site = model.create_entity("IfcSite", Name="IfcSite", GlobalId=ifcopenshell.guid.new())
+    building = model.create_entity("IfcBuilding", GlobalId=ifcopenshell.guid.new(), Name="IfcBuilding", Description="ApartmentComplex" )
     ifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])
     ifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])
 
@@ -128,15 +127,16 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
             storeys[floor_idx] = storey
         floor_height = floor_rooms["extrusion_height"].astype(float).max()
         # Iterate over each room and create extrusion
+        apartment_groups = {}
         for _, room in floor_rooms.iterrows():
-            apartmentindex = room["appartement"]
+            apartmentindex = room["appartement"] if pd.notnull(room["appartement"]) else "shared"
             if pd.isnull(room["appartement"]):
                 apartmentunit = model.create_entity("IfcGroup", GlobalId=ifcopenshell.guid.new(),
-                                                    Description="SharedPart")
+                                                    Name="SharedPart")
 
             else:
                 apartmentunit = model.create_entity("IfcGroup", GlobalId=ifcopenshell.guid.new(),
-                                                    Description="ApartmentUnit")
+                                                    Name="ApartmentUnit")
 
                 apartment_index_prop = model.create_entity("IfcPropertySingleValue",
                                                            Name="apartmentIndex",
@@ -155,14 +155,24 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
                                     RelatingPropertyDefinition=property_set,
                                     RelatedObjects=[apartmentunit]
                                     )
-
+            apartment_groups[apartmentindex] = apartmentunit
             ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[apartmentunit])
             if storey_inclusion:
                 ifcopenshell.api.aggregate.assign_object(model, relating_object=storeys[room["floor_index"]],
                                                          products=[apartmentunit])
 
-            legalspace = model.create_entity("IfcZone", GlobalId=ifcopenshell.guid.new(), Description="BIMLegalSpace")
-            ifcopenshell.api.aggregate.assign_object(model, relating_object=apartmentunit, products=[legalspace])
+            apartment_zones = {}
+
+            if apartmentindex != "shared":
+                if apartmentindex not in apartment_zones:
+                    zone = model.create_entity("IfcZone", Name=f"ApartmentZone_{apartmentindex}")
+                    apartment_zones[apartmentindex] = zone
+
+                # Assign apartment unit (IfcGroup) to the Zone
+                model.create_entity("IfcRelAggregates",
+                                    GlobalId=ifcopenshell.guid.new(),
+                                    RelatingObject=apartment_zones[apartmentindex],
+                                    RelatedObjects=[apartment_groups[apartmentindex]])
 
             print(room['ruimte'])
             try:
@@ -257,17 +267,21 @@ for bag_pnd, rooms in gdf.groupby("bag_pnd"):
                                 RelatedObjects=[space]
                                 )
 
-
-            ifcopenshell.api.aggregate.assign_object(model, relating_object=legalspace, products=[space])
+            model.create_entity("IfcRelAssignsToGroup",
+                                GlobalId=ifcopenshell.guid.new(),
+                                RelatingGroup=zone,
+                                RelatedObjects=[space]
+                                )
+            space.ObjectPlacement = create_local_placement(model, 0.0, 0.0, z_offset)
 
             if storey_inclusion:
                 ifcopenshell.api.aggregate.assign_object(model, relating_object=storeys[room["floor_index"]], products=[space])
 
-                ifcopenshell.api.run("spatial.assign_container", model,
-                                     products=[space],
-                                     relating_structure=storeys[room["floor_index"]])
+                # ifcopenshell.api.run("spatial.assign_container", model,
+                #                      products=[space],
+                #                      relating_structure=storeys[room["floor_index"]])
 
-            space.ObjectPlacement = create_local_placement(model, 0.0, 0.0, z_offset)
+
             print(f"Created {space.is_a()} with name {space.Name}")
 
         z_offset += float(floor_height)
@@ -283,3 +297,4 @@ os.makedirs(output_dir, exist_ok=True)
 filename = os.path.join(output_dir, f"project_{bag_pnd}.ifc")
 model.write(filename)
 print(f"Saved IFC for {bag_pnd} to {filename}")
+
