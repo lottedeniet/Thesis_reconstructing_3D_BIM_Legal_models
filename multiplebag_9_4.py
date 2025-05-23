@@ -162,8 +162,8 @@ def extract_multilines(geom):
 
     return MultiLineString(lines)
 
-def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2):
-    """ plots the reference floor geometry, its buffered version, and the best transformed geometries. """
+def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.1):
+    """Plots the reference floor geometry, its buffered version, and the best transformed geometries."""
     fig, ax = plt.subplots(figsize=(8, 8))
 
     if isinstance(ref_floor_geom, gp.GeoSeries):
@@ -171,7 +171,6 @@ def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2)
     else:
         geometries = [ref_floor_geom]
 
-    # plot the lines instead of the polygons
     all_lines = []
     for geom in geometries:
         if isinstance(geom, Polygon):
@@ -182,23 +181,33 @@ def plot_geometries(ref_floor_geom, transformed_geometries, buffer_distance=0.2)
 
     buffered_lines = [line.buffer(buffer_distance) for multi_line in all_lines for line in multi_line.geoms]
 
+    # Track which legend items have already been added
+    added_labels = set()
+
     for geom in geometries:
+        label = "Reference Floor" if "Reference Floor" not in added_labels else None
         if isinstance(geom, Polygon):
-            plot_polygon(geom, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label="Ground Floor")
+            plot_polygon(geom, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label=label)
         elif isinstance(geom, MultiPolygon):
             for poly in geom.geoms:
-                plot_polygon(poly, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label="Ground Floor")
+                plot_polygon(poly, ax=ax, facecolor='none', add_points=False, edgecolor='blue', linewidth=1, label=label)
+        added_labels.add("Reference Floor")
 
     for buffered_line in buffered_lines:
-        plot_polygon(buffered_line, ax=ax, facecolor='none',add_points=False, edgecolor='blue', linestyle='dashed', linewidth=1.5,
-                     label="Buffered Lines")
+        label = "Buffered Lines" if "Buffered Lines" not in added_labels else None
+        plot_polygon(buffered_line, ax=ax, facecolor='none', add_points=False, edgecolor='blue',
+                     linestyle='dashed', linewidth=1.5, label=label)
+        added_labels.add("Buffered Lines")
 
-    # plot transformed geometries (individual rooms)
     for transformed_geom in transformed_geometries:
-        plot_polygon(transformed_geom, ax=ax, facecolor='none', edgecolor='red', add_points=False, linewidth=1, label="Transformed Geometry")
-
+        label = "Current Floor" if "Current Floor" not in added_labels else None
+        plot_polygon(transformed_geom, ax=ax, facecolor='none', edgecolor='red', add_points=False, linewidth=1, label=label)
+        added_labels.add("Current Floor")
+    ax.set_axis_off()
     ax.set_title("Shape Similarity")
+    ax.legend()
     plt.show()
+
 
 def containment_percentage(geom, ref_geom):
     """ calculate the percentage (0,1) of the geometry that is contained within the reference """
@@ -501,16 +510,16 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom,
                     best_geometries = transformed_geometries
                     best_params = params
                     no_geom = False
-                    pand_data.set_geometry(pand_data['transformed_akte_bg'])
-                    pand_data.plot()
-                    plt.show()
+                    # pand_data.set_geometry(pand_data['transformed_akte_bg'])
+                    # pand_data.plot()
+                    # plt.show()
                 else:
 
                     best_score = score
                     best_geometries = transformed_geometries
-                    pand_data.set_geometry(pand_data['transformed_akte_bg'])
-                    pand_data.plot()
-                    plt.show()
+                    # pand_data.set_geometry(pand_data['transformed_akte_bg'])
+                    # pand_data.plot()
+                    # plt.show()
                     best_params = params
                     no_geom = True
 
@@ -1431,6 +1440,425 @@ for perceel in perceel_list:
     # pand_data.set_geometry('optimized_rooms')
     # pand_data.plot()
     # plt.show()
+    pand_data.to_csv(os.path.join("werkmap", 'pand_data.csv'), index=True)
+
+    import uuid
+    import sqlite3
+    from pathlib import Path
+    import pandas as pd
+    import geopandas as gpd
+
+
+    # ------------------------------------------------------------------------------
+    # 1.  Helper – generate a new UUID as a compact string
+    # ------------------------------------------------------------------------------
+    def new_uuid() -> str:
+        return uuid.uuid4().hex
+
+
+    # ------------------------------------------------------------------------------
+    # 2.  Build every table in memory
+    #     · rooms_gdf must have:  optimized_rooms (geometry), ruimte (str),
+    #       extrusion_height (float), apartment (int | NaN)
+    # ------------------------------------------------------------------------------
+    def build_bimlegal_tables(rooms_gdf: gpd.GeoDataFrame) -> dict:
+        tables = {}
+
+        # --  root ------------------------------------------------------------------
+        bimlegal_apartment_complex_uuid = new_uuid()
+        tables["BIMLegalApartmentComplex"] = pd.DataFrame({
+            "uuid": [bimlegal_apartment_complex_uuid]
+        })
+
+        # --  apartment-complex -----------------------------------------------------
+        apartment_complex_uuid = new_uuid()
+        tables["ApartmentComplex"] = pd.DataFrame({
+            "uuid": [apartment_complex_uuid],
+            "apartmentComplexIndex": ["AC-01"],  # use your own code here
+            "bimLegalApartmentComplex_uuid": [bimlegal_apartment_complex_uuid]  # FK
+        })
+
+        # --  rights / restrictions (empty shell; extend as you need) --------------
+        rrr_uuid = new_uuid()
+        tables["RRR"] = pd.DataFrame({
+            "uuid": [rrr_uuid],
+            "apartmentComplex_uuid": [apartment_complex_uuid]  # FK
+        })
+
+        # --  apartment-units -------------------------------------------------------
+        rooms_gdf['apartment'] = pd.to_numeric(rooms_gdf['appartement'], errors='coerce')
+
+        unit_lookup = (rooms_gdf.dropna(subset=["appartement"])
+                       .appartement.astype(int)
+                       .drop_duplicates()
+                       .sort_values())
+
+        unit_table = pd.DataFrame({
+            "apartmentindex": unit_lookup,
+            "uuid": [new_uuid() for _ in unit_lookup],
+            "apartmentComplex_uuid": apartment_complex_uuid  # FK
+        })
+        tables["ApartmentUnit"] = unit_table
+
+        # --  shared-parts ----------------------------------------------------------
+        # Every room that has NaN in 'apartment' is considered a separate SharedPart
+        shared_lookup = (rooms_gdf[rooms_gdf["appartement"].isna()]
+                         .index.to_series())
+        shared_table = pd.DataFrame({
+            "uuid": [new_uuid() for _ in shared_lookup],
+            "room_row": shared_lookup  # to help us join later
+        })
+        tables["SharedPart"] = shared_table
+
+        # --------------------------------------------------------------------------
+        #  BIMLegalSpace  &  BIMLegalSpaceUnit  (this is where the action is)
+        # --------------------------------------------------------------------------
+        space_rows = []
+        spaceunit_rows = []
+
+        for idx, row in rooms_gdf.iterrows():
+            space_uuid = new_uuid()
+            spaceunit_uuid = new_uuid()
+
+            # Decide if the space belongs to an ApartmentUnit or a SharedPart
+            if pd.notna(row["appartement"]):
+                # FK to the proper unit
+                apartmentindex = int(row["appartement"])
+                unit_uuid = unit_table.loc[
+                    unit_table.apartmentindex.eq(apartmentindex), "uuid"
+                ].iat[0]
+
+                sharedpart_uuid = None
+            else:
+                # FK to its specific SharedPart record
+                unit_uuid = None
+                sharedpart_uuid = shared_table.loc[
+                    shared_table.room_row.eq(idx), "uuid"
+                ].iat[0]
+
+            # --- BIMLegalSpace -----------------------------------------------------
+            space_rows.append({
+                "uuid": space_uuid,
+                "apartmentUnit_uuid": unit_uuid,
+                "sharedPart_uuid": sharedpart_uuid
+            })
+
+            # --- BIMLegalSpaceUnit (spatial) ---------------------------------------
+            spaceunit_rows.append({
+                "uuid": spaceunit_uuid,
+                "bimLegalSpace_uuid": space_uuid,  # FK
+                "name": row["ruimte"],
+                "extrusion_height": row.get("extrusion_height"),
+                "isSharedPart": pd.isna(row["appartement"]),
+                "geometry": row["optimized_rooms_3d"]
+            })
+
+        tables["BIMLegalSpace"] = pd.DataFrame(space_rows)
+        tables["BIMLegalSpaceUnit"] = gpd.GeoDataFrame(
+            spaceunit_rows, geometry="geometry", crs=rooms_gdf.crs
+        )
+
+        return tables
+
+
+    # ------------------------------------------------------------------------------
+    # 3.  Write everything to a single GeoPackage
+    # ------------------------------------------------------------------------------
+    def write_to_geopackage(tables: dict, gpkg_path: Path) -> None:
+        gpkg_path = Path(gpkg_path)
+
+        # 3-A. spatial layer --------------------------------------------------------
+        tables["BIMLegalSpaceUnit"].to_file(
+            gpkg_path, layer="BIMLegalSpaceUnit", driver="GPKG"
+        )
+
+        # 3-B. non-spatial tables  --------------------------------------------------
+        # A GeoPackage is just a SQLite DB; we can drop the attribute tables straight
+        # into it.  The gpkg_contents metadata written in 3-A stays intact.
+        with sqlite3.connect(gpkg_path) as conn:
+            conn.execute("PRAGMA foreign_keys = ON;")
+
+            for name, df in tables.items():
+                if name == "BIMLegalSpaceUnit":
+                    continue  # already written spatially
+                df.to_sql(name, conn, if_exists="replace", index=False)
+
+
+    # ------------------------------------------------------------------------------
+    # 4.  One-liner utility – everything together
+    # ------------------------------------------------------------------------------
+    def export_bimlegal(rooms_gdf: gpd.GeoDataFrame, out_gpkg: str | Path) -> None:
+        tables = build_bimlegal_tables(rooms_gdf)
+        write_to_geopackage(tables, out_gpkg)
+        print(f"GeoPackage written ➜  {out_gpkg}")
+
+
+    import uuid
+    import json
+    from pathlib import Path
+    from typing import Dict, Any
+
+    import numpy as np
+    import pandas as pd
+    import geopandas as gpd
+
+
+    # ---------------------------------------------------------------------------
+    #  Helpers
+    # ---------------------------------------------------------------------------
+
+    def new_uuid() -> str:
+        """Return a compact UUID string (hex, no dashes)."""
+        return uuid.uuid4().hex
+
+
+    def convert_to_json_serializable(obj: Any):
+        """Recursively cast numpy dtypes → native Python so json.dump() works."""
+        if isinstance(obj, dict):
+            return {k: convert_to_json_serializable(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [convert_to_json_serializable(v) for v in obj]
+        if isinstance(obj, np.integer):
+            return int(obj)
+        if isinstance(obj, np.floating):
+            return float(obj)
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return obj
+
+
+    # ---------------------------------------------------------------------------
+    #  CityJSON builder (BIM-Legal mapping)
+    # ---------------------------------------------------------------------------
+
+    def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
+        """Return a CityJSON dict using the hierarchy requested by the user:
+
+            BIMLegalApartmentComplex   → CityObjectGroup
+            ApartmentComplex           → Building
+            ApartmentUnit              → BuildingPart
+            SharedPart                 → single Room (container) with isSharedPart = true
+            BIMLegalSpaceUnit          → Room (leaf) with geometry
+        """
+        # ------------------------------------------------------------------
+        #  Base CityJSON scaffold
+        # ------------------------------------------------------------------
+        cj: Dict[str, Any] = {
+            "type": "CityJSON",
+            "version": "1.1",
+            "CityObjects": {},
+            "vertices": [],
+            "metadata": {
+                "referenceSystem": str(rooms_gdf.crs)
+            },
+        }
+
+        # ------------------------------------------------------------------
+        #  Vertex store with deduplication
+        # ------------------------------------------------------------------
+        vertices: list[list[float]] = []
+        vertex_index: Dict[tuple, int] = {}
+
+        def add_vertex(coord):
+            """Add unique vertex, return its index."""
+            key = tuple(np.round(coord, 6))  # avoid FP noise
+            if key not in vertex_index:
+                vertex_index[key] = len(vertices)
+                vertices.append(list(coord))
+            return vertex_index[key]
+
+        # ------------------------------------------------------------------
+        #  Top-level: BIMLegalApartmentComplex → CityObjectGroup
+        # ------------------------------------------------------------------
+        group_uuid = new_uuid()
+        cj["CityObjects"][group_uuid] = {
+            "type": "CityObjectGroup",
+            "attributes": {
+                "name": "BIMLegalApartmentComplex"
+            },
+            "children": []  # Building(s) will be appended here
+        }
+
+        # ------------------------------------------------------------------
+        #  Building (ApartmentComplex) – We assume one complex for now; extend if
+        #  you have multiple by grouping on a column.
+        # ------------------------------------------------------------------
+        building_uuid = new_uuid()
+        cj["CityObjects"][building_uuid] = {
+            "type": "Building",
+            "attributes": {
+                "apartmentComplexIndex": "AC-01"  # customise if you have a field
+            },
+            "children": []  # units + shared container
+        }
+        cj["CityObjects"][group_uuid]["children"].append(building_uuid)
+
+        # ------------------------------------------------------------------
+        #  Prepare data – numeric apartment index
+        # ------------------------------------------------------------------
+        rooms_gdf = rooms_gdf.copy()
+        rooms_gdf["apartment"] = pd.to_numeric(rooms_gdf["appartement"], errors="coerce")
+
+        # ------------------------------------------------------------------
+        #  Containers:   BuildingPart for each ApartmentUnit
+        # ------------------------------------------------------------------
+        apartment_units: Dict[int, Dict[str, Any]] = {}
+        for idx in rooms_gdf["apartment"].dropna().astype(int).unique():
+            unit_uuid = new_uuid()
+            apartment_units[idx] = {
+                "uuid": unit_uuid,
+                "children": []
+            }
+            cj["CityObjects"][unit_uuid] = {
+                "type": "BuildingPart",
+                "attributes": {
+                    "apartmentIndex": str(idx)
+                },
+                "children": apartment_units[idx]["children"],
+            }
+            # Register under Building
+            cj["CityObjects"][building_uuid]["children"].append(unit_uuid)
+
+        # ------------------------------------------------------------------
+        #  SharedPart container – one Room that groups all shared rooms
+        # ------------------------------------------------------------------
+        shared_room_container_uuid = new_uuid()
+        cj["CityObjects"][shared_room_container_uuid] = {
+            "type": "BuildingPart",
+            "attributes": {
+                "name": "SharedPart",
+                "isSharedPart": True
+            },
+            "children": []
+        }
+        # We add it regardless; if it ends up empty, we can prune later
+        cj["CityObjects"][building_uuid]["children"].append(shared_room_container_uuid)
+
+        # ------------------------------------------------------------------
+        #  Iterate rooms → leaf Rooms with geometry
+        # ------------------------------------------------------------------
+        for idx, row in rooms_gdf.iterrows():
+            geom = row["optimized_rooms_3d"]
+            if geom is None or geom.is_empty:
+                continue
+
+            room_uuid = new_uuid()
+
+            # ---------- Geometry handling ---------------------------------
+            solid_faces: list[list[int]] = []
+
+            if hasattr(geom, "exterior"):
+                coords_base = list(geom.exterior.coords)
+
+                # Assume base already has Z values
+                coords_top = [(x, y, z + row["extrusion_height"]) for x, y, z in coords_base]
+
+                # Ensure base polygon is closed
+                if coords_base[0] != coords_base[-1]:
+                    coords_base.append(coords_base[0])
+                    coords_top.append(coords_top[0])
+
+                # Build solid faces
+                bottom_face = [add_vertex(c) for c in coords_base]
+                top_face = [add_vertex(c) for c in reversed(coords_top)]  # reverse for correct normal
+
+                wall_faces = []
+                for i in range(len(coords_base) - 1):
+                    p1_base = coords_base[i]
+                    p2_base = coords_base[i + 1]
+                    p2_top = coords_top[i + 1]
+                    p1_top = coords_top[i]
+                    wall_face = [add_vertex(p1_base), add_vertex(p2_base),
+                                 add_vertex(p2_top), add_vertex(p1_top)]
+                    wall_faces.append(wall_face)
+
+                solid_faces = [bottom_face, top_face] + wall_faces
+
+            elif isinstance(geom, list):
+                # Pre-built face list [[(x,y,z),...], ...]
+                for face in geom:
+                    solid_faces.append([add_vertex(tuple(face)) for face in face])
+            else:
+                raise TypeError(f"Unsupported geometry type for row {idx}: {type(geom)}")
+
+            cj["CityObjects"][room_uuid] = {
+                "type": "BuildingRoom",
+                "attributes": {
+                    "name": row["ruimte"],
+                    "extrusion_height": row.get("extrusion_height"),
+                    "isSharedPart": pd.isna(row["apartment"])
+                },
+                "geometry": [{
+                    "type": "Solid",
+                    "lod": "2",
+                    "boundaries": [[[face] for face in solid_faces]]
+                }]
+            }
+
+            # ---------- Attach to parent ----------------------------------
+            if pd.notna(row["apartment"]):
+                parent_dict = apartment_units[int(row["apartment"])]
+            else:
+                parent_dict = cj["CityObjects"][shared_room_container_uuid]
+            parent_dict["children"].append(room_uuid)
+
+        # ------------------------------------------------------------------
+        #  Prune shared container if empty
+        # ------------------------------------------------------------------
+        if not cj["CityObjects"][shared_room_container_uuid]["children"]:
+            cj["CityObjects"].pop(shared_room_container_uuid)
+            cj["CityObjects"][building_uuid]["children"].remove(shared_room_container_uuid)
+
+        # ------------------------------------------------------------------
+        cj["vertices"] = vertices
+        return cj
+
+
+    # ---------------------------------------------------------------------------
+    #  Export helper
+    # ---------------------------------------------------------------------------
+
+    def export_to_cityjson(rooms_gdf: gpd.GeoDataFrame, out_path: Path | str) -> None:
+        cj = build_cityjson_model(rooms_gdf)
+        cj = convert_to_json_serializable(cj)
+        out_path = Path(out_path)
+        for i, v in enumerate(cj["vertices"]):
+            if len(v) != 3:
+                print(f"Invalid vertex at index {i}: {v}")
+        with out_path.open("w", encoding="utf-8") as f:
+            json.dump(cj, f, indent=2)
+        print(f"CityJSON written ➜ {out_path.resolve()}")
+
+    # ------------------------------------------------------------------------------
+    # 5.  Example usage
+    # ------------------------------------------------------------------------------
+    # Replace empty strings and whitespace with NaN, then drop or handle them
+    # extruding the floors to the calculated heights
+    pand_data['optimized_rooms_3d'] = pand_data.apply(
+        lambda row: extrude_to_3d(row['optimized_rooms'], row['maaiveld'], floor_height=row['extrusion_height'],
+                                  floor_index=row['floor_index']),
+        axis=1)
+    pand_data['appartement'] = pd.to_numeric(pand_data['appartement'], errors='coerce')
+
+
+    def has_3d_coords(geom):
+        """Returns True if geometry is a Polygon or MultiPolygon with all 3D coords."""
+        if geom is None or geom.is_empty:
+            return False
+        if isinstance(geom, (Polygon, MultiPolygon)):
+            # Check if exterior coordinates are 3D
+            coords = list(geom.exterior.coords)
+            return all(len(coord) == 3 for coord in coords)
+        if isinstance(geom, list):  # if already a list of faces with (x, y, z)
+            return all(len(pt) == 3 for face in geom for pt in face)
+        return False
+
+
+    # Filter out non-3D geometries
+    pand_data = pand_data[pand_data['optimized_rooms_3d'].apply(has_3d_coords)].copy()
+    export_bimlegal(pand_data, "bim_legal_output.gpkg")
+    export_to_cityjson(pand_data, Path("bim_legal_output.city.json"))
+
     all_panden_rooms.append(pand_data)
 
 panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
@@ -1439,10 +1867,6 @@ end_time = time.time()
 print("Executed time: ", end_time - start_time)
 
 
-# extruding the floors to the calculated heights
-panden_rooms['optimized_rooms_3d'] = panden_rooms.apply(
-    lambda row: extrude_to_3d(row['optimized_rooms'], row['maaiveld'],floor_height=row['extrusion_height'], floor_index=row['floor_index']),
-    axis=1)
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
 panden_rooms.set_geometry('optimized_rooms_3d')
@@ -1452,7 +1876,7 @@ panden_rooms.set_geometry('optimized_rooms_3d')
 # panden_rooms2.to_file(os.path.join("werkmap", f"optimized_rooms_edgematch.shp"), driver="ESRI Shapefile")
 
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
-panden_rooms2 = panden_rooms[["optimized_rooms_3d", "room", "verdieping", "appartement", "ruimte", "perceel_id", "bag_pnd"]]
+panden_rooms2 = panden_rooms[["optimized_rooms_3d", "room", "verdieping", "appartement", "ruimte", "perceel_id", "bag_pnd", "extrusion_height"]]
 panden_rooms.to_csv(os.path.join("werkmap", 'separate_pand_rooms.csv'), index=True)
 
-panden_rooms2.to_file(os.path.join("werkmap", f"optimized_rooms_3d.geojson"), driver="GeoJSON")
+panden_rooms2.to_file(os.path.join("werkmap", f"testing.geojson"), driver="GeoJSON")
