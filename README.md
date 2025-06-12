@@ -19,9 +19,21 @@ These models help visualize how ownership is divided in a building in 3D, which 
 
 ## Project Structure
 
-<pre> <code> thesis/ ├── data/ │ ├── raw/ # Original input data (e.g., shapefiles) │ └── json_input/ # Vectorized JSONs of division drawings │ ├── output/ # Results (.city.json files) ├── main.py # Main script to run └── README.md </code> </pre>
+```
+thesis/
+├── data/
+│   ├── raw/           # Original input data (e.g., shapefiles)
+│   └── json_input/    # Vectorized JSONs of division drawings
+│
+├── output/            # Results (.city.json files)
+├── main.py            # Main script to run
+└── README.md
+```
 
-
+The code starts at line 1016. Nothing has to be adjusted for it to run.
+You can choose to turn off "automatic capping", this will allow you to manually set the height of each storey that is beyond reasonable limits (2.1-3.3 m).
+You can also turn on "manual", which will allow you to manually adjust georeferencing parameters.
+Initialization techniques can also be changed, but they have been set to the best performing methods.
 
 This project is part of my MSc thesis at Geomatics TU Delft.
 Supervised by: Jantien Stoter, Amir Hakim, Ken Arroyo Ohori and Bhavya Kausika
