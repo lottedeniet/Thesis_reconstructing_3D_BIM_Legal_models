@@ -582,7 +582,7 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom,
     # if transformed_rooms is not None and pand_data['transformed_akte_bg'].iloc[0] is not None and pand_data['floor_index'].all() != -100:
     #     transformed_rooms = [refine_alignment(pand_data["bgt_outline"].iloc[i], pand_data['transformed_akte_bg'].iloc[i], g)
     #                        for i, g in enumerate(transformed_rooms)]
-
+    pand_data["georef_accuracy"] = (containment + shapesim)/2 * 100
     pand_data["optimized_rooms"] = transformed_rooms
     return pand
 
@@ -788,22 +788,21 @@ def rotate_geom_azimuth(group):
 
     return group
 
+def has_3d_coords(geom):
+    """Returns True if geometry is a Polygon or MultiPolygon with all 3D coords."""
+    if geom is None or geom.is_empty:
+        return False
+    if isinstance(geom, (Polygon, MultiPolygon)):
+        # Check if exterior coordinates are 3D
+        coords = list(geom.exterior.coords)
+        return all(len(coord) == 3 for coord in coords)
+    if isinstance(geom, list):  # if already a list of faces with (x, y, z)
+        return all(len(pt) == 3 for face in geom for pt in face)
+    return False
 
 def new_uuid() -> str:
     """Return a compact UUID string (hex, no dashes)."""
     return uuid.uuid4().hex
-
-def aggregate_solid_geometries(child_ids, city_objects):
-    solids = []
-    for cid in child_ids:
-        child = city_objects.get(cid)
-        if not child or "geometry" not in child:
-            continue
-        for geom in child["geometry"]:
-            if geom["type"] == "Solid":
-                solids.append(geom)
-    return solids if solids else None
-
 
 def convert_to_json_serializable(obj: Any):
     """Recursively cast numpy dtypes → native Python so json.dump() works."""
@@ -829,7 +828,7 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
         BIMLegalApartmentComplex   → CityObjectGroup
         ApartmentComplex           → Building
         ApartmentUnit              → BuildingPart
-        SharedPart                 → single Room (container) with isSharedPart = true
+        SharedPart                 → Whether the room is a shared part or private
         BIMLegalSpaceUnit          → Room (leaf) with geometry
     """
 
@@ -849,13 +848,12 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
     vertex_index: Dict[tuple, int] = {}
 
     def add_vertex(coord):
-        """Add unique vertex (scaled to int), return its index, and print it for debugging."""
+        # scale vertices to be integers
         scaled = tuple(int(round(c * 10000)) for c in coord)
         if scaled not in vertex_index:
             idx = len(vertices)
             vertex_index[scaled] = idx
             vertices.append(list(scaled))
-            print(f"Vertex {idx}: {scaled}")
         return vertex_index[scaled]
 
 
@@ -865,16 +863,17 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
         "attributes": {
             "name": "BIMLegalApartmentComplex"
         },
-        "children": []  # Building(s) will be appended here
+        "children": []
     }
 
     building_uuid = new_uuid()
     cj["CityObjects"][building_uuid] = {
         "type": "Building",
         "attributes": {
-            "apartmentComplexIndex": "AC-01"  # customise if you have a field
+            # only one apartment per bim legal model
+            "apartmentComplexIndex": "AC-01"
         },
-        "children": [],  # units + shared container
+        "children": [],
         "parents": [group_uuid]
     }
     cj["CityObjects"][group_uuid]["children"].append(building_uuid)
@@ -923,17 +922,21 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
         room_uuid = new_uuid()
         solid_faces: list[list[int]] = []
 
+        # create room geometry
         if hasattr(geom, "exterior"):
             coords_base = remove_consecutive_duplicates(list(geom.exterior.coords))
 
+            # unclosed
             if coords_base[0] == coords_base[-1]:
                 coords_base = coords_base[:-1]
 
             coords_top = [(x, y, z + row["extrusion_height"]) for x, y, z in coords_base]
 
+            # reverse so its counterclockwise
             bottom_face = [add_vertex(c) for c in reversed(coords_base)]
             top_face = [add_vertex(c) for c in coords_top]
 
+            # create wall by iterating over the base and top
             wall_faces = []
             for i in range(len(coords_base)):
                 p1_base = coords_base[i]
@@ -951,12 +954,17 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
         else:
             raise TypeError(f"Unsupported geometry type for row {idx}: {type(geom)}")
 
+        # add rooms
         cj["CityObjects"][room_uuid] = {
             "type": "BuildingRoom",
             "attributes": {
                 "name": row["ruimte"],
                 "extrusion_height": row.get("extrusion_height"),
-                "isSharedPart": pd.isna(row["apartment"])
+                "isSharedPart": pd.isna(row["apartment"]),
+                "apartmentindex": str(row["apartment"]),
+                "bimLegalSpaceUnitType": "m",
+                "level" : row.get("floor_index"),
+                "georef_accuracy": row.get("georef_accuracy"),
             },
             "geometry": [{
                 "type": "MultiSurface",
@@ -987,7 +995,7 @@ def build_cityjson_model(rooms_gdf: gpd.GeoDataFrame) -> Dict[str, Any]:
     cj["vertices"] = vertices
     cj["transform"] = {
         "scale": [0.0001, 0.0001, 0.0001],
-        "translate": [0.0, 0.0, 0.0]  # Optional: adjust if you apply a spatial offset
+        "translate": [0.0, 0.0, 0.0]
     }
 
     return cj
@@ -1252,7 +1260,6 @@ for perceel in perceel_list:
     combined_df = pand.merge(pand_data, left_on='bgt_lokaal_id', right_on='bgt_lokaal_id', how='inner')
     combined_df.to_csv(os.path.join("werkmap", f'combined_df.csv'), index=False)
 
-    print(pand_data.info())
     pand_data.drop(columns=['geom_bgt'], inplace=True)
 
     outline = pand.groupby('perceel_id').agg({'geom_bgt': lambda g: g.unary_union})
@@ -1442,7 +1449,7 @@ for perceel in perceel_list:
     pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms",
                        alpha=0.2, buffer=1,
                        angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
-                       translation_step=1)
+                       translation_step=0.8)
 
     pand_data = gp.GeoDataFrame(pand_data, geometry='optimized_rooms', crs='EPSG:28992')
     # make a copy before removing the section geometry
@@ -1664,25 +1671,14 @@ for perceel in perceel_list:
     # pand_data.set_geometry('optimized_rooms')
     # pand_data.plot()
     # plt.show()
+
+    # create 3D BIM Legal CityJSON files
     pand_data["maaiveld"] = 0.0
     pand_data['optimized_rooms_3d'] = pand_data.apply(
         lambda row: extrude_to_3d(row['optimized_rooms'], row['maaiveld'], floor_height=row['extrusion_height'],
                                   floor_index=row['floor_index']),
         axis=1)
     pand_data['appartement'] = pd.to_numeric(pand_data['appartement'], errors='coerce')
-
-
-    def has_3d_coords(geom):
-        """Returns True if geometry is a Polygon or MultiPolygon with all 3D coords."""
-        if geom is None or geom.is_empty:
-            return False
-        if isinstance(geom, (Polygon, MultiPolygon)):
-            # Check if exterior coordinates are 3D
-            coords = list(geom.exterior.coords)
-            return all(len(coord) == 3 for coord in coords)
-        if isinstance(geom, list):  # if already a list of faces with (x, y, z)
-            return all(len(pt) == 3 for face in geom for pt in face)
-        return False
 
     # Filter out non-3D geometries
     pand_data = pand_data[pand_data['optimized_rooms_3d'].apply(has_3d_coords)].copy()
@@ -1699,12 +1695,10 @@ panden_rooms = pd.concat(all_panden_rooms, ignore_index=True)
 end_time = time.time()
 print("Executed time: ", end_time - start_time)
 
-
+# optionally create geojson output file with all buildings
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
 panden_rooms.set_geometry('optimized_rooms_3d')
-
 panden_rooms = gp.GeoDataFrame(panden_rooms, geometry='optimized_rooms_3d', crs='EPSG:28992')
 panden_rooms2 = panden_rooms[["optimized_rooms_3d", "room", "verdieping", "appartement", "ruimte", "perceel_id", "bag_pnd", "extrusion_height"]]
-
 # panden_rooms2.to_file(os.path.join(out_path, f"alternative_result.geojson"), driver="GeoJSON")
 

@@ -1,0 +1,5722 @@
+{
+  "type": "CityJSON",
+  "version": "2.0",
+  "CityObjects": {
+    "39680b36f1ae4e91b5f38216d5fca466": {
+      "type": "CityObjectGroup",
+      "attributes": {
+        "name": "BIMLegalApartmentComplex"
+      },
+      "children": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "0fc7bfed96654a5bb2bbcde98276e17c": {
+      "type": "Building",
+      "attributes": {
+        "apartmentComplexIndex": "AC-01"
+      },
+      "children": [
+        "574a86a7cf3c4ca1bba71753b047a5ea",
+        "67a281d770f04ca69fe505255bc2a71d",
+        "dc827454e5c544ab9986b0a9c7f99198",
+        "1a080b11a9b14203bf0e426a1b43718f",
+        "f225243749fe4934bee8491d33c07d8c",
+        "93334e0e83fb49fbbb971e3b4a0ba549",
+        "1911faa3bcd141e8be74dd88c72c8170",
+        "da38d85ed98e4502854f95a21918d172",
+        "4fd20b8cbae14f1b8dc16927ef92a97f",
+        "430888e4af174122b2ff3883168f46fa",
+        "9ff8b93b29a74b4ba25a843ef513cbcb",
+        "6ff352b267104192bf21456fda300dc3",
+        "45d5aeed0a9e4952842b75b0546b6dbc",
+        "e60ac383868b40c68eee7cb313c43cc5",
+        "d7113eb6aff24aa4b0274e94b1b8d4ce",
+        "a4e988102ac3434d80f510583cf6b28e",
+        "e27125293d964ebcb47feb822ac1c05f",
+        "d164fed1156e4268a17ec28e562ab77b",
+        "797d2c47ee0845d09b830b40c557b6cf",
+        "ef043b299735450f9812343c4d715978",
+        "d8c66cdf4f774ac6a4e6f3d83073a7b5",
+        "d960c3f0f3974749b53e9e3f098ab87a"
+      ],
+      "parents": [
+        "39680b36f1ae4e91b5f38216d5fca466"
+      ]
+    },
+    "574a86a7cf3c4ca1bba71753b047a5ea": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "14"
+      },
+      "children": [
+        "a429308677cd41fd8d496b4499d35700"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "67a281d770f04ca69fe505255bc2a71d": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "2"
+      },
+      "children": [
+        "ddd700b2d4954d7fb183ff4b5ddc6cea",
+        "f163f05acae2467680c26debda6796ab"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "dc827454e5c544ab9986b0a9c7f99198": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "4"
+      },
+      "children": [
+        "72238dcfbebf4a4abefc99f7cb1efa93",
+        "8f835c2f52b3467e921421cd0a20de4f",
+        "ddb16370e7114908aac440779a82c8cd",
+        "5a172002ad2e49eeb276d2fed552b740",
+        "bfbf9413013f41e5b2d11f284c548041"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "1a080b11a9b14203bf0e426a1b43718f": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "3"
+      },
+      "children": [
+        "71997e5332624e4c8b33b5fe1f5ec663",
+        "287a4b7d171c4ba3ad19158343ed270b"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "f225243749fe4934bee8491d33c07d8c": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "5"
+      },
+      "children": [
+        "2fc3332e89fe4b1bbfca67e023c3e208",
+        "e3a5889f934c4db592623964566e3634"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "93334e0e83fb49fbbb971e3b4a0ba549": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "1"
+      },
+      "children": [
+        "7445b324203a458999c9da55a45f7f5a",
+        "1fa5ef2ee0044a1d8e61452a2166d640",
+        "9ef5a5fecb15424ead15b291e0ff2bd2"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "1911faa3bcd141e8be74dd88c72c8170": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "6"
+      },
+      "children": [
+        "524b9eb148654130aa852dabdaafd060",
+        "5f4dfe750e504d04b19f195ae3da09c1",
+        "e98a7d72bc2947f1b4c8b32da4e41f65",
+        "7403e1752dd7476b9bc1290e6692839b",
+        "f42f9b82c6ab45f09c7ef5e30b92f020",
+        "f4ecc4ce366645c08b296e7e0ae970b4"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "da38d85ed98e4502854f95a21918d172": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "20"
+      },
+      "children": [
+        "b41d37d9f2264dc2a667dd9107979bd6"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "4fd20b8cbae14f1b8dc16927ef92a97f": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "13"
+      },
+      "children": [
+        "3b2b5b6f08064ecc88c2ded754b7567f"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "430888e4af174122b2ff3883168f46fa": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "12"
+      },
+      "children": [
+        "601c44c02fcb4b49b16ee8208e64bd30"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "9ff8b93b29a74b4ba25a843ef513cbcb": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "15"
+      },
+      "children": [
+        "3a9b30a1ac544a95a579df1836935cbf"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "6ff352b267104192bf21456fda300dc3": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "11"
+      },
+      "children": [
+        "36e8e3df42054053a380a133bb9cfaa8"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "45d5aeed0a9e4952842b75b0546b6dbc": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "10"
+      },
+      "children": [
+        "2832c923fe3041e180c3ee74b24503b3"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "e60ac383868b40c68eee7cb313c43cc5": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "16"
+      },
+      "children": [
+        "86aa13b70e204ea989b71ec2921ab2ee"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "d7113eb6aff24aa4b0274e94b1b8d4ce": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "9"
+      },
+      "children": [
+        "cb69e2268d154621b5f928b1234487db"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "a4e988102ac3434d80f510583cf6b28e": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "8"
+      },
+      "children": [
+        "07f7d6f9961243d38e9d903a4fb43c40"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "e27125293d964ebcb47feb822ac1c05f": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "21"
+      },
+      "children": [
+        "21802e9f1c5d4e759802cd7ca588e85b"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "d164fed1156e4268a17ec28e562ab77b": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "18"
+      },
+      "children": [
+        "c0cfc0f1566b481f89ec58807c8c7395"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "797d2c47ee0845d09b830b40c557b6cf": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "19"
+      },
+      "children": [
+        "6395986c726c488ba6ebc99432b68012"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "ef043b299735450f9812343c4d715978": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "17"
+      },
+      "children": [
+        "cf5b4d13e1df44faa8571b2c916f6e7f"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "d8c66cdf4f774ac6a4e6f3d83073a7b5": {
+      "type": "BuildingPart",
+      "attributes": {
+        "apartmentIndex": "7"
+      },
+      "children": [
+        "35bec3d9a2c44189abf3a58447c1623b"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "d960c3f0f3974749b53e9e3f098ab87a": {
+      "type": "BuildingPart",
+      "attributes": {
+        "name": "SharedPart",
+        "isSharedPart": true
+      },
+      "children": [
+        "2ad290448865411cba44dfb46850f3f3",
+        "31e63209699844f28290280c35d6b1bc"
+      ],
+      "parents": [
+        "0fc7bfed96654a5bb2bbcde98276e17c"
+      ]
+    },
+    "a429308677cd41fd8d496b4499d35700": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "14.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                0,
+                1,
+                2,
+                3
+              ]
+            ],
+            [
+              [
+                4,
+                5,
+                6,
+                7
+              ]
+            ],
+            [
+              [
+                3,
+                2,
+                5,
+                4
+              ]
+            ],
+            [
+              [
+                2,
+                1,
+                6,
+                5
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                7,
+                6
+              ]
+            ],
+            [
+              [
+                0,
+                3,
+                4,
+                7
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "574a86a7cf3c4ca1bba71753b047a5ea"
+      ]
+    },
+    "ddd700b2d4954d7fb183ff4b5ddc6cea": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "2.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16
+              ]
+            ],
+            [
+              [
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25
+              ]
+            ],
+            [
+              [
+                16,
+                15,
+                18,
+                17
+              ]
+            ],
+            [
+              [
+                15,
+                14,
+                19,
+                18
+              ]
+            ],
+            [
+              [
+                14,
+                13,
+                20,
+                19
+              ]
+            ],
+            [
+              [
+                13,
+                12,
+                21,
+                20
+              ]
+            ],
+            [
+              [
+                12,
+                11,
+                22,
+                21
+              ]
+            ],
+            [
+              [
+                11,
+                10,
+                23,
+                22
+              ]
+            ],
+            [
+              [
+                10,
+                9,
+                24,
+                23
+              ]
+            ],
+            [
+              [
+                9,
+                8,
+                25,
+                24
+              ]
+            ],
+            [
+              [
+                8,
+                16,
+                17,
+                25
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "67a281d770f04ca69fe505255bc2a71d"
+      ]
+    },
+    "72238dcfbebf4a4abefc99f7cb1efa93": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "4.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                26,
+                27,
+                28,
+                8,
+                16,
+                29
+              ]
+            ],
+            [
+              [
+                30,
+                17,
+                25,
+                31,
+                32,
+                33
+              ]
+            ],
+            [
+              [
+                29,
+                16,
+                17,
+                30
+              ]
+            ],
+            [
+              [
+                16,
+                8,
+                25,
+                17
+              ]
+            ],
+            [
+              [
+                8,
+                28,
+                31,
+                25
+              ]
+            ],
+            [
+              [
+                28,
+                27,
+                32,
+                31
+              ]
+            ],
+            [
+              [
+                27,
+                26,
+                33,
+                32
+              ]
+            ],
+            [
+              [
+                26,
+                29,
+                30,
+                33
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "dc827454e5c544ab9986b0a9c7f99198"
+      ]
+    },
+    "8f835c2f52b3467e921421cd0a20de4f": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "4.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                34,
+                35,
+                36,
+                37,
+                38
+              ]
+            ],
+            [
+              [
+                39,
+                40,
+                41,
+                42,
+                43
+              ]
+            ],
+            [
+              [
+                38,
+                37,
+                40,
+                39
+              ]
+            ],
+            [
+              [
+                37,
+                36,
+                41,
+                40
+              ]
+            ],
+            [
+              [
+                36,
+                35,
+                42,
+                41
+              ]
+            ],
+            [
+              [
+                35,
+                34,
+                43,
+                42
+              ]
+            ],
+            [
+              [
+                34,
+                38,
+                39,
+                43
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "dc827454e5c544ab9986b0a9c7f99198"
+      ]
+    },
+    "71997e5332624e4c8b33b5fe1f5ec663": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "3.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                44,
+                45,
+                34,
+                38,
+                46
+              ]
+            ],
+            [
+              [
+                47,
+                39,
+                43,
+                48,
+                49
+              ]
+            ],
+            [
+              [
+                46,
+                38,
+                39,
+                47
+              ]
+            ],
+            [
+              [
+                38,
+                34,
+                43,
+                39
+              ]
+            ],
+            [
+              [
+                34,
+                45,
+                48,
+                43
+              ]
+            ],
+            [
+              [
+                45,
+                44,
+                49,
+                48
+              ]
+            ],
+            [
+              [
+                44,
+                46,
+                47,
+                49
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1a080b11a9b14203bf0e426a1b43718f"
+      ]
+    },
+    "ddb16370e7114908aac440779a82c8cd": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "4.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                27,
+                26,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                36,
+                35,
+                34,
+                64,
+                65,
+                66
+              ]
+            ],
+            [
+              [
+                67,
+                68,
+                69,
+                43,
+                42,
+                41,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                33,
+                32,
+                76,
+                77,
+                78,
+                79,
+                80,
+                81,
+                82,
+                83
+              ]
+            ],
+            [
+              [
+                66,
+                65,
+                68,
+                67
+              ]
+            ],
+            [
+              [
+                65,
+                64,
+                69,
+                68
+              ]
+            ],
+            [
+              [
+                64,
+                34,
+                43,
+                69
+              ]
+            ],
+            [
+              [
+                34,
+                35,
+                42,
+                43
+              ]
+            ],
+            [
+              [
+                35,
+                36,
+                41,
+                42
+              ]
+            ],
+            [
+              [
+                36,
+                63,
+                70,
+                41
+              ]
+            ],
+            [
+              [
+                63,
+                62,
+                71,
+                70
+              ]
+            ],
+            [
+              [
+                62,
+                61,
+                72,
+                71
+              ]
+            ],
+            [
+              [
+                61,
+                60,
+                73,
+                72
+              ]
+            ],
+            [
+              [
+                60,
+                59,
+                74,
+                73
+              ]
+            ],
+            [
+              [
+                59,
+                58,
+                75,
+                74
+              ]
+            ],
+            [
+              [
+                58,
+                26,
+                33,
+                75
+              ]
+            ],
+            [
+              [
+                26,
+                27,
+                32,
+                33
+              ]
+            ],
+            [
+              [
+                27,
+                57,
+                76,
+                32
+              ]
+            ],
+            [
+              [
+                57,
+                56,
+                77,
+                76
+              ]
+            ],
+            [
+              [
+                56,
+                55,
+                78,
+                77
+              ]
+            ],
+            [
+              [
+                55,
+                54,
+                79,
+                78
+              ]
+            ],
+            [
+              [
+                54,
+                53,
+                80,
+                79
+              ]
+            ],
+            [
+              [
+                53,
+                52,
+                81,
+                80
+              ]
+            ],
+            [
+              [
+                52,
+                51,
+                82,
+                81
+              ]
+            ],
+            [
+              [
+                51,
+                50,
+                83,
+                82
+              ]
+            ],
+            [
+              [
+                50,
+                66,
+                67,
+                83
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "dc827454e5c544ab9986b0a9c7f99198"
+      ]
+    },
+    "2fc3332e89fe4b1bbfca67e023c3e208": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "5.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                84,
+                85,
+                86,
+                87,
+                88
+              ]
+            ],
+            [
+              [
+                89,
+                90,
+                91,
+                92,
+                93
+              ]
+            ],
+            [
+              [
+                88,
+                87,
+                90,
+                89
+              ]
+            ],
+            [
+              [
+                87,
+                86,
+                91,
+                90
+              ]
+            ],
+            [
+              [
+                86,
+                85,
+                92,
+                91
+              ]
+            ],
+            [
+              [
+                85,
+                84,
+                93,
+                92
+              ]
+            ],
+            [
+              [
+                84,
+                88,
+                89,
+                93
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "f225243749fe4934bee8491d33c07d8c"
+      ]
+    },
+    "7445b324203a458999c9da55a45f7f5a": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "1.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                94,
+                95,
+                96,
+                97
+              ]
+            ],
+            [
+              [
+                98,
+                99,
+                100,
+                101
+              ]
+            ],
+            [
+              [
+                97,
+                96,
+                99,
+                98
+              ]
+            ],
+            [
+              [
+                96,
+                95,
+                100,
+                99
+              ]
+            ],
+            [
+              [
+                95,
+                94,
+                101,
+                100
+              ]
+            ],
+            [
+              [
+                94,
+                97,
+                98,
+                101
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "93334e0e83fb49fbbb971e3b4a0ba549"
+      ]
+    },
+    "5a172002ad2e49eeb276d2fed552b740": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Woning",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "4.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                102,
+                103,
+                52,
+                51,
+                50,
+                104,
+                105,
+                55,
+                54,
+                53
+              ]
+            ],
+            [
+              [
+                80,
+                79,
+                78,
+                106,
+                107,
+                83,
+                82,
+                81,
+                108,
+                109
+              ]
+            ],
+            [
+              [
+                53,
+                54,
+                79,
+                80
+              ]
+            ],
+            [
+              [
+                54,
+                55,
+                78,
+                79
+              ]
+            ],
+            [
+              [
+                55,
+                105,
+                106,
+                78
+              ]
+            ],
+            [
+              [
+                105,
+                104,
+                107,
+                106
+              ]
+            ],
+            [
+              [
+                104,
+                50,
+                83,
+                107
+              ]
+            ],
+            [
+              [
+                50,
+                51,
+                82,
+                83
+              ]
+            ],
+            [
+              [
+                51,
+                52,
+                81,
+                82
+              ]
+            ],
+            [
+              [
+                52,
+                103,
+                108,
+                81
+              ]
+            ],
+            [
+              [
+                103,
+                102,
+                109,
+                108
+              ]
+            ],
+            [
+              [
+                102,
+                53,
+                80,
+                109
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "dc827454e5c544ab9986b0a9c7f99198"
+      ]
+    },
+    "bfbf9413013f41e5b2d11f284c548041": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "4.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                52,
+                103,
+                102,
+                53
+              ]
+            ],
+            [
+              [
+                80,
+                109,
+                108,
+                81
+              ]
+            ],
+            [
+              [
+                53,
+                102,
+                109,
+                80
+              ]
+            ],
+            [
+              [
+                102,
+                103,
+                108,
+                109
+              ]
+            ],
+            [
+              [
+                103,
+                52,
+                81,
+                108
+              ]
+            ],
+            [
+              [
+                52,
+                53,
+                80,
+                81
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "dc827454e5c544ab9986b0a9c7f99198"
+      ]
+    },
+    "524b9eb148654130aa852dabdaafd060": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                110,
+                111,
+                112,
+                113
+              ]
+            ],
+            [
+              [
+                114,
+                115,
+                116,
+                117
+              ]
+            ],
+            [
+              [
+                113,
+                112,
+                115,
+                114
+              ]
+            ],
+            [
+              [
+                112,
+                111,
+                116,
+                115
+              ]
+            ],
+            [
+              [
+                111,
+                110,
+                117,
+                116
+              ]
+            ],
+            [
+              [
+                110,
+                113,
+                114,
+                117
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "b41d37d9f2264dc2a667dd9107979bd6": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "vitrine",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "20.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                118,
+                119,
+                120,
+                121
+              ]
+            ],
+            [
+              [
+                122,
+                123,
+                124,
+                125
+              ]
+            ],
+            [
+              [
+                121,
+                120,
+                123,
+                122
+              ]
+            ],
+            [
+              [
+                120,
+                119,
+                124,
+                123
+              ]
+            ],
+            [
+              [
+                119,
+                118,
+                125,
+                124
+              ]
+            ],
+            [
+              [
+                118,
+                121,
+                122,
+                125
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "da38d85ed98e4502854f95a21918d172"
+      ]
+    },
+    "5f4dfe750e504d04b19f195ae3da09c1": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Woning",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                111,
+                110,
+                126,
+                127,
+                128,
+                129,
+                113,
+                112
+              ]
+            ],
+            [
+              [
+                115,
+                114,
+                130,
+                131,
+                132,
+                133,
+                117,
+                116
+              ]
+            ],
+            [
+              [
+                112,
+                113,
+                114,
+                115
+              ]
+            ],
+            [
+              [
+                113,
+                129,
+                130,
+                114
+              ]
+            ],
+            [
+              [
+                129,
+                128,
+                131,
+                130
+              ]
+            ],
+            [
+              [
+                128,
+                127,
+                132,
+                131
+              ]
+            ],
+            [
+              [
+                127,
+                126,
+                133,
+                132
+              ]
+            ],
+            [
+              [
+                126,
+                110,
+                117,
+                133
+              ]
+            ],
+            [
+              [
+                110,
+                111,
+                116,
+                117
+              ]
+            ],
+            [
+              [
+                111,
+                112,
+                115,
+                116
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "e98a7d72bc2947f1b4c8b32da4e41f65": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                134,
+                126,
+                110,
+                113,
+                129,
+                135,
+                136,
+                137,
+                138,
+                139,
+                140,
+                141,
+                142
+              ]
+            ],
+            [
+              [
+                143,
+                144,
+                145,
+                146,
+                147,
+                148,
+                149,
+                150,
+                130,
+                114,
+                117,
+                133,
+                151
+              ]
+            ],
+            [
+              [
+                142,
+                141,
+                144,
+                143
+              ]
+            ],
+            [
+              [
+                141,
+                140,
+                145,
+                144
+              ]
+            ],
+            [
+              [
+                140,
+                139,
+                146,
+                145
+              ]
+            ],
+            [
+              [
+                139,
+                138,
+                147,
+                146
+              ]
+            ],
+            [
+              [
+                138,
+                137,
+                148,
+                147
+              ]
+            ],
+            [
+              [
+                137,
+                136,
+                149,
+                148
+              ]
+            ],
+            [
+              [
+                136,
+                135,
+                150,
+                149
+              ]
+            ],
+            [
+              [
+                135,
+                129,
+                130,
+                150
+              ]
+            ],
+            [
+              [
+                129,
+                113,
+                114,
+                130
+              ]
+            ],
+            [
+              [
+                113,
+                110,
+                117,
+                114
+              ]
+            ],
+            [
+              [
+                110,
+                126,
+                133,
+                117
+              ]
+            ],
+            [
+              [
+                126,
+                134,
+                151,
+                133
+              ]
+            ],
+            [
+              [
+                134,
+                142,
+                143,
+                151
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "7403e1752dd7476b9bc1290e6692839b": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                139,
+                138,
+                152,
+                140
+              ]
+            ],
+            [
+              [
+                145,
+                153,
+                147,
+                146
+              ]
+            ],
+            [
+              [
+                140,
+                152,
+                153,
+                145
+              ]
+            ],
+            [
+              [
+                152,
+                138,
+                147,
+                153
+              ]
+            ],
+            [
+              [
+                138,
+                139,
+                146,
+                147
+              ]
+            ],
+            [
+              [
+                139,
+                140,
+                145,
+                146
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "1fa5ef2ee0044a1d8e61452a2166d640": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Winkel",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "1.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                154,
+                155,
+                156,
+                157,
+                158,
+                159,
+                160,
+                161,
+                162,
+                163,
+                164,
+                165,
+                166,
+                167,
+                168,
+                169,
+                170,
+                171
+              ]
+            ],
+            [
+              [
+                172,
+                173,
+                174,
+                175,
+                176,
+                177,
+                178,
+                179,
+                180,
+                181,
+                182,
+                183,
+                184,
+                185,
+                186,
+                187,
+                188,
+                189
+              ]
+            ],
+            [
+              [
+                171,
+                170,
+                173,
+                172
+              ]
+            ],
+            [
+              [
+                170,
+                169,
+                174,
+                173
+              ]
+            ],
+            [
+              [
+                169,
+                168,
+                175,
+                174
+              ]
+            ],
+            [
+              [
+                168,
+                167,
+                176,
+                175
+              ]
+            ],
+            [
+              [
+                167,
+                166,
+                177,
+                176
+              ]
+            ],
+            [
+              [
+                166,
+                165,
+                178,
+                177
+              ]
+            ],
+            [
+              [
+                165,
+                164,
+                179,
+                178
+              ]
+            ],
+            [
+              [
+                164,
+                163,
+                180,
+                179
+              ]
+            ],
+            [
+              [
+                163,
+                162,
+                181,
+                180
+              ]
+            ],
+            [
+              [
+                162,
+                161,
+                182,
+                181
+              ]
+            ],
+            [
+              [
+                161,
+                160,
+                183,
+                182
+              ]
+            ],
+            [
+              [
+                160,
+                159,
+                184,
+                183
+              ]
+            ],
+            [
+              [
+                159,
+                158,
+                185,
+                184
+              ]
+            ],
+            [
+              [
+                158,
+                157,
+                186,
+                185
+              ]
+            ],
+            [
+              [
+                157,
+                156,
+                187,
+                186
+              ]
+            ],
+            [
+              [
+                156,
+                155,
+                188,
+                187
+              ]
+            ],
+            [
+              [
+                155,
+                154,
+                189,
+                188
+              ]
+            ],
+            [
+              [
+                154,
+                171,
+                172,
+                189
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "93334e0e83fb49fbbb971e3b4a0ba549"
+      ]
+    },
+    "2ad290448865411cba44dfb46850f3f3": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": true,
+        "apartmentindex": "nan",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                190,
+                191,
+                192,
+                193,
+                169,
+                168,
+                167
+              ]
+            ],
+            [
+              [
+                176,
+                175,
+                174,
+                194,
+                195,
+                196,
+                197
+              ]
+            ],
+            [
+              [
+                167,
+                168,
+                175,
+                176
+              ]
+            ],
+            [
+              [
+                168,
+                169,
+                174,
+                175
+              ]
+            ],
+            [
+              [
+                169,
+                193,
+                194,
+                174
+              ]
+            ],
+            [
+              [
+                193,
+                192,
+                195,
+                194
+              ]
+            ],
+            [
+              [
+                192,
+                191,
+                196,
+                195
+              ]
+            ],
+            [
+              [
+                191,
+                190,
+                197,
+                196
+              ]
+            ],
+            [
+              [
+                190,
+                167,
+                176,
+                197
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "d960c3f0f3974749b53e9e3f098ab87a"
+      ]
+    },
+    "3b2b5b6f08064ecc88c2ded754b7567f": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "13.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                198,
+                190,
+                167,
+                166
+              ]
+            ],
+            [
+              [
+                177,
+                176,
+                197,
+                199
+              ]
+            ],
+            [
+              [
+                166,
+                167,
+                176,
+                177
+              ]
+            ],
+            [
+              [
+                167,
+                190,
+                197,
+                176
+              ]
+            ],
+            [
+              [
+                190,
+                198,
+                199,
+                197
+              ]
+            ],
+            [
+              [
+                198,
+                166,
+                177,
+                199
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "4fd20b8cbae14f1b8dc16927ef92a97f"
+      ]
+    },
+    "601c44c02fcb4b49b16ee8208e64bd30": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "12.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                200,
+                198,
+                166,
+                165
+              ]
+            ],
+            [
+              [
+                178,
+                177,
+                199,
+                201
+              ]
+            ],
+            [
+              [
+                165,
+                166,
+                177,
+                178
+              ]
+            ],
+            [
+              [
+                166,
+                198,
+                199,
+                177
+              ]
+            ],
+            [
+              [
+                198,
+                200,
+                201,
+                199
+              ]
+            ],
+            [
+              [
+                200,
+                165,
+                178,
+                201
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "430888e4af174122b2ff3883168f46fa"
+      ]
+    },
+    "3a9b30a1ac544a95a579df1836935cbf": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "15.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                1,
+                0,
+                202,
+                203
+              ]
+            ],
+            [
+              [
+                204,
+                205,
+                7,
+                6
+              ]
+            ],
+            [
+              [
+                203,
+                202,
+                205,
+                204
+              ]
+            ],
+            [
+              [
+                202,
+                0,
+                7,
+                205
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                6,
+                7
+              ]
+            ],
+            [
+              [
+                1,
+                203,
+                204,
+                6
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "9ff8b93b29a74b4ba25a843ef513cbcb"
+      ]
+    },
+    "36e8e3df42054053a380a133bb9cfaa8": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "11.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                206,
+                200,
+                165,
+                164
+              ]
+            ],
+            [
+              [
+                179,
+                178,
+                201,
+                207
+              ]
+            ],
+            [
+              [
+                164,
+                165,
+                178,
+                179
+              ]
+            ],
+            [
+              [
+                165,
+                200,
+                201,
+                178
+              ]
+            ],
+            [
+              [
+                200,
+                206,
+                207,
+                201
+              ]
+            ],
+            [
+              [
+                206,
+                164,
+                179,
+                207
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "6ff352b267104192bf21456fda300dc3"
+      ]
+    },
+    "2832c923fe3041e180c3ee74b24503b3": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "10.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                208,
+                206,
+                164,
+                163
+              ]
+            ],
+            [
+              [
+                180,
+                179,
+                207,
+                209
+              ]
+            ],
+            [
+              [
+                163,
+                164,
+                179,
+                180
+              ]
+            ],
+            [
+              [
+                164,
+                206,
+                207,
+                179
+              ]
+            ],
+            [
+              [
+                206,
+                208,
+                209,
+                207
+              ]
+            ],
+            [
+              [
+                208,
+                163,
+                180,
+                209
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "45d5aeed0a9e4952842b75b0546b6dbc"
+      ]
+    },
+    "86aa13b70e204ea989b71ec2921ab2ee": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "16.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                210,
+                211,
+                203,
+                202
+              ]
+            ],
+            [
+              [
+                205,
+                204,
+                212,
+                213
+              ]
+            ],
+            [
+              [
+                202,
+                203,
+                204,
+                205
+              ]
+            ],
+            [
+              [
+                203,
+                211,
+                212,
+                204
+              ]
+            ],
+            [
+              [
+                211,
+                210,
+                213,
+                212
+              ]
+            ],
+            [
+              [
+                210,
+                202,
+                205,
+                213
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "e60ac383868b40c68eee7cb313c43cc5"
+      ]
+    },
+    "cb69e2268d154621b5f928b1234487db": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "9.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                214,
+                193,
+                192,
+                215
+              ]
+            ],
+            [
+              [
+                216,
+                195,
+                194,
+                217
+              ]
+            ],
+            [
+              [
+                215,
+                192,
+                195,
+                216
+              ]
+            ],
+            [
+              [
+                192,
+                193,
+                194,
+                195
+              ]
+            ],
+            [
+              [
+                193,
+                214,
+                217,
+                194
+              ]
+            ],
+            [
+              [
+                214,
+                215,
+                216,
+                217
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "d7113eb6aff24aa4b0274e94b1b8d4ce"
+      ]
+    },
+    "07f7d6f9961243d38e9d903a4fb43c40": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "8.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                218,
+                214,
+                215,
+                219
+              ]
+            ],
+            [
+              [
+                220,
+                216,
+                217,
+                221
+              ]
+            ],
+            [
+              [
+                219,
+                215,
+                216,
+                220
+              ]
+            ],
+            [
+              [
+                215,
+                214,
+                217,
+                216
+              ]
+            ],
+            [
+              [
+                214,
+                218,
+                221,
+                217
+              ]
+            ],
+            [
+              [
+                218,
+                219,
+                220,
+                221
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "a4e988102ac3434d80f510583cf6b28e"
+      ]
+    },
+    "e3a5889f934c4db592623964566e3634": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Woning",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "5.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                222,
+                223,
+                224,
+                225,
+                226,
+                88,
+                87,
+                86,
+                227,
+                228
+              ]
+            ],
+            [
+              [
+                229,
+                230,
+                91,
+                90,
+                89,
+                231,
+                232,
+                233,
+                234,
+                235
+              ]
+            ],
+            [
+              [
+                228,
+                227,
+                230,
+                229
+              ]
+            ],
+            [
+              [
+                227,
+                86,
+                91,
+                230
+              ]
+            ],
+            [
+              [
+                86,
+                87,
+                90,
+                91
+              ]
+            ],
+            [
+              [
+                87,
+                88,
+                89,
+                90
+              ]
+            ],
+            [
+              [
+                88,
+                226,
+                231,
+                89
+              ]
+            ],
+            [
+              [
+                226,
+                225,
+                232,
+                231
+              ]
+            ],
+            [
+              [
+                225,
+                224,
+                233,
+                232
+              ]
+            ],
+            [
+              [
+                224,
+                223,
+                234,
+                233
+              ]
+            ],
+            [
+              [
+                223,
+                222,
+                235,
+                234
+              ]
+            ],
+            [
+              [
+                222,
+                228,
+                229,
+                235
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "f225243749fe4934bee8491d33c07d8c"
+      ]
+    },
+    "21802e9f1c5d4e759802cd7ca588e85b": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "vitrine",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "21.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                236,
+                237,
+                218,
+                219,
+                238
+              ]
+            ],
+            [
+              [
+                239,
+                220,
+                221,
+                240,
+                241
+              ]
+            ],
+            [
+              [
+                238,
+                219,
+                220,
+                239
+              ]
+            ],
+            [
+              [
+                219,
+                218,
+                221,
+                220
+              ]
+            ],
+            [
+              [
+                218,
+                237,
+                240,
+                221
+              ]
+            ],
+            [
+              [
+                237,
+                236,
+                241,
+                240
+              ]
+            ],
+            [
+              [
+                236,
+                238,
+                239,
+                241
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "e27125293d964ebcb47feb822ac1c05f"
+      ]
+    },
+    "c0cfc0f1566b481f89ec58807c8c7395": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "18.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                242,
+                243,
+                244,
+                245
+              ]
+            ],
+            [
+              [
+                246,
+                247,
+                248,
+                249
+              ]
+            ],
+            [
+              [
+                245,
+                244,
+                247,
+                246
+              ]
+            ],
+            [
+              [
+                244,
+                243,
+                248,
+                247
+              ]
+            ],
+            [
+              [
+                243,
+                242,
+                249,
+                248
+              ]
+            ],
+            [
+              [
+                242,
+                245,
+                246,
+                249
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "d164fed1156e4268a17ec28e562ab77b"
+      ]
+    },
+    "6395986c726c488ba6ebc99432b68012": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "19.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                243,
+                250,
+                251,
+                244
+              ]
+            ],
+            [
+              [
+                247,
+                252,
+                253,
+                248
+              ]
+            ],
+            [
+              [
+                244,
+                251,
+                252,
+                247
+              ]
+            ],
+            [
+              [
+                251,
+                250,
+                253,
+                252
+              ]
+            ],
+            [
+              [
+                250,
+                243,
+                248,
+                253
+              ]
+            ],
+            [
+              [
+                243,
+                244,
+                247,
+                248
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "797d2c47ee0845d09b830b40c557b6cf"
+      ]
+    },
+    "cf5b4d13e1df44faa8571b2c916f6e7f": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "17.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                254,
+                255,
+                211,
+                210
+              ]
+            ],
+            [
+              [
+                213,
+                212,
+                256,
+                257
+              ]
+            ],
+            [
+              [
+                210,
+                211,
+                212,
+                213
+              ]
+            ],
+            [
+              [
+                211,
+                255,
+                256,
+                212
+              ]
+            ],
+            [
+              [
+                255,
+                254,
+                257,
+                256
+              ]
+            ],
+            [
+              [
+                254,
+                210,
+                213,
+                257
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "ef043b299735450f9812343c4d715978"
+      ]
+    },
+    "35bec3d9a2c44189abf3a58447c1623b": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "pp.",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "7.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 0,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                258,
+                259,
+                260,
+                261
+              ]
+            ],
+            [
+              [
+                262,
+                263,
+                264,
+                265
+              ]
+            ],
+            [
+              [
+                261,
+                260,
+                263,
+                262
+              ]
+            ],
+            [
+              [
+                260,
+                259,
+                264,
+                263
+              ]
+            ],
+            [
+              [
+                259,
+                258,
+                265,
+                264
+              ]
+            ],
+            [
+              [
+                258,
+                261,
+                262,
+                265
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "d8c66cdf4f774ac6a4e6f3d83073a7b5"
+      ]
+    },
+    "f42f9b82c6ab45f09c7ef5e30b92f020": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Terras",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                266,
+                128,
+                127,
+                267
+              ]
+            ],
+            [
+              [
+                268,
+                132,
+                131,
+                269
+              ]
+            ],
+            [
+              [
+                267,
+                127,
+                132,
+                268
+              ]
+            ],
+            [
+              [
+                127,
+                128,
+                131,
+                132
+              ]
+            ],
+            [
+              [
+                128,
+                266,
+                269,
+                131
+              ]
+            ],
+            [
+              [
+                266,
+                267,
+                268,
+                269
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "f4ecc4ce366645c08b296e7e0ae970b4": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "6.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 2,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                270,
+                271,
+                272,
+                273
+              ]
+            ],
+            [
+              [
+                274,
+                275,
+                276,
+                277
+              ]
+            ],
+            [
+              [
+                273,
+                272,
+                275,
+                274
+              ]
+            ],
+            [
+              [
+                272,
+                271,
+                276,
+                275
+              ]
+            ],
+            [
+              [
+                271,
+                270,
+                277,
+                276
+              ]
+            ],
+            [
+              [
+                270,
+                273,
+                274,
+                277
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1911faa3bcd141e8be74dd88c72c8170"
+      ]
+    },
+    "287a4b7d171c4ba3ad19158343ed270b": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Woning",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "3.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                45,
+                44,
+                278,
+                279,
+                280,
+                281,
+                282,
+                283,
+                284,
+                285,
+                286,
+                287,
+                288,
+                289,
+                290,
+                291
+              ]
+            ],
+            [
+              [
+                292,
+                293,
+                294,
+                295,
+                296,
+                297,
+                298,
+                299,
+                300,
+                301,
+                302,
+                303,
+                304,
+                305,
+                49,
+                48
+              ]
+            ],
+            [
+              [
+                291,
+                290,
+                293,
+                292
+              ]
+            ],
+            [
+              [
+                290,
+                289,
+                294,
+                293
+              ]
+            ],
+            [
+              [
+                289,
+                288,
+                295,
+                294
+              ]
+            ],
+            [
+              [
+                288,
+                287,
+                296,
+                295
+              ]
+            ],
+            [
+              [
+                287,
+                286,
+                297,
+                296
+              ]
+            ],
+            [
+              [
+                286,
+                285,
+                298,
+                297
+              ]
+            ],
+            [
+              [
+                285,
+                284,
+                299,
+                298
+              ]
+            ],
+            [
+              [
+                284,
+                283,
+                300,
+                299
+              ]
+            ],
+            [
+              [
+                283,
+                282,
+                301,
+                300
+              ]
+            ],
+            [
+              [
+                282,
+                281,
+                302,
+                301
+              ]
+            ],
+            [
+              [
+                281,
+                280,
+                303,
+                302
+              ]
+            ],
+            [
+              [
+                280,
+                279,
+                304,
+                303
+              ]
+            ],
+            [
+              [
+                279,
+                278,
+                305,
+                304
+              ]
+            ],
+            [
+              [
+                278,
+                44,
+                49,
+                305
+              ]
+            ],
+            [
+              [
+                44,
+                45,
+                48,
+                49
+              ]
+            ],
+            [
+              [
+                45,
+                291,
+                292,
+                48
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "1a080b11a9b14203bf0e426a1b43718f"
+      ]
+    },
+    "f163f05acae2467680c26debda6796ab": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Woning",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "2.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                306,
+                13,
+                12,
+                11,
+                10,
+                307,
+                286,
+                285,
+                308
+              ]
+            ],
+            [
+              [
+                309,
+                298,
+                297,
+                310,
+                23,
+                22,
+                21,
+                20,
+                311
+              ]
+            ],
+            [
+              [
+                308,
+                285,
+                298,
+                309
+              ]
+            ],
+            [
+              [
+                285,
+                286,
+                297,
+                298
+              ]
+            ],
+            [
+              [
+                286,
+                307,
+                310,
+                297
+              ]
+            ],
+            [
+              [
+                307,
+                10,
+                23,
+                310
+              ]
+            ],
+            [
+              [
+                10,
+                11,
+                22,
+                23
+              ]
+            ],
+            [
+              [
+                11,
+                12,
+                21,
+                22
+              ]
+            ],
+            [
+              [
+                12,
+                13,
+                20,
+                21
+              ]
+            ],
+            [
+              [
+                13,
+                306,
+                311,
+                20
+              ]
+            ],
+            [
+              [
+                306,
+                308,
+                309,
+                311
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "67a281d770f04ca69fe505255bc2a71d"
+      ]
+    },
+    "31e63209699844f28290280c35d6b1bc": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "Lichthof",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": true,
+        "apartmentindex": "nan",
+        "bimLegalSpaceUnitType": "m",
+        "level": 1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                284,
+                283,
+                282,
+                281,
+                280,
+                279,
+                278,
+                44,
+                46,
+                38,
+                37,
+                36,
+                63,
+                62,
+                61,
+                60,
+                59,
+                58,
+                26,
+                29,
+                16,
+                15,
+                14,
+                13,
+                306,
+                308,
+                285
+              ]
+            ],
+            [
+              [
+                298,
+                309,
+                311,
+                20,
+                19,
+                18,
+                17,
+                30,
+                33,
+                75,
+                74,
+                73,
+                72,
+                71,
+                70,
+                41,
+                40,
+                39,
+                47,
+                49,
+                305,
+                304,
+                303,
+                302,
+                301,
+                300,
+                299
+              ]
+            ],
+            [
+              [
+                285,
+                308,
+                309,
+                298
+              ]
+            ],
+            [
+              [
+                308,
+                306,
+                311,
+                309
+              ]
+            ],
+            [
+              [
+                306,
+                13,
+                20,
+                311
+              ]
+            ],
+            [
+              [
+                13,
+                14,
+                19,
+                20
+              ]
+            ],
+            [
+              [
+                14,
+                15,
+                18,
+                19
+              ]
+            ],
+            [
+              [
+                15,
+                16,
+                17,
+                18
+              ]
+            ],
+            [
+              [
+                16,
+                29,
+                30,
+                17
+              ]
+            ],
+            [
+              [
+                29,
+                26,
+                33,
+                30
+              ]
+            ],
+            [
+              [
+                26,
+                58,
+                75,
+                33
+              ]
+            ],
+            [
+              [
+                58,
+                59,
+                74,
+                75
+              ]
+            ],
+            [
+              [
+                59,
+                60,
+                73,
+                74
+              ]
+            ],
+            [
+              [
+                60,
+                61,
+                72,
+                73
+              ]
+            ],
+            [
+              [
+                61,
+                62,
+                71,
+                72
+              ]
+            ],
+            [
+              [
+                62,
+                63,
+                70,
+                71
+              ]
+            ],
+            [
+              [
+                63,
+                36,
+                41,
+                70
+              ]
+            ],
+            [
+              [
+                36,
+                37,
+                40,
+                41
+              ]
+            ],
+            [
+              [
+                37,
+                38,
+                39,
+                40
+              ]
+            ],
+            [
+              [
+                38,
+                46,
+                47,
+                39
+              ]
+            ],
+            [
+              [
+                46,
+                44,
+                49,
+                47
+              ]
+            ],
+            [
+              [
+                44,
+                278,
+                305,
+                49
+              ]
+            ],
+            [
+              [
+                278,
+                279,
+                304,
+                305
+              ]
+            ],
+            [
+              [
+                279,
+                280,
+                303,
+                304
+              ]
+            ],
+            [
+              [
+                280,
+                281,
+                302,
+                303
+              ]
+            ],
+            [
+              [
+                281,
+                282,
+                301,
+                302
+              ]
+            ],
+            [
+              [
+                282,
+                283,
+                300,
+                301
+              ]
+            ],
+            [
+              [
+                283,
+                284,
+                299,
+                300
+              ]
+            ],
+            [
+              [
+                284,
+                285,
+                298,
+                299
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "d960c3f0f3974749b53e9e3f098ab87a"
+      ]
+    },
+    "9ef5a5fecb15424ead15b291e0ff2bd2": {
+      "type": "BuildingRoom",
+      "attributes": {
+        "name": "",
+        "extrusion_height": 2.596280568584916,
+        "isSharedPart": false,
+        "apartmentindex": "1.0",
+        "bimLegalSpaceUnitType": "m",
+        "level": -1,
+        "georef_accuracy": null
+      },
+      "geometry": [
+        {
+          "type": "MultiSurface",
+          "lod": "1",
+          "boundaries": [
+            [
+              [
+                312,
+                313,
+                94,
+                97,
+                96,
+                95,
+                314,
+                315
+              ]
+            ],
+            [
+              [
+                316,
+                317,
+                100,
+                99,
+                98,
+                101,
+                318,
+                319
+              ]
+            ],
+            [
+              [
+                315,
+                314,
+                317,
+                316
+              ]
+            ],
+            [
+              [
+                314,
+                95,
+                100,
+                317
+              ]
+            ],
+            [
+              [
+                95,
+                96,
+                99,
+                100
+              ]
+            ],
+            [
+              [
+                96,
+                97,
+                98,
+                99
+              ]
+            ],
+            [
+              [
+                97,
+                94,
+                101,
+                98
+              ]
+            ],
+            [
+              [
+                94,
+                313,
+                318,
+                101
+              ]
+            ],
+            [
+              [
+                313,
+                312,
+                319,
+                318
+              ]
+            ],
+            [
+              [
+                312,
+                315,
+                316,
+                319
+              ]
+            ]
+          ]
+        }
+      ],
+      "parents": [
+        "93334e0e83fb49fbbb971e3b4a0ba549"
+      ]
+    }
+  },
+  "vertices": [
+    [
+      1407435820,
+      4708421673,
+      -25963
+    ],
+    [
+      1407442029,
+      4708480263,
+      -25963
+    ],
+    [
+      1407470087,
+      4708477241,
+      -25963
+    ],
+    [
+      1407464010,
+      4708418710,
+      -25963
+    ],
+    [
+      1407464010,
+      4708418710,
+      0
+    ],
+    [
+      1407470087,
+      4708477241,
+      0
+    ],
+    [
+      1407442029,
+      4708480263,
+      0
+    ],
+    [
+      1407435820,
+      4708421673,
+      0
+    ],
+    [
+      1407432015,
+      4708579344,
+      25963
+    ],
+    [
+      1407479767,
+      4708577999,
+      25963
+    ],
+    [
+      1407476815,
+      4708548021,
+      25963
+    ],
+    [
+      1407419890,
+      4708549546,
+      25963
+    ],
+    [
+      1407417568,
+      4708527402,
+      25963
+    ],
+    [
+      1407356389,
+      4708533832,
+      25963
+    ],
+    [
+      1407357413,
+      4708543796,
+      25963
+    ],
+    [
+      1407353535,
+      4708544284,
+      25963
+    ],
+    [
+      1407364894,
+      4708578162,
+      25963
+    ],
+    [
+      1407364894,
+      4708578162,
+      51926
+    ],
+    [
+      1407353535,
+      4708544284,
+      51926
+    ],
+    [
+      1407357413,
+      4708543796,
+      51926
+    ],
+    [
+      1407356389,
+      4708533832,
+      51926
+    ],
+    [
+      1407417568,
+      4708527402,
+      51926
+    ],
+    [
+      1407419890,
+      4708549546,
+      51926
+    ],
+    [
+      1407476815,
+      4708548021,
+      51926
+    ],
+    [
+      1407479767,
+      4708577999,
+      51926
+    ],
+    [
+      1407432015,
+      4708579344,
+      51926
+    ],
+    [
+      1407379185,
+      4708612570,
+      25963
+    ],
+    [
+      1407407189,
+      4708612868,
+      25963
+    ],
+    [
+      1407432516,
+      4708613473,
+      25963
+    ],
+    [
+      1407376434,
+      4708612580,
+      25963
+    ],
+    [
+      1407376434,
+      4708612580,
+      51926
+    ],
+    [
+      1407432516,
+      4708613473,
+      51926
+    ],
+    [
+      1407407189,
+      4708612868,
+      51926
+    ],
+    [
+      1407379185,
+      4708612570,
+      51926
+    ],
+    [
+      1407310445,
+      4708587824,
+      25963
+    ],
+    [
+      1407312219,
+      4708611877,
+      25963
+    ],
+    [
+      1407361991,
+      4708612318,
+      25963
+    ],
+    [
+      1407366094,
+      4708612277,
+      25963
+    ],
+    [
+      1407354685,
+      4708578881,
+      25963
+    ],
+    [
+      1407354685,
+      4708578881,
+      51926
+    ],
+    [
+      1407366094,
+      4708612277,
+      51926
+    ],
+    [
+      1407361991,
+      4708612318,
+      51926
+    ],
+    [
+      1407312219,
+      4708611877,
+      51926
+    ],
+    [
+      1407310445,
+      4708587824,
+      51926
+    ],
+    [
+      1407338721,
+      4708545842,
+      25963
+    ],
+    [
+      1407307830,
+      4708549013,
+      25963
+    ],
+    [
+      1407343236,
+      4708545366,
+      25963
+    ],
+    [
+      1407343236,
+      4708545366,
+      51926
+    ],
+    [
+      1407307830,
+      4708549013,
+      51926
+    ],
+    [
+      1407338721,
+      4708545842,
+      51926
+    ],
+    [
+      1407333719,
+      4708679496,
+      25963
+    ],
+    [
+      1407376288,
+      4708680916,
+      25963
+    ],
+    [
+      1407376241,
+      4708695504,
+      25963
+    ],
+    [
+      1407395729,
+      4708695583,
+      25963
+    ],
+    [
+      1407395973,
+      4708681145,
+      25963
+    ],
+    [
+      1407430044,
+      4708681647,
+      25963
+    ],
+    [
+      1407431098,
+      4708651582,
+      25963
+    ],
+    [
+      1407406586,
+      4708651015,
+      25963
+    ],
+    [
+      1407378577,
+      4708647067,
+      25963
+    ],
+    [
+      1407382009,
+      4708647206,
+      25963
+    ],
+    [
+      1407381618,
+      4708663630,
+      25963
+    ],
+    [
+      1407344650,
+      4708662534,
+      25963
+    ],
+    [
+      1407348770,
+      4708646549,
+      25963
+    ],
+    [
+      1407361325,
+      4708646826,
+      25963
+    ],
+    [
+      1407262176,
+      4708591169,
+      25963
+    ],
+    [
+      1407268371,
+      4708679741,
+      25963
+    ],
+    [
+      1407333602,
+      4708675603,
+      25963
+    ],
+    [
+      1407333602,
+      4708675603,
+      51926
+    ],
+    [
+      1407268371,
+      4708679741,
+      51926
+    ],
+    [
+      1407262176,
+      4708591169,
+      51926
+    ],
+    [
+      1407361325,
+      4708646826,
+      51926
+    ],
+    [
+      1407348770,
+      4708646549,
+      51926
+    ],
+    [
+      1407344650,
+      4708662534,
+      51926
+    ],
+    [
+      1407381618,
+      4708663630,
+      51926
+    ],
+    [
+      1407382009,
+      4708647206,
+      51926
+    ],
+    [
+      1407378577,
+      4708647067,
+      51926
+    ],
+    [
+      1407406586,
+      4708651015,
+      51926
+    ],
+    [
+      1407431098,
+      4708651582,
+      51926
+    ],
+    [
+      1407430044,
+      4708681647,
+      51926
+    ],
+    [
+      1407395973,
+      4708681145,
+      51926
+    ],
+    [
+      1407395729,
+      4708695583,
+      51926
+    ],
+    [
+      1407376241,
+      4708695504,
+      51926
+    ],
+    [
+      1407376288,
+      4708680916,
+      51926
+    ],
+    [
+      1407333719,
+      4708679496,
+      51926
+    ],
+    [
+      1407407545,
+      4708446094,
+      51926
+    ],
+    [
+      1407446323,
+      4708442020,
+      51926
+    ],
+    [
+      1407441419,
+      4708394984,
+      51926
+    ],
+    [
+      1407402613,
+      4708399062,
+      51926
+    ],
+    [
+      1407404810,
+      4708420010,
+      51926
+    ],
+    [
+      1407404810,
+      4708420010,
+      77888
+    ],
+    [
+      1407402613,
+      4708399062,
+      77888
+    ],
+    [
+      1407441419,
+      4708394984,
+      77888
+    ],
+    [
+      1407446323,
+      4708442020,
+      77888
+    ],
+    [
+      1407407545,
+      4708446094,
+      77888
+    ],
+    [
+      1407439087,
+      4708552915,
+      -25963
+    ],
+    [
+      1407460157,
+      4708550696,
+      -25963
+    ],
+    [
+      1407459264,
+      4708542256,
+      -25963
+    ],
+    [
+      1407438226,
+      4708544445,
+      -25963
+    ],
+    [
+      1407438226,
+      4708544445,
+      0
+    ],
+    [
+      1407459264,
+      4708542256,
+      0
+    ],
+    [
+      1407460157,
+      4708550696,
+      0
+    ],
+    [
+      1407439087,
+      4708552915,
+      0
+    ],
+    [
+      1407395587,
+      4708703969,
+      25963
+    ],
+    [
+      1407375883,
+      4708703965,
+      25963
+    ],
+    [
+      1407338023,
+      4708822440,
+      25963
+    ],
+    [
+      1407425096,
+      4708822838,
+      25963
+    ],
+    [
+      1407425096,
+      4708822838,
+      51926
+    ],
+    [
+      1407338023,
+      4708822440,
+      51926
+    ],
+    [
+      1407375883,
+      4708703965,
+      51926
+    ],
+    [
+      1407395587,
+      4708703969,
+      51926
+    ],
+    [
+      1407374848,
+      4708679072,
+      51926
+    ],
+    [
+      1407374513,
+      4708696144,
+      51926
+    ],
+    [
+      1407394227,
+      4708696412,
+      51926
+    ],
+    [
+      1407394402,
+      4708679465,
+      51926
+    ],
+    [
+      1407394402,
+      4708679465,
+      77888
+    ],
+    [
+      1407394227,
+      4708696412,
+      77888
+    ],
+    [
+      1407374513,
+      4708696144,
+      77888
+    ],
+    [
+      1407374848,
+      4708679072,
+      77888
+    ],
+    [
+      1407444714,
+      4708326207,
+      0
+    ],
+    [
+      1407443219,
+      4708316740,
+      0
+    ],
+    [
+      1407394949,
+      4708323150,
+      0
+    ],
+    [
+      1407396448,
+      4708332681,
+      0
+    ],
+    [
+      1407396448,
+      4708332681,
+      25963
+    ],
+    [
+      1407394949,
+      4708323150,
+      25963
+    ],
+    [
+      1407443219,
+      4708316740,
+      25963
+    ],
+    [
+      1407444714,
+      4708326207,
+      25963
+    ],
+    [
+      1407332068,
+      4708678189,
+      51926
+    ],
+    [
+      1407335787,
+      4708799741,
+      51926
+    ],
+    [
+      1407424191,
+      4708800390,
+      51926
+    ],
+    [
+      1407428398,
+      4708680091,
+      51926
+    ],
+    [
+      1407428398,
+      4708680091,
+      77888
+    ],
+    [
+      1407424191,
+      4708800390,
+      77888
+    ],
+    [
+      1407335787,
+      4708799741,
+      77888
+    ],
+    [
+      1407332068,
+      4708678189,
+      77888
+    ],
+    [
+      1407331939,
+      4708673964,
+      51926
+    ],
+    [
+      1407429426,
+      4708649934,
+      51926
+    ],
+    [
+      1407405031,
+      4708649126,
+      51926
+    ],
+    [
+      1407405687,
+      4708611451,
+      51926
+    ],
+    [
+      1407310299,
+      4708610154,
+      51926
+    ],
+    [
+      1407289293,
+      4708609931,
+      51926
+    ],
+    [
+      1407288041,
+      4708587648,
+      51926
+    ],
+    [
+      1407260553,
+      4708589542,
+      51926
+    ],
+    [
+      1407266699,
+      4708678170,
+      51926
+    ],
+    [
+      1407266699,
+      4708678170,
+      77888
+    ],
+    [
+      1407260553,
+      4708589542,
+      77888
+    ],
+    [
+      1407288041,
+      4708587648,
+      77888
+    ],
+    [
+      1407289293,
+      4708609931,
+      77888
+    ],
+    [
+      1407310299,
+      4708610154,
+      77888
+    ],
+    [
+      1407405687,
+      4708611451,
+      77888
+    ],
+    [
+      1407405031,
+      4708649126,
+      77888
+    ],
+    [
+      1407429426,
+      4708649934,
+      77888
+    ],
+    [
+      1407331939,
+      4708673964,
+      77888
+    ],
+    [
+      1407308947,
+      4708586207,
+      51926
+    ],
+    [
+      1407308947,
+      4708586207,
+      77888
+    ],
+    [
+      1407335187,
+      4708675695,
+      0
+    ],
+    [
+      1407339585,
+      4708822104,
+      0
+    ],
+    [
+      1407426412,
+      4708822988,
+      0
+    ],
+    [
+      1407432352,
+      4708651232,
+      0
+    ],
+    [
+      1407408266,
+      4708650926,
+      0
+    ],
+    [
+      1407408672,
+      4708613067,
+      0
+    ],
+    [
+      1407433002,
+      4708613295,
+      0
+    ],
+    [
+      1407432437,
+      4708579339,
+      0
+    ],
+    [
+      1407481426,
+      4708578046,
+      0
+    ],
+    [
+      1407470801,
+      4708477145,
+      0
+    ],
+    [
+      1407442731,
+      4708480098,
+      0
+    ],
+    [
+      1407414342,
+      4708483085,
+      0
+    ],
+    [
+      1407384772,
+      4708486195,
+      0
+    ],
+    [
+      1407354881,
+      4708489340,
+      0
+    ],
+    [
+      1407291883,
+      4708495967,
+      0
+    ],
+    [
+      1407289039,
+      4708469206,
+      0
+    ],
+    [
+      1407254282,
+      4708472870,
+      0
+    ],
+    [
+      1407268981,
+      4708680200,
+      0
+    ],
+    [
+      1407268981,
+      4708680200,
+      25963
+    ],
+    [
+      1407254282,
+      4708472870,
+      25963
+    ],
+    [
+      1407289039,
+      4708469206,
+      25963
+    ],
+    [
+      1407291883,
+      4708495967,
+      25963
+    ],
+    [
+      1407354881,
+      4708489340,
+      25963
+    ],
+    [
+      1407384772,
+      4708486195,
+      25963
+    ],
+    [
+      1407414342,
+      4708483085,
+      25963
+    ],
+    [
+      1407442731,
+      4708480098,
+      25963
+    ],
+    [
+      1407470801,
+      4708477145,
+      25963
+    ],
+    [
+      1407481426,
+      4708578046,
+      25963
+    ],
+    [
+      1407432437,
+      4708579339,
+      25963
+    ],
+    [
+      1407433002,
+      4708613295,
+      25963
+    ],
+    [
+      1407408672,
+      4708613067,
+      25963
+    ],
+    [
+      1407408266,
+      4708650926,
+      25963
+    ],
+    [
+      1407432352,
+      4708651232,
+      25963
+    ],
+    [
+      1407426412,
+      4708822988,
+      25963
+    ],
+    [
+      1407339585,
+      4708822104,
+      25963
+    ],
+    [
+      1407335187,
+      4708675695,
+      25963
+    ],
+    [
+      1407348975,
+      4708430792,
+      0
+    ],
+    [
+      1407345734,
+      4708400623,
+      0
+    ],
+    [
+      1407340545,
+      4708401072,
+      0
+    ],
+    [
+      1407282430,
+      4708407026,
+      0
+    ],
+    [
+      1407282430,
+      4708407026,
+      25963
+    ],
+    [
+      1407340545,
+      4708401072,
+      25963
+    ],
+    [
+      1407345734,
+      4708400623,
+      25963
+    ],
+    [
+      1407348975,
+      4708430792,
+      25963
+    ],
+    [
+      1407378612,
+      4708427679,
+      0
+    ],
+    [
+      1407378612,
+      4708427679,
+      25963
+    ],
+    [
+      1407408102,
+      4708424580,
+      0
+    ],
+    [
+      1407408102,
+      4708424580,
+      25963
+    ],
+    [
+      1407407370,
+      4708424663,
+      -25963
+    ],
+    [
+      1407413595,
+      4708483325,
+      -25963
+    ],
+    [
+      1407413595,
+      4708483325,
+      0
+    ],
+    [
+      1407407370,
+      4708424663,
+      0
+    ],
+    [
+      1407436495,
+      4708421598,
+      0
+    ],
+    [
+      1407436495,
+      4708421598,
+      25963
+    ],
+    [
+      1407464641,
+      4708418641,
+      0
+    ],
+    [
+      1407464641,
+      4708418641,
+      25963
+    ],
+    [
+      1407377905,
+      4708427759,
+      -25963
+    ],
+    [
+      1407384136,
+      4708486316,
+      -25963
+    ],
+    [
+      1407384136,
+      4708486316,
+      0
+    ],
+    [
+      1407377905,
+      4708427759,
+      0
+    ],
+    [
+      1407279500,
+      4708379464,
+      0
+    ],
+    [
+      1407337609,
+      4708373323,
+      0
+    ],
+    [
+      1407337609,
+      4708373323,
+      25963
+    ],
+    [
+      1407279500,
+      4708379464,
+      25963
+    ],
+    [
+      1407276544,
+      4708351652,
+      0
+    ],
+    [
+      1407334677,
+      4708345601,
+      0
+    ],
+    [
+      1407334677,
+      4708345601,
+      25963
+    ],
+    [
+      1407276544,
+      4708351652,
+      25963
+    ],
+    [
+      1407280935,
+      4708336778,
+      51926
+    ],
+    [
+      1407275319,
+      4708343805,
+      51926
+    ],
+    [
+      1407283877,
+      4708425177,
+      51926
+    ],
+    [
+      1407312767,
+      4708422065,
+      51926
+    ],
+    [
+      1407313560,
+      4708429644,
+      51926
+    ],
+    [
+      1407459006,
+      4708393136,
+      51926
+    ],
+    [
+      1407450694,
+      4708313725,
+      51926
+    ],
+    [
+      1407450694,
+      4708313725,
+      77888
+    ],
+    [
+      1407459006,
+      4708393136,
+      77888
+    ],
+    [
+      1407313560,
+      4708429644,
+      77888
+    ],
+    [
+      1407312767,
+      4708422065,
+      77888
+    ],
+    [
+      1407283877,
+      4708425177,
+      77888
+    ],
+    [
+      1407275319,
+      4708343805,
+      77888
+    ],
+    [
+      1407280935,
+      4708336778,
+      77888
+    ],
+    [
+      1407285546,
+      4708338018,
+      0
+    ],
+    [
+      1407276455,
+      4708350808,
+      0
+    ],
+    [
+      1407333190,
+      4708331543,
+      0
+    ],
+    [
+      1407333190,
+      4708331543,
+      25963
+    ],
+    [
+      1407276455,
+      4708350808,
+      25963
+    ],
+    [
+      1407285546,
+      4708338018,
+      25963
+    ],
+    [
+      1407276097,
+      4708352176,
+      -25963
+    ],
+    [
+      1407279283,
+      4708379639,
+      -25963
+    ],
+    [
+      1407336931,
+      4708373580,
+      -25963
+    ],
+    [
+      1407334321,
+      4708345907,
+      -25963
+    ],
+    [
+      1407334321,
+      4708345907,
+      0
+    ],
+    [
+      1407336931,
+      4708373580,
+      0
+    ],
+    [
+      1407279283,
+      4708379639,
+      0
+    ],
+    [
+      1407276097,
+      4708352176,
+      0
+    ],
+    [
+      1407282320,
+      4708407117,
+      -25963
+    ],
+    [
+      1407339821,
+      4708401074,
+      -25963
+    ],
+    [
+      1407339821,
+      4708401074,
+      0
+    ],
+    [
+      1407282320,
+      4708407117,
+      0
+    ],
+    [
+      1407348173,
+      4708430884,
+      -25963
+    ],
+    [
+      1407354445,
+      4708489265,
+      -25963
+    ],
+    [
+      1407354445,
+      4708489265,
+      0
+    ],
+    [
+      1407348173,
+      4708430884,
+      0
+    ],
+    [
+      1407397456,
+      4708338950,
+      0
+    ],
+    [
+      1407400519,
+      4708366750,
+      0
+    ],
+    [
+      1407458534,
+      4708360641,
+      0
+    ],
+    [
+      1407455609,
+      4708332859,
+      0
+    ],
+    [
+      1407455609,
+      4708332859,
+      25963
+    ],
+    [
+      1407458534,
+      4708360641,
+      25963
+    ],
+    [
+      1407400519,
+      4708366750,
+      25963
+    ],
+    [
+      1407397456,
+      4708338950,
+      25963
+    ],
+    [
+      1407423462,
+      4708821244,
+      51926
+    ],
+    [
+      1407336428,
+      4708820673,
+      51926
+    ],
+    [
+      1407336428,
+      4708820673,
+      77888
+    ],
+    [
+      1407423462,
+      4708821244,
+      77888
+    ],
+    [
+      1407366366,
+      4708645405,
+      51926
+    ],
+    [
+      1407313329,
+      4708644295,
+      51926
+    ],
+    [
+      1407313983,
+      4708660494,
+      51926
+    ],
+    [
+      1407365966,
+      4708661588,
+      51926
+    ],
+    [
+      1407365966,
+      4708661588,
+      77888
+    ],
+    [
+      1407313983,
+      4708660494,
+      77888
+    ],
+    [
+      1407313329,
+      4708644295,
+      77888
+    ],
+    [
+      1407366366,
+      4708645405,
+      77888
+    ],
+    [
+      1407330271,
+      4708465217,
+      25963
+    ],
+    [
+      1407319048,
+      4708466473,
+      25963
+    ],
+    [
+      1407314469,
+      4708423891,
+      25963
+    ],
+    [
+      1407325123,
+      4708422772,
+      25963
+    ],
+    [
+      1407325552,
+      4708427190,
+      25963
+    ],
+    [
+      1407345210,
+      4708425072,
+      25963
+    ],
+    [
+      1407345500,
+      4708427894,
+      25963
+    ],
+    [
+      1407406431,
+      4708421499,
+      25963
+    ],
+    [
+      1407396076,
+      4708322948,
+      25963
+    ],
+    [
+      1407348454,
+      4708329447,
+      25963
+    ],
+    [
+      1407282456,
+      4708338453,
+      25963
+    ],
+    [
+      1407276853,
+      4708345501,
+      25963
+    ],
+    [
+      1407286640,
+      4708438434,
+      25963
+    ],
+    [
+      1407297837,
+      4708544752,
+      25963
+    ],
+    [
+      1407297837,
+      4708544752,
+      51926
+    ],
+    [
+      1407286640,
+      4708438434,
+      51926
+    ],
+    [
+      1407276853,
+      4708345501,
+      51926
+    ],
+    [
+      1407282456,
+      4708338453,
+      51926
+    ],
+    [
+      1407348454,
+      4708329447,
+      51926
+    ],
+    [
+      1407396076,
+      4708322948,
+      51926
+    ],
+    [
+      1407406431,
+      4708421499,
+      51926
+    ],
+    [
+      1407345500,
+      4708427894,
+      51926
+    ],
+    [
+      1407345210,
+      4708425072,
+      51926
+    ],
+    [
+      1407325552,
+      4708427190,
+      51926
+    ],
+    [
+      1407325123,
+      4708422772,
+      51926
+    ],
+    [
+      1407314469,
+      4708423891,
+      51926
+    ],
+    [
+      1407319048,
+      4708466473,
+      51926
+    ],
+    [
+      1407330271,
+      4708465217,
+      51926
+    ],
+    [
+      1407349384,
+      4708465680,
+      25963
+    ],
+    [
+      1407452223,
+      4708315492,
+      25963
+    ],
+    [
+      1407410408,
+      4708459348,
+      25963
+    ],
+    [
+      1407410408,
+      4708459348,
+      51926
+    ],
+    [
+      1407452223,
+      4708315492,
+      51926
+    ],
+    [
+      1407349384,
+      4708465680,
+      51926
+    ],
+    [
+      1407414163,
+      4708507915,
+      -25963
+    ],
+    [
+      1407419094,
+      4708555021,
+      -25963
+    ],
+    [
+      1407477625,
+      4708548856,
+      -25963
+    ],
+    [
+      1407472674,
+      4708501743,
+      -25963
+    ],
+    [
+      1407472674,
+      4708501743,
+      0
+    ],
+    [
+      1407477625,
+      4708548856,
+      0
+    ],
+    [
+      1407419094,
+      4708555021,
+      0
+    ],
+    [
+      1407414163,
+      4708507915,
+      0
+    ]
+  ],
+  "metadata": {
+    "referenceSystem": "https://www.opengis.net/def/crs/EPSG/0/28992"
+  },
+  "transform": {
+    "scale": [
+      0.0001,
+      0.0001,
+      0.0001
+    ],
+    "translate": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+}
