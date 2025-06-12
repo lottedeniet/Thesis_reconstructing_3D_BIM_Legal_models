@@ -15,17 +15,11 @@ What the project does:
 - Outputs the result in CityJSON format, following the BIM Legal LoD1+ standard
 
 These models help visualize how ownership is divided in a building in 3D, which can be useful for legal registration, urban planning, and future automation of property documentation.
+![image2](https://github.com/user-attachments/assets/41822074-d712-483a-815a-2847740e5037)
 
 ## Project Structure
 
-thesis/
-├── data/
-│ ├── raw/ # Original input data (e.g., shapefiles)
-│ └── json_input/ # Vectorized JSONs division drawings
-│
-├── output/ # Results (.city.json files)
-├── main.py # Main script to run
-└── README.md
+<pre> <code> thesis/ ├── data/ │ ├── raw/ # Original input data (e.g., shapefiles) │ └── json_input/ # Vectorized JSONs of division drawings │ ├── output/ # Results (.city.json files) ├── main.py # Main script to run └── README.md </code> </pre>
 
 
 
