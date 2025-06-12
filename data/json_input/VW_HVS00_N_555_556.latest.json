@@ -1,0 +1,4760 @@
+{
+  "Tables": {},
+  "attachments": {
+    "front": {
+      "filename": "VW_HVS00_N_555_556.front.png",
+      "id": "('front', 'png')",
+      "md5": "709ac1ca816416d7e71854a1f9cf7a0a",
+      "properties": {
+        "vectorize": true
+      },
+      "type": "image"
+    },
+    "front-segmentation": {
+      "filename": "VW_HVS00_N_555_556.front-segmentation.png",
+      "id": "('front-segmentation', 'png')",
+      "md5": "3b98f2f5da3e946a7f5688234f241f5d",
+      "properties": {},
+      "type": "image"
+    }
+  },
+  "buildings": {},
+  "gps_points": {},
+  "lines": {
+    "l10": {
+      "attachment": "front",
+      "points": [
+        "p12",
+        "p39",
+        "p2"
+      ]
+    },
+    "l103": {
+      "attachment": "front",
+      "points": [
+        "p192",
+        "p154",
+        "p114"
+      ]
+    },
+    "l105": {
+      "attachment": "front",
+      "points": [
+        "p194",
+        "p115"
+      ]
+    },
+    "l108": {
+      "attachment": "front",
+      "points": [
+        "p118",
+        "p117"
+      ]
+    },
+    "l109": {
+      "attachment": "front",
+      "points": [
+        "p119",
+        "p161"
+      ]
+    },
+    "l110": {
+      "attachment": "front",
+      "points": [
+        "p120",
+        "p121"
+      ]
+    },
+    "l111": {
+      "attachment": "front",
+      "points": [
+        "p162",
+        "p159"
+      ]
+    },
+    "l114": {
+      "attachment": "front",
+      "points": [
+        "p125",
+        "p153"
+      ]
+    },
+    "l134": {
+      "attachment": "front",
+      "points": [
+        "p143",
+        "p144"
+      ]
+    },
+    "l135": {
+      "attachment": "front",
+      "points": [
+        "p148",
+        "p145"
+      ]
+    },
+    "l136": {
+      "attachment": "front",
+      "points": [
+        "p147",
+        "p146"
+      ]
+    },
+    "l138": {
+      "attachment": "front",
+      "points": [
+        "p185",
+        "p150"
+      ]
+    },
+    "l14": {
+      "attachment": "front",
+      "points": [
+        "p1",
+        "p25",
+        "p9",
+        "p10"
+      ]
+    },
+    "l140": {
+      "attachment": "front",
+      "points": [
+        "p152",
+        "p153"
+      ]
+    },
+    "l141": {
+      "attachment": "front",
+      "points": [
+        "p150",
+        "p154"
+      ]
+    },
+    "l144": {
+      "attachment": "front",
+      "points": [
+        "p157",
+        "p202"
+      ]
+    },
+    "l145": {
+      "attachment": "front",
+      "points": [
+        "p159",
+        "p158"
+      ]
+    },
+    "l146": {
+      "attachment": "front",
+      "points": [
+        "p160",
+        "p203"
+      ]
+    },
+    "l147": {
+      "attachment": "front",
+      "points": [
+        "p163",
+        "p184"
+      ]
+    },
+    "l148": {
+      "attachment": "front",
+      "points": [
+        "p161",
+        "p162"
+      ]
+    },
+    "l149": {
+      "attachment": "front",
+      "points": [
+        "p204",
+        "p163"
+      ]
+    },
+    "l16": {
+      "attachment": "front",
+      "points": [
+        "p2",
+        "p13"
+      ]
+    },
+    "l163": {
+      "attachment": "front",
+      "points": [
+        "p249",
+        "p255",
+        "p269"
+      ]
+    },
+    "l2": {
+      "attachment": "front",
+      "points": [
+        "p2",
+        "p307",
+        "p16",
+        "p9"
+      ]
+    },
+    "l20": {
+      "attachment": "front",
+      "points": [
+        "p16",
+        "p45"
+      ]
+    },
+    "l21": {
+      "attachment": "front",
+      "points": [
+        "p18",
+        "p37",
+        "p26",
+        "p34",
+        "p17"
+      ]
+    },
+    "l212": {
+      "attachment": "front",
+      "points": [
+        "p42",
+        "p303"
+      ]
+    },
+    "l213": {
+      "attachment": "front",
+      "points": [
+        "p303",
+        "p304"
+      ]
+    },
+    "l214": {
+      "attachment": "front",
+      "points": [
+        "p304",
+        "p31"
+      ]
+    },
+    "l215": {
+      "attachment": "front",
+      "points": [
+        "p6",
+        "p23"
+      ]
+    },
+    "l216": {
+      "attachment": "front",
+      "points": [
+        "p7",
+        "p8"
+      ]
+    },
+    "l217": {
+      "attachment": "front",
+      "points": [
+        "p306",
+        "p305"
+      ]
+    },
+    "l218": {
+      "attachment": "front",
+      "points": [
+        "p28",
+        "p48"
+      ]
+    },
+    "l219": {
+      "attachment": "front",
+      "points": [
+        "p307",
+        "p57"
+      ]
+    },
+    "l220": {
+      "attachment": "front",
+      "points": [
+        "p12",
+        "p308"
+      ]
+    },
+    "l224": {
+      "attachment": "front",
+      "points": [
+        "p310",
+        "p311"
+      ]
+    },
+    "l225": {
+      "attachment": "front",
+      "points": [
+        "p311",
+        "p313",
+        "p312"
+      ]
+    },
+    "l227": {
+      "attachment": "front",
+      "points": [
+        "p312",
+        "p314"
+      ]
+    },
+    "l228": {
+      "attachment": "front",
+      "points": [
+        "p321",
+        "p177"
+      ]
+    },
+    "l229": {
+      "attachment": "front",
+      "points": [
+        "p321",
+        "p114"
+      ]
+    },
+    "l23": {
+      "attachment": "front",
+      "points": [
+        "p22",
+        "p23"
+      ]
+    },
+    "l230": {
+      "attachment": "front",
+      "points": [
+        "p321",
+        "p322"
+      ]
+    },
+    "l231": {
+      "attachment": "front",
+      "points": [
+        "p322",
+        "p323"
+      ]
+    },
+    "l232": {
+      "attachment": "front",
+      "points": [
+        "p79",
+        "p326",
+        "p114"
+      ]
+    },
+    "l235": {
+      "attachment": "front",
+      "points": [
+        "p317",
+        "p318"
+      ]
+    },
+    "l236": {
+      "attachment": "front",
+      "points": [
+        "p318",
+        "p319"
+      ]
+    },
+    "l237": {
+      "attachment": "front",
+      "points": [
+        "p319",
+        "p320"
+      ]
+    },
+    "l238": {
+      "attachment": "front",
+      "points": [
+        "p318",
+        "p97"
+      ]
+    },
+    "l239": {
+      "attachment": "front",
+      "points": [
+        "p325",
+        "p324",
+        "p316"
+      ]
+    },
+    "l24": {
+      "attachment": "front",
+      "points": [
+        "p24",
+        "p38",
+        "p27",
+        "p35"
+      ]
+    },
+    "l242": {
+      "attachment": "front",
+      "points": [
+        "p328",
+        "p329"
+      ]
+    },
+    "l243": {
+      "attachment": "front",
+      "points": [
+        "p329",
+        "p330"
+      ]
+    },
+    "l244": {
+      "attachment": "front",
+      "points": [
+        "p30",
+        "p122"
+      ]
+    },
+    "l245": {
+      "attachment": "front",
+      "points": [
+        "p331",
+        "p333"
+      ]
+    },
+    "l246": {
+      "attachment": "front",
+      "points": [
+        "p333",
+        "p334"
+      ]
+    },
+    "l247": {
+      "attachment": "front",
+      "points": [
+        "p332",
+        "p334"
+      ]
+    },
+    "l249": {
+      "attachment": "front",
+      "points": [
+        "p335",
+        "p76"
+      ]
+    },
+    "l25": {
+      "attachment": "front",
+      "points": [
+        "p26",
+        "p27",
+        "p25"
+      ]
+    },
+    "l250": {
+      "attachment": "front",
+      "points": [
+        "p337",
+        "p338"
+      ]
+    },
+    "l251": {
+      "attachment": "front",
+      "points": [
+        "p338",
+        "p339"
+      ]
+    },
+    "l252": {
+      "attachment": "front",
+      "points": [
+        "p339",
+        "p336"
+      ]
+    },
+    "l255": {
+      "attachment": "front",
+      "points": [
+        "p166",
+        "p85"
+      ]
+    },
+    "l262": {
+      "attachment": "front",
+      "points": [
+        "p176",
+        "p344"
+      ]
+    },
+    "l263": {
+      "attachment": "front",
+      "points": [
+        "p344",
+        "p343"
+      ]
+    },
+    "l264": {
+      "attachment": "front",
+      "points": [
+        "p343",
+        "p342"
+      ]
+    },
+    "l265": {
+      "attachment": "front",
+      "points": [
+        "p342",
+        "p341"
+      ]
+    },
+    "l267": {
+      "attachment": "front",
+      "points": [
+        "p345",
+        "p346"
+      ]
+    },
+    "l268": {
+      "attachment": "front",
+      "points": [
+        "p346",
+        "p347"
+      ]
+    },
+    "l269": {
+      "attachment": "front",
+      "points": [
+        "p347",
+        "p218"
+      ]
+    },
+    "l27": {
+      "attachment": "front",
+      "points": [
+        "p31",
+        "p42"
+      ]
+    },
+    "l270": {
+      "attachment": "front",
+      "points": [
+        "p348",
+        "p350",
+        "p351",
+        "p349",
+        "p183"
+      ]
+    },
+    "l271": {
+      "attachment": "front",
+      "points": [
+        "p351",
+        "p352"
+      ]
+    },
+    "l272": {
+      "attachment": "front",
+      "points": [
+        "p352",
+        "p353"
+      ]
+    },
+    "l273": {
+      "attachment": "front",
+      "points": [
+        "p353",
+        "p350"
+      ]
+    },
+    "l274": {
+      "attachment": "front",
+      "points": [
+        "p354",
+        "p357"
+      ]
+    },
+    "l275": {
+      "attachment": "front",
+      "points": [
+        "p354",
+        "p355"
+      ]
+    },
+    "l276": {
+      "attachment": "front",
+      "points": [
+        "p355",
+        "p356"
+      ]
+    },
+    "l277": {
+      "attachment": "front",
+      "points": [
+        "p357",
+        "p356"
+      ]
+    },
+    "l278": {
+      "attachment": "front",
+      "points": [
+        "p360",
+        "p359"
+      ]
+    },
+    "l279": {
+      "attachment": "front",
+      "points": [
+        "p359",
+        "p358"
+      ]
+    },
+    "l280": {
+      "attachment": "front",
+      "points": [
+        "p358",
+        "p361"
+      ]
+    },
+    "l281": {
+      "attachment": "front",
+      "points": [
+        "p66",
+        "p348"
+      ]
+    },
+    "l282": {
+      "attachment": "front",
+      "points": [
+        "p5",
+        "p340"
+      ]
+    },
+    "l283": {
+      "attachment": "front",
+      "points": [
+        "p123",
+        "p328",
+        "p124",
+        "p340"
+      ]
+    },
+    "l284": {
+      "attachment": "front",
+      "points": [
+        "p185",
+        "p192",
+        "p184",
+        "p96"
+      ]
+    },
+    "l285": {
+      "attachment": "front",
+      "points": [
+        "p20",
+        "p21",
+        "p309"
+      ]
+    },
+    "l286": {
+      "attachment": "front",
+      "points": [
+        "p308",
+        "p45",
+        "p1"
+      ]
+    },
+    "l288": {
+      "attachment": "front",
+      "points": [
+        "p315",
+        "p313",
+        "p202",
+        "p93",
+        "p195",
+        "p177"
+      ]
+    },
+    "l289": {
+      "attachment": "front",
+      "points": [
+        "p325",
+        "p96",
+        "p317",
+        "p204",
+        "p320",
+        "p177",
+        "p323",
+        "p109",
+        "p152"
+      ]
+    },
+    "l290": {
+      "attachment": "front",
+      "points": [
+        "p324",
+        "p97",
+        "p106",
+        "p93"
+      ]
+    },
+    "l291": {
+      "attachment": "front",
+      "points": [
+        "p335",
+        "p332",
+        "p331",
+        "p30",
+        "p5"
+      ]
+    },
+    "l292": {
+      "attachment": "front",
+      "points": [
+        "p316",
+        "p314",
+        "p315",
+        "p310",
+        "p84"
+      ]
+    },
+    "l293": {
+      "attachment": "front",
+      "points": [
+        "p139",
+        "p64",
+        "p107"
+      ]
+    },
+    "l295": {
+      "attachment": "front",
+      "points": [
+        "p179",
+        "p61",
+        "p60",
+        "p180",
+        "p194",
+        "p102",
+        "p269"
+      ]
+    },
+    "l297": {
+      "attachment": "front",
+      "points": [
+        "p249",
+        "p100",
+        "p70",
+        "p65"
+      ]
+    },
+    "l298": {
+      "attachment": "front",
+      "points": [
+        "p341",
+        "p71",
+        "p101",
+        "p103",
+        "p255"
+      ]
+    },
+    "l3": {
+      "attachment": "front",
+      "points": [
+        "p6",
+        "p309",
+        "p46",
+        "p305",
+        "p17",
+        "p32",
+        "p9"
+      ]
+    },
+    "l31": {
+      "attachment": "front",
+      "points": [
+        "p32",
+        "p36"
+      ]
+    },
+    "l33": {
+      "attachment": "front",
+      "points": [
+        "p34",
+        "p36",
+        "p35"
+      ]
+    },
+    "l34": {
+      "attachment": "front",
+      "points": [
+        "p37",
+        "p38"
+      ]
+    },
+    "l35": {
+      "attachment": "front",
+      "points": [
+        "p57",
+        "p39"
+      ]
+    },
+    "l36": {
+      "attachment": "front",
+      "points": [
+        "p40",
+        "p46"
+      ]
+    },
+    "l4": {
+      "attachment": "front",
+      "points": [
+        "p7",
+        "p20",
+        "p28"
+      ]
+    },
+    "l41": {
+      "attachment": "front",
+      "points": [
+        "p76",
+        "p79"
+      ]
+    },
+    "l42": {
+      "attachment": "front",
+      "points": [
+        "p68",
+        "p98",
+        "p62",
+        "p186",
+        "p175"
+      ]
+    },
+    "l43": {
+      "attachment": "front",
+      "points": [
+        "p176",
+        "p187",
+        "p63",
+        "p99",
+        "p69"
+      ]
+    },
+    "l44": {
+      "attachment": "front",
+      "points": [
+        "p77",
+        "p66"
+      ]
+    },
+    "l45": {
+      "attachment": "front",
+      "points": [
+        "p139",
+        "p175",
+        "p65",
+        "p176",
+        "p60",
+        "p90"
+      ]
+    },
+    "l46": {
+      "attachment": "front",
+      "points": [
+        "p61",
+        "p63",
+        "p62",
+        "p64"
+      ]
+    },
+    "l49": {
+      "attachment": "front",
+      "points": [
+        "p67",
+        "p66"
+      ]
+    },
+    "l5": {
+      "attachment": "front",
+      "points": [
+        "p8",
+        "p21",
+        "p40",
+        "p306",
+        "p10"
+      ]
+    },
+    "l50": {
+      "attachment": "front",
+      "points": [
+        "p67",
+        "p361",
+        "p360",
+        "p117",
+        "p120"
+      ]
+    },
+    "l51": {
+      "attachment": "front",
+      "points": [
+        "p148",
+        "p146",
+        "p80",
+        "p86"
+      ]
+    },
+    "l54": {
+      "attachment": "front",
+      "points": [
+        "p87",
+        "p81",
+        "p147",
+        "p145"
+      ]
+    },
+    "l55": {
+      "attachment": "front",
+      "points": [
+        "p88",
+        "p82",
+        "p166"
+      ]
+    },
+    "l56": {
+      "attachment": "front",
+      "points": [
+        "p143",
+        "p160",
+        "p89",
+        "p118"
+      ]
+    },
+    "l57": {
+      "attachment": "front",
+      "points": [
+        "p179",
+        "p69",
+        "p68",
+        "p108"
+      ]
+    },
+    "l59": {
+      "attachment": "front",
+      "points": [
+        "p150",
+        "p123",
+        "p330",
+        "p122"
+      ]
+    },
+    "l60": {
+      "attachment": "front",
+      "points": [
+        "p180",
+        "p71",
+        "p70"
+      ]
+    },
+    "l61": {
+      "attachment": "front",
+      "points": [
+        "p91",
+        "p94",
+        "p78"
+      ]
+    },
+    "l64": {
+      "attachment": "front",
+      "points": [
+        "p183",
+        "p95"
+      ]
+    },
+    "l66": {
+      "attachment": "front",
+      "points": [
+        "p119",
+        "p336",
+        "p337",
+        "p88"
+      ]
+    },
+    "l69": {
+      "attachment": "front",
+      "points": [
+        "p158",
+        "p76"
+      ]
+    },
+    "l7": {
+      "attachment": "front",
+      "points": [
+        "p1",
+        "p24",
+        "p18",
+        "p22"
+      ]
+    },
+    "l70": {
+      "attachment": "front",
+      "points": [
+        "p182",
+        "p77",
+        "p78",
+        "p104"
+      ]
+    },
+    "l71": {
+      "attachment": "front",
+      "points": [
+        "p79",
+        "p80",
+        "p81",
+        "p82"
+      ]
+    },
+    "l74": {
+      "attachment": "front",
+      "points": [
+        "p84",
+        "p85"
+      ]
+    },
+    "l75": {
+      "attachment": "front",
+      "points": [
+        "p88",
+        "p87",
+        "p86"
+      ]
+    },
+    "l76": {
+      "attachment": "front",
+      "points": [
+        "p218",
+        "p345",
+        "p92",
+        "p89",
+        "p121"
+      ]
+    },
+    "l77": {
+      "attachment": "front",
+      "points": [
+        "p115",
+        "p90"
+      ]
+    },
+    "l78": {
+      "attachment": "front",
+      "points": [
+        "p183",
+        "p91"
+      ]
+    },
+    "l79": {
+      "attachment": "front",
+      "points": [
+        "p92",
+        "p203",
+        "p182",
+        "p144"
+      ]
+    },
+    "l81": {
+      "attachment": "front",
+      "points": [
+        "p95",
+        "p105",
+        "p94"
+      ]
+    },
+    "l83": {
+      "attachment": "front",
+      "points": [
+        "p98",
+        "p99"
+      ]
+    },
+    "l84": {
+      "attachment": "front",
+      "points": [
+        "p100",
+        "p101"
+      ]
+    },
+    "l85": {
+      "attachment": "front",
+      "points": [
+        "p185",
+        "p124"
+      ]
+    },
+    "l86": {
+      "attachment": "front",
+      "points": [
+        "p186",
+        "p187"
+      ]
+    },
+    "l87": {
+      "attachment": "front",
+      "points": [
+        "p103",
+        "p102"
+      ]
+    },
+    "l88": {
+      "attachment": "front",
+      "points": [
+        "p104",
+        "p105"
+      ]
+    },
+    "l89": {
+      "attachment": "front",
+      "points": [
+        "p157",
+        "p106"
+      ]
+    },
+    "l9": {
+      "attachment": "front",
+      "points": [
+        "p13",
+        "p48"
+      ]
+    },
+    "l91": {
+      "attachment": "front",
+      "points": [
+        "p108",
+        "p107"
+      ]
+    },
+    "l93": {
+      "attachment": "front",
+      "points": [
+        "p109",
+        "p125",
+        "p148"
+      ]
+    }
+  },
+  "measurement_lines": {},
+  "meta": {
+    "dataVersion": "0.2.0",
+    "frontDimensions": [
+      6190,
+      3376
+    ],
+    "id": "VW_HVS00_N_555_556",
+    "municipality": "HVS00",
+    "parcels": [],
+    "section": "N",
+    "sketch": 555,
+    "sketchSub": ""
+  },
+  "points": {
+    "p1": {
+      "attachment": "front",
+      "position": [
+        1625.1846432594891,
+        1479.2314657525783
+      ]
+    },
+    "p10": {
+      "attachment": "front",
+      "position": [
+        1188.3972373369086,
+        1452.0829126399103
+      ]
+    },
+    "p100": {
+      "attachment": "front",
+      "position": [
+        5184.677856648374,
+        533.6841641801112
+      ]
+    },
+    "p101": {
+      "attachment": "front",
+      "position": [
+        5180.501778816224,
+        788.4284022023007
+      ]
+    },
+    "p102": {
+      "attachment": "front",
+      "position": [
+        5432.567455759132,
+        1041.4007029418472
+      ]
+    },
+    "p103": {
+      "attachment": "front",
+      "position": [
+        5436.548993828335,
+        791.642495169552
+      ]
+    },
+    "p104": {
+      "attachment": "front",
+      "position": [
+        4687.879683732338,
+        1472.2413196124212
+      ]
+    },
+    "p105": {
+      "attachment": "front",
+      "position": [
+        4684.4595674725715,
+        1702.3393318758706
+      ]
+    },
+    "p106": {
+      "attachment": "front",
+      "position": [
+        2966.0823683727117,
+        1044.3477843569847
+      ]
+    },
+    "p107": {
+      "attachment": "front",
+      "position": [
+        3834.8832498226484,
+        225.95386469545898
+      ]
+    },
+    "p108": {
+      "attachment": "front",
+      "position": [
+        3777.232480798874,
+        435.6604164168172
+      ]
+    },
+    "p109": {
+      "attachment": "front",
+      "position": [
+        3123.6588903842776,
+        1245.0788577565856
+      ]
+    },
+    "p114": {
+      "attachment": "front",
+      "position": [
+        3028.839135203259,
+        1372.40214669708
+      ]
+    },
+    "p115": {
+      "attachment": "front",
+      "position": [
+        5115.8190551731095,
+        1220.9506127578106
+      ]
+    },
+    "p117": {
+      "attachment": "front",
+      "position": [
+        4060.4158718085987,
+        1998.2948299386965
+      ]
+    },
+    "p118": {
+      "attachment": "front",
+      "position": [
+        4235.20755754139,
+        2002.2847900020226
+      ]
+    },
+    "p119": {
+      "attachment": "front",
+      "position": [
+        3479.7720694533477,
+        2487.3124503911235
+      ]
+    },
+    "p12": {
+      "attachment": "front",
+      "position": [
+        1733.0078777650003,
+        2486.470198173686
+      ]
+    },
+    "p120": {
+      "attachment": "front",
+      "position": [
+        4061.526327454684,
+        1853.9176046397376
+      ]
+    },
+    "p121": {
+      "attachment": "front",
+      "position": [
+        4103.478596859412,
+        1697.3234172271964
+      ]
+    },
+    "p122": {
+      "attachment": "front",
+      "position": [
+        2925.203698346905,
+        1969.6203685221822
+      ]
+    },
+    "p123": {
+      "attachment": "front",
+      "position": [
+        2925.299407219087,
+        1696.4733862431992
+      ]
+    },
+    "p124": {
+      "attachment": "front",
+      "position": [
+        2831.350696395007,
+        1696.4494412368047
+      ]
+    },
+    "p125": {
+      "attachment": "front",
+      "position": [
+        3118.7478638847742,
+        1320.957944899175
+      ]
+    },
+    "p13": {
+      "attachment": "front",
+      "position": [
+        844.095681110671,
+        2497.9321684749034
+      ]
+    },
+    "p139": {
+      "attachment": "front",
+      "position": [
+        4832.357836291188,
+        236.256476770823
+      ]
+    },
+    "p143": {
+      "attachment": "front",
+      "position": [
+        4237.953272192225,
+        1409.7411394804258
+      ]
+    },
+    "p144": {
+      "attachment": "front",
+      "position": [
+        4319.779353573445,
+        1412.884934245927
+      ]
+    },
+    "p145": {
+      "attachment": "front",
+      "position": [
+        3202.258724151224,
+        1468.93477909253
+      ]
+    },
+    "p146": {
+      "attachment": "front",
+      "position": [
+        3106.247096079595,
+        1547.7380870236993
+      ]
+    },
+    "p147": {
+      "attachment": "front",
+      "position": [
+        3201.9732837369675,
+        1547.6964935640713
+      ]
+    },
+    "p148": {
+      "attachment": "front",
+      "position": [
+        3109.527168980518,
+        1463.424680158297
+      ]
+    },
+    "p150": {
+      "attachment": "front",
+      "position": [
+        2925.4492645920573,
+        1448.2212035607881
+      ]
+    },
+    "p152": {
+      "attachment": "front",
+      "position": [
+        3280.8823027404815,
+        1254.2893531816424
+      ]
+    },
+    "p153": {
+      "attachment": "front",
+      "position": [
+        3276.0535631845983,
+        1331.669320064863
+      ]
+    },
+    "p154": {
+      "attachment": "front",
+      "position": [
+        2931.4608938167853,
+        1365.46684533409
+      ]
+    },
+    "p157": {
+      "attachment": "front",
+      "position": [
+        2979.6343128814674,
+        813.2561532558511
+      ]
+    },
+    "p158": {
+      "attachment": "front",
+      "position": [
+        3161.616471492598,
+        2495.06972495404
+      ]
+    },
+    "p159": {
+      "attachment": "front",
+      "position": [
+        3163.8614126582997,
+        2554.273668955955
+      ]
+    },
+    "p16": {
+      "attachment": "front",
+      "position": [
+        1273.1318028282687,
+        1705.5025548781334
+      ]
+    },
+    "p160": {
+      "attachment": "front",
+      "position": [
+        4236.913039211232,
+        1634.2303986841318
+      ]
+    },
+    "p161": {
+      "attachment": "front",
+      "position": [
+        3322.554940438659,
+        2490.562499708834
+      ]
+    },
+    "p162": {
+      "attachment": "front",
+      "position": [
+        3322.993367642056,
+        2550.066207008574
+      ]
+    },
+    "p163": {
+      "attachment": "front",
+      "position": [
+        2912.1236875373847,
+        1301.9416344161075
+      ]
+    },
+    "p166": {
+      "attachment": "front",
+      "position": [
+        3373.1310559983617,
+        1488.6734339797886
+      ]
+    },
+    "p17": {
+      "attachment": "front",
+      "position": [
+        1286.6029955348622,
+        1241.062653263008
+      ]
+    },
+    "p175": {
+      "attachment": "front",
+      "position": [
+        4828.810799617782,
+        490.67627761679944
+      ]
+    },
+    "p176": {
+      "attachment": "front",
+      "position": [
+        4825.23659828081,
+        747.0445297845074
+      ]
+    },
+    "p177": {
+      "attachment": "front",
+      "position": [
+        3038.7362245549093,
+        1240.1039000617805
+      ]
+    },
+    "p179": {
+      "attachment": "front",
+      "position": [
+        3773.335760026218,
+        1026.2026914950886
+      ]
+    },
+    "p18": {
+      "attachment": "front",
+      "position": [
+        1639.6047439947179,
+        1264.2174440195463
+      ]
+    },
+    "p180": {
+      "attachment": "front",
+      "position": [
+        5017.945616730638,
+        1036.4837084804017
+      ]
+    },
+    "p182": {
+      "attachment": "front",
+      "position": [
+        4319.712217225946,
+        1442.991181483373
+      ]
+    },
+    "p183": {
+      "attachment": "front",
+      "position": [
+        4886.656831656049,
+        1927.0577867363907
+      ]
+    },
+    "p184": {
+      "attachment": "front",
+      "position": [
+        2840.2394005900187,
+        1298.2503282995913
+      ]
+    },
+    "p185": {
+      "attachment": "front",
+      "position": [
+        2831.3019192091983,
+        1439.4477358303075
+      ]
+    },
+    "p186": {
+      "attachment": "front",
+      "position": [
+        4656.935557004167,
+        488.99133445614314
+      ]
+    },
+    "p187": {
+      "attachment": "front",
+      "position": [
+        4654.507769997586,
+        745.716419365642
+      ]
+    },
+    "p192": {
+      "attachment": "front",
+      "position": [
+        2835.8146393926695,
+        1358.6548964918445
+      ]
+    },
+    "p194": {
+      "attachment": "front",
+      "position": [
+        5117.265999711282,
+        1037.6615474822468
+      ]
+    },
+    "p195": {
+      "attachment": "front",
+      "position": [
+        3040.775308947266,
+        1207.719041256019
+      ]
+    },
+    "p2": {
+      "attachment": "front",
+      "position": [
+        1270.4626086011576,
+        2498.0752288462413
+      ]
+    },
+    "p20": {
+      "attachment": "front",
+      "position": [
+        970.4296533000974,
+        827.3011984931571
+      ]
+    },
+    "p202": {
+      "attachment": "front",
+      "position": [
+        3065.2368775564382,
+        819.2189632086735
+      ]
+    },
+    "p203": {
+      "attachment": "front",
+      "position": [
+        4319.285720132133,
+        1634.2471468509614
+      ]
+    },
+    "p204": {
+      "attachment": "front",
+      "position": [
+        2916.192183998523,
+        1232.9249989808434
+      ]
+    },
+    "p21": {
+      "attachment": "front",
+      "position": [
+        1225.7253883759242,
+        824.3554015965278
+      ]
+    },
+    "p218": {
+      "attachment": "front",
+      "position": [
+        4411.513774780877,
+        1700.4134756456467
+      ]
+    },
+    "p22": {
+      "attachment": "front",
+      "position": [
+        1670.5533387762218,
+        809.8556104624564
+      ]
+    },
+    "p23": {
+      "attachment": "front",
+      "position": [
+        1431.4115080933307,
+        623.0295070310847
+      ]
+    },
+    "p24": {
+      "attachment": "front",
+      "position": [
+        1633.6636536529597,
+        1351.4396497470507
+      ]
+    },
+    "p249": {
+      "attachment": "front",
+      "position": [
+        5681.160067170717,
+        539.658723662459
+      ]
+    },
+    "p25": {
+      "attachment": "front",
+      "position": [
+        1471.0873480440061,
+        1471.0131574898385
+      ]
+    },
+    "p255": {
+      "attachment": "front",
+      "position": [
+        5677.447603628335,
+        794.7360934837125
+      ]
+    },
+    "p26": {
+      "attachment": "front",
+      "position": [
+        1482.4777647576902,
+        1253.9108595838773
+      ]
+    },
+    "p269": {
+      "attachment": "front",
+      "position": [
+        5673.788637937012,
+        1046.137712423189
+      ]
+    },
+    "p27": {
+      "attachment": "front",
+      "position": [
+        1477.9366457986298,
+        1340.4649678187363
+      ]
+    },
+    "p28": {
+      "attachment": "front",
+      "position": [
+        973.829220780824,
+        1374.5467440114116
+      ]
+    },
+    "p30": {
+      "attachment": "front",
+      "position": [
+        2578.123052979949,
+        1968.5433417787565
+      ]
+    },
+    "p303": {
+      "attachment": "front",
+      "position": [
+        449.2947082519531,
+        1148.4384765625
+      ]
+    },
+    "p304": {
+      "attachment": "front",
+      "position": [
+        624.6561279296875,
+        1158.4591064453125
+      ]
+    },
+    "p305": {
+      "attachment": "front",
+      "position": [
+        1293.022308138386,
+        1143.7912274099272
+      ]
+    },
+    "p306": {
+      "attachment": "front",
+      "position": [
+        1206.6710029092233,
+        1144.7827903244554
+      ]
+    },
+    "p307": {
+      "attachment": "front",
+      "position": [
+        1270.7317056866318,
+        2418.1713408395003
+      ]
+    },
+    "p308": {
+      "attachment": "front",
+      "position": [
+        1682.1650390625,
+        2103.54248046875
+      ]
+    },
+    "p309": {
+      "attachment": "front",
+      "position": [
+        1314.094400716564,
+        824.487180795603
+      ]
+    },
+    "p31": {
+      "attachment": "front",
+      "position": [
+        607.3733290178674,
+        1462.397721226186
+      ]
+    },
+    "p310": {
+      "attachment": "front",
+      "position": [
+        3109.3056640625,
+        602.6011352539062
+      ]
+    },
+    "p311": {
+      "attachment": "front",
+      "position": [
+        3102.7294921875,
+        638.7694091796875
+      ]
+    },
+    "p312": {
+      "attachment": "front",
+      "position": [
+        3048.242431640625,
+        631.7236938476562
+      ]
+    },
+    "p313": {
+      "attachment": "front",
+      "position": [
+        3077.36474609375,
+        636.8905639648438
+      ]
+    },
+    "p314": {
+      "attachment": "front",
+      "position": [
+        3053.87890625,
+        593.676513671875
+      ]
+    },
+    "p315": {
+      "attachment": "front",
+      "position": [
+        3078.891845703125,
+        597.9671630859375
+      ]
+    },
+    "p316": {
+      "attachment": "front",
+      "position": [
+        2706.875244140625,
+        540.6615600585938
+      ]
+    },
+    "p317": {
+      "attachment": "front",
+      "position": [
+        2852.8724054462605,
+        1229.2155862290715
+      ]
+    },
+    "p318": {
+      "attachment": "front",
+      "position": [
+        2854.222900390625,
+        1196.81298828125
+      ]
+    },
+    "p319": {
+      "attachment": "front",
+      "position": [
+        2999.541748046875,
+        1205.5321044921875
+      ]
+    },
+    "p32": {
+      "attachment": "front",
+      "position": [
+        1283.7533957206824,
+        1284.2424536802337
+      ]
+    },
+    "p320": {
+      "attachment": "front",
+      "position": [
+        2997.107843022509,
+        1237.6652173496407
+      ]
+    },
+    "p321": {
+      "attachment": "front",
+      "position": [
+        3033.783447265625,
+        1283.1893310546875
+      ]
+    },
+    "p322": {
+      "attachment": "front",
+      "position": [
+        3048.931884765625,
+        1284.2462158203125
+      ]
+    },
+    "p323": {
+      "attachment": "front",
+      "position": [
+        3051.381174979591,
+        1240.8446692404364
+      ]
+    },
+    "p324": {
+      "attachment": "front",
+      "position": [
+        2707.70751953125,
+        1026.22998046875
+      ]
+    },
+    "p325": {
+      "attachment": "front",
+      "position": [
+        2707.70751953125,
+        1220.380126953125
+      ]
+    },
+    "p326": {
+      "attachment": "front",
+      "position": [
+        3021.95263671875,
+        1453.791748046875
+      ]
+    },
+    "p328": {
+      "attachment": "front",
+      "position": [
+        2894.838538439056,
+        1696.4656225848018
+      ]
+    },
+    "p329": {
+      "attachment": "front",
+      "position": [
+        2894.83837890625,
+        1724.0416259765625
+      ]
+    },
+    "p330": {
+      "attachment": "front",
+      "position": [
+        2925.28956232183,
+        1724.5700915461784
+      ]
+    },
+    "p331": {
+      "attachment": "front",
+      "position": [
+        2576.88143966947,
+        2299.442090517078
+      ]
+    },
+    "p332": {
+      "attachment": "front",
+      "position": [
+        2576.7198388361076,
+        2342.5098581573266
+      ]
+    },
+    "p333": {
+      "attachment": "front",
+      "position": [
+        2607.007080078125,
+        2299.70849609375
+      ]
+    },
+    "p334": {
+      "attachment": "front",
+      "position": [
+        2607.271240234375,
+        2342.511474609375
+      ]
+    },
+    "p335": {
+      "attachment": "front",
+      "position": [
+        2577.182861328125,
+        2496.79296875
+      ]
+    },
+    "p336": {
+      "attachment": "front",
+      "position": [
+        3460.850402502383,
+        2349.3544579915447
+      ]
+    },
+    "p337": {
+      "attachment": "front",
+      "position": [
+        3453.85431923196,
+        2298.3459709935933
+      ]
+    },
+    "p338": {
+      "attachment": "front",
+      "position": [
+        3422.20849609375,
+        2302.553466796875
+      ]
+    },
+    "p339": {
+      "attachment": "front",
+      "position": [
+        3429.14404296875,
+        2353.0849609375
+      ]
+    },
+    "p34": {
+      "attachment": "front",
+      "position": [
+        1413.2008609592028,
+        1249.366711520267
+      ]
+    },
+    "p340": {
+      "attachment": "front",
+      "position": [
+        2620.566650390625,
+        1696.057861328125
+      ]
+    },
+    "p341": {
+      "attachment": "front",
+      "position": [
+        4865.880859375,
+        784.4498901367188
+      ]
+    },
+    "p342": {
+      "attachment": "front",
+      "position": [
+        4865.880859375,
+        768.4794921875
+      ]
+    },
+    "p343": {
+      "attachment": "front",
+      "position": [
+        4847.56201171875,
+        768.009765625
+      ]
+    },
+    "p344": {
+      "attachment": "front",
+      "position": [
+        4846.15283203125,
+        745.9329833984375
+      ]
+    },
+    "p345": {
+      "attachment": "front",
+      "position": [
+        4374.141892796368,
+        1700.0385791831102
+      ]
+    },
+    "p346": {
+      "attachment": "front",
+      "position": [
+        4374.50390625,
+        1728.686279296875
+      ]
+    },
+    "p347": {
+      "attachment": "front",
+      "position": [
+        4411.1416015625,
+        1729.03857421875
+      ]
+    },
+    "p348": {
+      "attachment": "front",
+      "position": [
+        4950.22607421875,
+        2487.5068359375
+      ]
+    },
+    "p349": {
+      "attachment": "front",
+      "position": [
+        4897.26953125,
+        2084.314697265625
+      ]
+    },
+    "p35": {
+      "attachment": "front",
+      "position": [
+        1407.6699017551307,
+        1335.5129997777333
+      ]
+    },
+    "p350": {
+      "attachment": "front",
+      "position": [
+        4931.7901515207395,
+        2347.1423279033074
+      ]
+    },
+    "p351": {
+      "attachment": "front",
+      "position": [
+        4926.069897892966,
+        2303.5903669059926
+      ]
+    },
+    "p352": {
+      "attachment": "front",
+      "position": [
+        4896.4736328125,
+        2307.252685546875
+      ]
+    },
+    "p353": {
+      "attachment": "front",
+      "position": [
+        4900.701171875,
+        2350.583984375
+      ]
+    },
+    "p354": {
+      "attachment": "front",
+      "position": [
+        5465.8896484375,
+        2343.758544921875
+      ]
+    },
+    "p355": {
+      "attachment": "front",
+      "position": [
+        5605.865234375,
+        2344.697998046875
+      ]
+    },
+    "p356": {
+      "attachment": "front",
+      "position": [
+        5620.896484375,
+        2489.8408203125
+      ]
+    },
+    "p357": {
+      "attachment": "front",
+      "position": [
+        5462.6015625,
+        2487.9619140625
+      ]
+    },
+    "p358": {
+      "attachment": "front",
+      "position": [
+        4083.474609375,
+        2350.484375
+      ]
+    },
+    "p359": {
+      "attachment": "front",
+      "position": [
+        4083.9443359375,
+        2295.52734375
+      ]
+    },
+    "p36": {
+      "attachment": "front",
+      "position": [
+        1410.374208117131,
+        1293.3926465439085
+      ]
+    },
+    "p360": {
+      "attachment": "front",
+      "position": [
+        4058.1297793816843,
+        2295.5238841006944
+      ]
+    },
+    "p361": {
+      "attachment": "front",
+      "position": [
+        4057.707110670984,
+        2350.4776644580743
+      ]
+    },
+    "p37": {
+      "attachment": "front",
+      "position": [
+        1540.547908653213,
+        1257.7199116267336
+      ]
+    },
+    "p38": {
+      "attachment": "front",
+      "position": [
+        1535.876885612502,
+        1344.548239638884
+      ]
+    },
+    "p39": {
+      "attachment": "front",
+      "position": [
+        1297.7990683654227,
+        2497.9941837047513
+      ]
+    },
+    "p40": {
+      "attachment": "front",
+      "position": [
+        1212.4048600183182,
+        1048.3595882213392
+      ]
+    },
+    "p42": {
+      "attachment": "front",
+      "position": [
+        429.31884937903124,
+        1451.6511288813272
+      ]
+    },
+    "p45": {
+      "attachment": "front",
+      "position": [
+        1645.915469693743,
+        1702.442104678664
+      ]
+    },
+    "p46": {
+      "attachment": "front",
+      "position": [
+        1299.3134860902862,
+        1048.4614175887223
+      ]
+    },
+    "p48": {
+      "attachment": "front",
+      "position": [
+        844.0828206138991,
+        1870.194945018074
+      ]
+    },
+    "p5": {
+      "attachment": "front",
+      "position": [
+        2578.5627725928343,
+        1851.3549478791272
+      ]
+    },
+    "p57": {
+      "attachment": "front",
+      "position": [
+        1298.6116527898068,
+        2416.845902792132
+      ]
+    },
+    "p6": {
+      "attachment": "front",
+      "position": [
+        1328.3991728963003,
+        607.7278994883483
+      ]
+    },
+    "p60": {
+      "attachment": "front",
+      "position": [
+        4821.233856182598,
+        1034.1509065243295
+      ]
+    },
+    "p61": {
+      "attachment": "front",
+      "position": [
+        4561.961808060715,
+        1031.0762030123049
+      ]
+    },
+    "p62": {
+      "attachment": "front",
+      "position": [
+        4567.505125668393,
+        488.1146218398153
+      ]
+    },
+    "p63": {
+      "attachment": "front",
+      "position": [
+        4564.882281225717,
+        745.0192169855238
+      ]
+    },
+    "p64": {
+      "attachment": "front",
+      "position": [
+        4570.118102104129,
+        232.1765866189795
+      ]
+    },
+    "p65": {
+      "attachment": "front",
+      "position": [
+        4828.254393622301,
+        530.5858459674824
+      ]
+    },
+    "p66": {
+      "attachment": "front",
+      "position": [
+        4492.683064831312,
+        2495.144021196966
+      ]
+    },
+    "p67": {
+      "attachment": "front",
+      "position": [
+        4056.61597220096,
+        2492.343343897236
+      ]
+    },
+    "p68": {
+      "attachment": "front",
+      "position": [
+        3776.9374991020404,
+        480.36445669000483
+      ]
+    },
+    "p69": {
+      "attachment": "front",
+      "position": [
+        3775.231695481217,
+        738.8764748327417
+      ]
+    },
+    "p7": {
+      "attachment": "front",
+      "position": [
+        968.733747361381,
+        554.3026550484446
+      ]
+    },
+    "p70": {
+      "attachment": "front",
+      "position": [
+        5022.099513231329,
+        532.2709030044541
+      ]
+    },
+    "p71": {
+      "attachment": "front",
+      "position": [
+        5020.0057880750155,
+        786.4137384806548
+      ]
+    },
+    "p76": {
+      "attachment": "front",
+      "position": [
+        3021.472556268143,
+        2498.3987583468247
+      ]
+    },
+    "p77": {
+      "attachment": "front",
+      "position": [
+        4501.420650086246,
+        1457.4275378806713
+      ]
+    },
+    "p78": {
+      "attachment": "front",
+      "position": [
+        4585.2464312980355,
+        1464.0873215451186
+      ]
+    },
+    "p79": {
+      "attachment": "front",
+      "position": [
+        3020.495760412478,
+        1696.5597447257678
+      ]
+    },
+    "p8": {
+      "attachment": "front",
+      "position": [
+        1239.3934546584735,
+        594.5068559411881
+      ]
+    },
+    "p80": {
+      "attachment": "front",
+      "position": [
+        3105.9893792686044,
+        1696.5320684776796
+      ]
+    },
+    "p81": {
+      "attachment": "front",
+      "position": [
+        3201.434000545685,
+        1696.5011708615475
+      ]
+    },
+    "p82": {
+      "attachment": "front",
+      "position": [
+        3391.2521506627927,
+        1696.439722366507
+      ]
+    },
+    "p84": {
+      "attachment": "front",
+      "position": [
+        3168.7604789437914,
+        610.9904939070461
+      ]
+    },
+    "p85": {
+      "attachment": "front",
+      "position": [
+        3420.4962676454334,
+        802.7580041837406
+      ]
+    },
+    "p86": {
+      "attachment": "front",
+      "position": [
+        3105.324381417716,
+        2080.4716241151928
+      ]
+    },
+    "p87": {
+      "attachment": "front",
+      "position": [
+        3200.0424813408654,
+        2080.463752254058
+      ]
+    },
+    "p88": {
+      "attachment": "front",
+      "position": [
+        3423.9680702405626,
+        2080.4451421769772
+      ]
+    },
+    "p89": {
+      "attachment": "front",
+      "position": [
+        4236.61449162557,
+        1698.6589714817335
+      ]
+    },
+    "p9": {
+      "attachment": "front",
+      "position": [
+        1273.136055170148,
+        1457.7574180757892
+      ]
+    },
+    "p90": {
+      "attachment": "front",
+      "position": [
+        4818.684962437053,
+        1216.9764870944991
+      ]
+    },
+    "p91": {
+      "attachment": "front",
+      "position": [
+        4581.954670191332,
+        1922.8398240157835
+      ]
+    },
+    "p92": {
+      "attachment": "front",
+      "position": [
+        4319.140236905125,
+        1699.4868294415312
+      ]
+    },
+    "p93": {
+      "attachment": "front",
+      "position": [
+        3050.9977907902244,
+        1050.3030686479567
+      ]
+    },
+    "p94": {
+      "attachment": "front",
+      "position": [
+        4583.544571028963,
+        1701.2651215083326
+      ]
+    },
+    "p95": {
+      "attachment": "front",
+      "position": [
+        4867.6325778781065,
+        1704.2891545361792
+      ]
+    },
+    "p96": {
+      "attachment": "front",
+      "position": [
+        2844.455119748719,
+        1228.7224830057871
+      ]
+    },
+    "p97": {
+      "attachment": "front",
+      "position": [
+        2866.4642919194725,
+        1037.3613742454988
+      ]
+    },
+    "p98": {
+      "attachment": "front",
+      "position": [
+        4314.705123597623,
+        485.6363496464163
+      ]
+    },
+    "p99": {
+      "attachment": "front",
+      "position": [
+        4310.644523061748,
+        743.0414852873573
+      ]
+    }
+  },
+  "rooms": {
+    "r1": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p39",
+        "p12",
+        "p308",
+        "p45",
+        "p16",
+        "p307",
+        "p57",
+        "p39"
+      ],
+      "ruimteomschrijving": "t17",
+      "verdiepingaanduiding": "t28"
+    },
+    "r10": {
+      "attachment": "front",
+      "points": [
+        "p125",
+        "p153",
+        "p152",
+        "p109",
+        "p125"
+      ],
+      "verdiepingaanduiding": "t59"
+    },
+    "r11": {
+      "appartementsnummer": "t37",
+      "attachment": "front",
+      "points": [
+        "p153",
+        "p125",
+        "p148",
+        "p145",
+        "p147",
+        "p81",
+        "p82",
+        "p166",
+        "p85",
+        "p84",
+        "p310",
+        "p311",
+        "p313",
+        "p202",
+        "p93",
+        "p195",
+        "p177",
+        "p323",
+        "p109",
+        "p152",
+        "p153"
+      ],
+      "ruimteomschrijving": "t36",
+      "verdiepingaanduiding": "t59"
+    },
+    "r12": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p144",
+        "p143",
+        "p160",
+        "p203",
+        "p182",
+        "p144"
+      ],
+      "ruimteomschrijving": "t67",
+      "verdiepingaanduiding": "t71"
+    },
+    "r13": {
+      "attachment": "front",
+      "points": [
+        "p145",
+        "p148",
+        "p146",
+        "p147",
+        "p145"
+      ],
+      "ruimteomschrijving": "t46",
+      "verdiepingaanduiding": "t59"
+    },
+    "r14": {
+      "appartementsnummer": "t79",
+      "attachment": "front",
+      "points": [
+        "p147",
+        "p146",
+        "p80",
+        "p81",
+        "p147"
+      ],
+      "ruimteomschrijving": "t47",
+      "verdiepingaanduiding": "t59"
+    },
+    "r15": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p150",
+        "p185",
+        "p124",
+        "p328",
+        "p123",
+        "p150"
+      ],
+      "ruimteomschrijving": "t44",
+      "verdiepingaanduiding": "t59"
+    },
+    "r16": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p1",
+        "p25",
+        "p9",
+        "p16",
+        "p45",
+        "p1"
+      ],
+      "ruimteomschrijving": "t18",
+      "verdiepingaanduiding": "t28"
+    },
+    "r17": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p25",
+        "p1",
+        "p24",
+        "p38",
+        "p27",
+        "p25"
+      ],
+      "ruimteomschrijving": "t20",
+      "verdiepingaanduiding": "t28"
+    },
+    "r18": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p9",
+        "p25",
+        "p27",
+        "p35",
+        "p36",
+        "p32",
+        "p9"
+      ],
+      "ruimteomschrijving": "t19",
+      "verdiepingaanduiding": "t28"
+    },
+    "r19": {
+      "appartementsnummer": "t13",
+      "attachment": "front",
+      "points": [
+        "p9",
+        "p10",
+        "p306",
+        "p40",
+        "p21",
+        "p20",
+        "p28",
+        "p48",
+        "p13",
+        "p2",
+        "p307",
+        "p16",
+        "p9"
+      ],
+      "ruimteomschrijving": "t15",
+      "verdiepingaanduiding": "t28"
+    },
+    "r2": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p2",
+        "p39",
+        "p57",
+        "p307",
+        "p2"
+      ],
+      "ruimteomschrijving": "t16",
+      "verdiepingaanduiding": "t28"
+    },
+    "r20": {
+      "appartementsnummer": "t13",
+      "attachment": "front",
+      "points": [
+        "p10",
+        "p9",
+        "p32",
+        "p17",
+        "p305",
+        "p306",
+        "p10"
+      ],
+      "ruimteomschrijving": "t23",
+      "verdiepingaanduiding": "t28"
+    },
+    "r21": {
+      "appartementsnummer": "t32",
+      "attachment": "front",
+      "points": [
+        "p157",
+        "p202",
+        "p313",
+        "p312",
+        "p314",
+        "p316",
+        "p324",
+        "p97",
+        "p106",
+        "p157"
+      ],
+      "verdiepingaanduiding": "t59"
+    },
+    "r22": {
+      "attachment": "front",
+      "points": [
+        "p202",
+        "p157",
+        "p106",
+        "p93",
+        "p202"
+      ],
+      "ruimteomschrijving": "t34",
+      "verdiepingaanduiding": "t59"
+    },
+    "r23": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p203",
+        "p160",
+        "p89",
+        "p92",
+        "p203"
+      ],
+      "ruimteomschrijving": "t67",
+      "verdiepingaanduiding": "t71"
+    },
+    "r24": {
+      "attachment": "front",
+      "points": [
+        "p184",
+        "p163",
+        "p204",
+        "p317",
+        "p96",
+        "p184"
+      ],
+      "ruimteomschrijving": "t41",
+      "verdiepingaanduiding": "t59"
+    },
+    "r25": {
+      "attachment": "front",
+      "points": [
+        "p255",
+        "p249",
+        "p100",
+        "p101",
+        "p103",
+        "p255"
+      ]
+    },
+    "r26": {
+      "attachment": "front",
+      "points": [
+        "p269",
+        "p255",
+        "p103",
+        "p102",
+        "p269"
+      ]
+    },
+    "r27": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p18",
+        "p37",
+        "p38",
+        "p24",
+        "p18"
+      ],
+      "ruimteomschrijving": "t4",
+      "verdiepingaanduiding": "t28"
+    },
+    "r28": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p37",
+        "p18",
+        "p22",
+        "p23",
+        "p6",
+        "p309",
+        "p46",
+        "p305",
+        "p17",
+        "p34",
+        "p26",
+        "p37"
+      ],
+      "ruimteomschrijving": "t27",
+      "verdiepingaanduiding": "t28"
+    },
+    "r29": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p37",
+        "p26",
+        "p27",
+        "p38",
+        "p37"
+      ],
+      "ruimteomschrijving": "t21",
+      "verdiepingaanduiding": "t28"
+    },
+    "r3": {
+      "attachment": "front",
+      "points": [
+        "p192",
+        "p154",
+        "p114",
+        "p321",
+        "p177",
+        "p320",
+        "p204",
+        "p163",
+        "p184",
+        "p192"
+      ],
+      "ruimteomschrijving": "t42",
+      "verdiepingaanduiding": "t59"
+    },
+    "r30": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p26",
+        "p34",
+        "p36",
+        "p35",
+        "p27",
+        "p26"
+      ],
+      "ruimteomschrijving": "t2",
+      "verdiepingaanduiding": "t28"
+    },
+    "r31": {
+      "appartementsnummer": "t14",
+      "attachment": "front",
+      "points": [
+        "p34",
+        "p17",
+        "p32",
+        "p36",
+        "p34"
+      ],
+      "ruimteomschrijving": "t22",
+      "verdiepingaanduiding": "t28"
+    },
+    "r32": {
+      "appartementsnummer": "t11",
+      "attachment": "front",
+      "points": [
+        "p303",
+        "p42",
+        "p31",
+        "p304",
+        "p303"
+      ],
+      "ruimteomschrijving": "t12",
+      "verdiepingaanduiding": "t29"
+    },
+    "r33": {
+      "appartementsnummer": "t13",
+      "attachment": "front",
+      "points": [
+        "p8",
+        "p7",
+        "p20",
+        "p21",
+        "p8"
+      ],
+      "ruimteomschrijving": "t26",
+      "verdiepingaanduiding": "t28"
+    },
+    "r34": {
+      "appartementsnummer": "t13",
+      "attachment": "front",
+      "points": [
+        "p306",
+        "p305",
+        "p46",
+        "p40",
+        "p306"
+      ],
+      "ruimteomschrijving": "t24",
+      "verdiepingaanduiding": "t28"
+    },
+    "r35": {
+      "attachment": "front",
+      "points": [
+        "p311",
+        "p310",
+        "p315",
+        "p313",
+        "p311"
+      ],
+      "verdiepingaanduiding": "t59"
+    },
+    "r36": {
+      "attachment": "front",
+      "points": [
+        "p312",
+        "p313",
+        "p315",
+        "p314",
+        "p312"
+      ],
+      "verdiepingaanduiding": "t59"
+    },
+    "r37": {
+      "attachment": "front",
+      "points": [
+        "p177",
+        "p321",
+        "p322",
+        "p323",
+        "p177"
+      ],
+      "ruimteomschrijving": "t39",
+      "verdiepingaanduiding": "t59"
+    },
+    "r38": {
+      "attachment": "front",
+      "points": [
+        "p321",
+        "p114",
+        "p326",
+        "p79",
+        "p80",
+        "p146",
+        "p148",
+        "p125",
+        "p109",
+        "p323",
+        "p322",
+        "p321"
+      ],
+      "ruimteomschrijving": "t45",
+      "verdiepingaanduiding": "t59"
+    },
+    "r39": {
+      "appartementsnummer": "t32",
+      "attachment": "front",
+      "points": [
+        "p317",
+        "p318",
+        "p97",
+        "p324",
+        "p325",
+        "p96",
+        "p317"
+      ],
+      "ruimteomschrijving": "t33",
+      "verdiepingaanduiding": "t59"
+    },
+    "r4": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p154",
+        "p192",
+        "p185",
+        "p150",
+        "p154"
+      ],
+      "ruimteomschrijving": "t43",
+      "verdiepingaanduiding": "t59"
+    },
+    "r40": {
+      "attachment": "front",
+      "points": [
+        "p318",
+        "p317",
+        "p204",
+        "p320",
+        "p319",
+        "p318"
+      ],
+      "ruimteomschrijving": "t3",
+      "verdiepingaanduiding": "t59"
+    },
+    "r41": {
+      "attachment": "front",
+      "points": [
+        "p318",
+        "p319",
+        "p320",
+        "p177",
+        "p195",
+        "p93",
+        "p106",
+        "p97",
+        "p318"
+      ],
+      "ruimteomschrijving": "t35",
+      "verdiepingaanduiding": "t59"
+    },
+    "r42": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p328",
+        "p329",
+        "p330",
+        "p123",
+        "p328"
+      ],
+      "ruimteomschrijving": "t50",
+      "verdiepingaanduiding": "t59"
+    },
+    "r43": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p329",
+        "p328",
+        "p124",
+        "p340",
+        "p5",
+        "p30",
+        "p122",
+        "p330",
+        "p329"
+      ],
+      "ruimteomschrijving": "t49",
+      "verdiepingaanduiding": "t59"
+    },
+    "r44": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p333",
+        "p331",
+        "p332",
+        "p334",
+        "p333"
+      ],
+      "ruimteomschrijving": "t51",
+      "verdiepingaanduiding": "t59"
+    },
+    "r45": {
+      "appartementsnummer": "t56",
+      "attachment": "front",
+      "points": [
+        "p337",
+        "p338",
+        "p339",
+        "p336",
+        "p337"
+      ],
+      "ruimteomschrijving": "t54",
+      "verdiepingaanduiding": "t59"
+    },
+    "r46": {
+      "attachment": "front",
+      "points": [
+        "p176",
+        "p344",
+        "p343",
+        "p342",
+        "p341",
+        "p71",
+        "p70",
+        "p65",
+        "p176"
+      ]
+    },
+    "r47": {
+      "attachment": "front",
+      "points": [
+        "p344",
+        "p176",
+        "p60",
+        "p180",
+        "p71",
+        "p341",
+        "p342",
+        "p343",
+        "p344"
+      ]
+    },
+    "r48": {
+      "attachment": "front",
+      "points": [
+        "p345",
+        "p346",
+        "p347",
+        "p218",
+        "p345"
+      ],
+      "ruimteomschrijving": "t66",
+      "verdiepingaanduiding": "t71"
+    },
+    "r49": {
+      "appartementsnummer": "t70",
+      "attachment": "front",
+      "points": [
+        "p348",
+        "p350",
+        "p353",
+        "p352",
+        "p351",
+        "p349",
+        "p183",
+        "p91",
+        "p94",
+        "p78",
+        "p77",
+        "p66",
+        "p348"
+      ],
+      "verdiepingaanduiding": "t71"
+    },
+    "r5": {
+      "appartementsnummer": "t55",
+      "attachment": "front",
+      "points": [
+        "p114",
+        "p154",
+        "p150",
+        "p123",
+        "p330",
+        "p122",
+        "p30",
+        "p331",
+        "p333",
+        "p334",
+        "p332",
+        "p335",
+        "p76",
+        "p79",
+        "p326",
+        "p114"
+      ],
+      "ruimteomschrijving": "t52",
+      "verdiepingaanduiding": "t59"
+    },
+    "r50": {
+      "attachment": "front",
+      "points": [
+        "p350",
+        "p351",
+        "p352",
+        "p353",
+        "p350"
+      ],
+      "ruimteomschrijving": "t64",
+      "verdiepingaanduiding": "t71"
+    },
+    "r51": {
+      "appartementsnummer": "t77",
+      "attachment": "front",
+      "points": [
+        "p354",
+        "p357",
+        "p356",
+        "p355",
+        "p354"
+      ],
+      "ruimteomschrijving": "t76",
+      "verdiepingaanduiding": "t78"
+    },
+    "r52": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p359",
+        "p360",
+        "p361",
+        "p358",
+        "p359"
+      ],
+      "ruimteomschrijving": "t61",
+      "verdiepingaanduiding": "t71"
+    },
+    "r53": {
+      "appartementsnummer": "t13",
+      "attachment": "front",
+      "points": [
+        "p309",
+        "p21",
+        "p40",
+        "p46",
+        "p309"
+      ],
+      "ruimteomschrijving": "t25",
+      "verdiepingaanduiding": "t28"
+    },
+    "r54": {
+      "attachment": "front",
+      "points": [
+        "p139",
+        "p64",
+        "p62",
+        "p186",
+        "p175",
+        "p139"
+      ]
+    },
+    "r55": {
+      "attachment": "front",
+      "points": [
+        "p64",
+        "p107",
+        "p108",
+        "p68",
+        "p98",
+        "p62",
+        "p64"
+      ]
+    },
+    "r56": {
+      "attachment": "front",
+      "points": [
+        "p179",
+        "p61",
+        "p63",
+        "p99",
+        "p69",
+        "p179"
+      ]
+    },
+    "r57": {
+      "attachment": "front",
+      "points": [
+        "p61",
+        "p60",
+        "p176",
+        "p187",
+        "p63",
+        "p61"
+      ]
+    },
+    "r58": {
+      "attachment": "front",
+      "points": [
+        "p180",
+        "p194",
+        "p102",
+        "p103",
+        "p101",
+        "p71",
+        "p180"
+      ]
+    },
+    "r59": {
+      "attachment": "front",
+      "points": [
+        "p100",
+        "p70",
+        "p71",
+        "p101",
+        "p100"
+      ]
+    },
+    "r6": {
+      "attachment": "front",
+      "points": [
+        "p115",
+        "p194",
+        "p180",
+        "p60",
+        "p90",
+        "p115"
+      ]
+    },
+    "r60": {
+      "attachment": "front",
+      "points": [
+        "p98",
+        "p68",
+        "p69",
+        "p99",
+        "p98"
+      ]
+    },
+    "r61": {
+      "attachment": "front",
+      "points": [
+        "p62",
+        "p98",
+        "p99",
+        "p63",
+        "p62"
+      ]
+    },
+    "r62": {
+      "attachment": "front",
+      "points": [
+        "p186",
+        "p62",
+        "p63",
+        "p187",
+        "p186"
+      ]
+    },
+    "r63": {
+      "attachment": "front",
+      "points": [
+        "p175",
+        "p186",
+        "p187",
+        "p176",
+        "p65",
+        "p175"
+      ]
+    },
+    "r64": {
+      "appartementsnummer": "t56",
+      "attachment": "front",
+      "points": [
+        "p80",
+        "p86",
+        "p87",
+        "p81",
+        "p80"
+      ],
+      "ruimteomschrijving": "t58",
+      "verdiepingaanduiding": "t59"
+    },
+    "r65": {
+      "appartementsnummer": "t56",
+      "attachment": "front",
+      "points": [
+        "p81",
+        "p87",
+        "p88",
+        "p82",
+        "p81"
+      ],
+      "ruimteomschrijving": "t57",
+      "verdiepingaanduiding": "t59"
+    },
+    "r66": {
+      "appartementsnummer": "t70",
+      "attachment": "front",
+      "points": [
+        "p94",
+        "p91",
+        "p183",
+        "p95",
+        "p105",
+        "p94"
+      ],
+      "ruimteomschrijving": "t65",
+      "verdiepingaanduiding": "t71"
+    },
+    "r67": {
+      "appartementsnummer": "t70",
+      "attachment": "front",
+      "points": [
+        "p78",
+        "p94",
+        "p105",
+        "p104",
+        "p78"
+      ],
+      "ruimteomschrijving": "t8",
+      "verdiepingaanduiding": "t71"
+    },
+    "r7": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p118",
+        "p117",
+        "p360",
+        "p359",
+        "p358",
+        "p361",
+        "p67",
+        "p66",
+        "p77",
+        "p182",
+        "p203",
+        "p92",
+        "p89",
+        "p118"
+      ],
+      "ruimteomschrijving": "t62",
+      "verdiepingaanduiding": "t71"
+    },
+    "r8": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p117",
+        "p118",
+        "p89",
+        "p121",
+        "p120",
+        "p117"
+      ],
+      "ruimteomschrijving": "t60",
+      "verdiepingaanduiding": "t71"
+    },
+    "r9": {
+      "appartementsnummer": "t56",
+      "attachment": "front",
+      "points": [
+        "p161",
+        "p119",
+        "p336",
+        "p339",
+        "p338",
+        "p337",
+        "p88",
+        "p87",
+        "p86",
+        "p80",
+        "p79",
+        "p76",
+        "p158",
+        "p159",
+        "p162",
+        "p161"
+      ],
+      "ruimteomschrijving": "t53",
+      "verdiepingaanduiding": "t59"
+    }
+  },
+  "semantic_lines": {},
+  "symbols": {},
+  "text": {
+    "t11": {
+      "attachment": "front",
+      "box": [
+        [
+          523.2911795379579,
+          1311.4669706256914
+        ],
+        [
+          53.864632720276404,
+          76.98479834780183
+        ],
+        -0.6661256156568105
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "2"
+    },
+    "t12": {
+      "attachment": "front",
+      "box": [
+        [
+          499.3577880859375,
+          1421.72119140625
+        ],
+        [
+          72.0234375,
+          30.06201171875
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kelder"
+    },
+    "t13": {
+      "attachment": "front",
+      "box": [
+        [
+          1032.3533042854176,
+          1854.0743436879338
+        ],
+        [
+          60.884311324347024,
+          77.17321722967444
+        ],
+        -1.3971390121816176
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "2"
+    },
+    "t14": {
+      "attachment": "front",
+      "box": [
+        [
+          1456.7334594726562,
+          1863.0045166015625
+        ],
+        [
+          47.806892254663126,
+          86.15412099171729
+        ],
+        -1.7898554516640306
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "1"
+    },
+    "t15": {
+      "attachment": "front",
+      "box": [
+        [
+          953.7131513635095,
+          2444.193988682947
+        ],
+        [
+          146.97185418685095,
+          33.3968170897972
+        ],
+        -0.32550446738274325
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t16": {
+      "attachment": "front",
+      "box": [
+        [
+          1283.2168579101562,
+          2463.6295166015625
+        ],
+        [
+          23.9556884765625,
+          46.502197265625
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "m..k.."
+    },
+    "t17": {
+      "attachment": "front",
+      "box": [
+        [
+          1400.6709225275083,
+          2437.3827772798936
+        ],
+        [
+          145.1497849736496,
+          29.238612208359083
+        ],
+        -0.5562620508440856
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t18": {
+      "attachment": "front",
+      "box": [
+        [
+          1383.9745483398438,
+          1658.1868896484375
+        ],
+        [
+          149.38344713445125,
+          36.328931065790684
+        ],
+        -0.48150562786182144
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t19": {
+      "attachment": "front",
+      "box": [
+        [
+          1376.89599609375,
+          1424.462890625
+        ],
+        [
+          145.85634254975594,
+          29.246375758116795
+        ],
+        -0.6936318384579738
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t2": {
+      "attachment": "front",
+      "box": [
+        [
+          1440.0,
+          1299.0
+        ],
+        [
+          30.0,
+          44.0
+        ],
+        -0.0
+      ],
+      "color": "black",
+      "type": "ruimteomschrijving",
+      "value": "kast"
+    },
+    "t20": {
+      "attachment": "front",
+      "box": [
+        [
+          1534.2976488457775,
+          1435.7375246520924
+        ],
+        [
+          68.69719239292488,
+          27.83405788491417
+        ],
+        0.2938271556469233
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "entree"
+    },
+    "t21": {
+      "attachment": "front",
+      "box": [
+        [
+          1507.1627170752254,
+          1302.8764139180198
+        ],
+        [
+          37.85107435929329,
+          26.766965232454947
+        ],
+        -89.4000090443
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "m.k."
+    },
+    "t22": {
+      "attachment": "front",
+      "box": [
+        [
+          1329.024298120484,
+          1269.8084909350594
+        ],
+        [
+          47.84951154914596,
+          29.364426169880225
+        ],
+        1.8986438483396517
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t23": {
+      "attachment": "front",
+      "box": [
+        [
+          1241.5267333984375,
+          1328.5963745117188
+        ],
+        [
+          51.92878227486691,
+          27.4754274226538
+        ],
+        -89.70472684548233
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "gang"
+    },
+    "t24": {
+      "attachment": "front",
+      "box": [
+        [
+          1246.051324945017,
+          1108.9265781069337
+        ],
+        [
+          36.99413090347203,
+          25.875449569216922
+        ],
+        -0.8184689646029638
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "hal"
+    },
+    "t25": {
+      "attachment": "front",
+      "box": [
+        [
+          1255.7012329101562,
+          988.3025207519531
+        ],
+        [
+          47.82318115234375,
+          28.0069580078125
+        ],
+        -90
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kast"
+    },
+    "t26": {
+      "attachment": "front",
+      "box": [
+        [
+          1074.1065795149682,
+          786.7841159103617
+        ],
+        [
+          146.20146589387844,
+          27.474800883678373
+        ],
+        -0.2761270576870682
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t27": {
+      "attachment": "front",
+      "box": [
+        [
+          1484.888916015625,
+          1189.4036865234375
+        ],
+        [
+          149.71518856319005,
+          35.9736416385098
+        ],
+        -0.982150792639349
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bedrijfsruimte"
+    },
+    "t28": {
+      "attachment": "front",
+      "box": [
+        [
+          1067.7827028206739,
+          2764.5437873968467
+        ],
+        [
+          470.9723080305243,
+          50.727646807528416
+        ],
+        -0.15239469135663447
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "BEGANE GROND schaal 1:100"
+    },
+    "t29": {
+      "attachment": "front",
+      "box": [
+        [
+          586.2677764892578,
+          1716.5924682617188
+        ],
+        [
+          368.6585861424006,
+          57.92800798599843
+        ],
+        -1.0416243406017685
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "KELDER schaal 1:100"
+    },
+    "t3": {
+      "attachment": "front",
+      "box": [
+        [
+          2920.0,
+          1214.0
+        ],
+        [
+          46.0,
+          32.0
+        ],
+        -0.0
+      ],
+      "color": "black",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t30": {
+      "attachment": "front",
+      "box": [
+        [
+          3101.9993896484375,
+          557.3606872558594
+        ],
+        [
+          70.927490234375,
+          23.95562744140625
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t31": {
+      "attachment": "front",
+      "box": [
+        [
+          2771.790109668773,
+          988.53507760517
+        ],
+        [
+          68.31157455140306,
+          29.461798762293622
+        ],
+        2.1016261671352825
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t32": {
+      "attachment": "front",
+      "box": [
+        [
+          2846.232666015625,
+          900.2249450683594
+        ],
+        [
+          49.93617712518891,
+          82.12918815467435
+        ],
+        2.8985303944516594
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "6"
+    },
+    "t33": {
+      "attachment": "front",
+      "box": [
+        [
+          2784.2386860098086,
+          1182.7655914444815
+        ],
+        [
+          100.75525458065236,
+          28.186628629059435
+        ],
+        0.20033747501533433
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t34": {
+      "attachment": "front",
+      "box": [
+        [
+          3007.1519775390625,
+          1012.8933715820312
+        ],
+        [
+          46.032470703125,
+          32.8802490234375
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t35": {
+      "attachment": "front",
+      "box": [
+        [
+          2946.5648336275817,
+          1159.8750054732047
+        ],
+        [
+          92.23564964937482,
+          31.45773558876837
+        ],
+        1.3131655381225784
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "overloop"
+    },
+    "t36": {
+      "attachment": "front",
+      "box": [
+        [
+          3109.501220703125,
+          1183.14990234375
+        ],
+        [
+          67.32324233302764,
+          31.92125214353622
+        ],
+        0.5509494049859397
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t37": {
+      "attachment": "front",
+      "box": [
+        [
+          3205.850514994075,
+          1095.4912794027493
+        ],
+        [
+          47.61462252376451,
+          78.984136009672
+        ],
+        1.5074125736377841
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "4"
+    },
+    "t38": {
+      "attachment": "front",
+      "box": [
+        [
+          3173.7685546875,
+          1298.1134643554688
+        ],
+        [
+          51.99821422689301,
+          31.696137364722304
+        ],
+        2.6698628158146294
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t39": {
+      "attachment": "front",
+      "box": [
+        [
+          3083.5386962890625,
+          1304.0582885742188
+        ],
+        [
+          63.08643264016855,
+          23.776465161534414
+        ],
+        0.48350522201585944
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t4": {
+      "attachment": "front",
+      "box": [
+        [
+          1577.5,
+          1317.0
+        ],
+        [
+          49.0,
+          30.0
+        ],
+        -0.0
+      ],
+      "color": "black",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t40": {
+      "attachment": "front",
+      "box": [
+        [
+          3017.3559964278525,
+          1218.1405098947826
+        ],
+        [
+          13.678839467710429,
+          23.973337205284007
+        ],
+        -1.6604527337638886
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "k"
+    },
+    "t41": {
+      "attachment": "front",
+      "box": [
+        [
+          2876.4566650390625,
+          1268.1763916015625
+        ],
+        [
+          35.669189453125,
+          21.665771484375
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "c.v."
+    },
+    "t42": {
+      "attachment": "front",
+      "box": [
+        [
+          2962.6130395367068,
+          1331.16627371243
+        ],
+        [
+          90.95848568537178,
+          32.499257178028735
+        ],
+        -0.37447387135698323
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "overloop"
+    },
+    "t43": {
+      "attachment": "front",
+      "box": [
+        [
+          2878.7757568359375,
+          1410.2513427734375
+        ],
+        [
+          57.7538769772191,
+          27.140496618435762
+        ],
+        0.5988844909669403
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "toilet"
+    },
+    "t44": {
+      "attachment": "front",
+      "box": [
+        [
+          2882.34033203125,
+          1611.0886840820312
+        ],
+        [
+          100.98958037926735,
+          33.4710432906803
+        ],
+        -90.20174856093183
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t45": {
+      "attachment": "front",
+      "box": [
+        [
+          3063.602898255741,
+          1530.2652776568486
+        ],
+        [
+          90.73335763286349,
+          33.36014857070517
+        ],
+        -92.3734864604452
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "overloop"
+    },
+    "t46": {
+      "attachment": "front",
+      "box": [
+        [
+          3149.570556640625,
+          1508.8793334960938
+        ],
+        [
+          60.59375,
+          28.6527099609375
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "toilet"
+    },
+    "t47": {
+      "attachment": "front",
+      "box": [
+        [
+          3146.517333984375,
+          1662.9468383789062
+        ],
+        [
+          47.6413522578682,
+          33.35273855366726
+        ],
+        1.1344449764930795
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t48": {
+      "attachment": "front",
+      "box": [
+        [
+          3283.909912109375,
+          1656.3707885742188
+        ],
+        [
+          103.75064773892657,
+          30.49398535654551
+        ],
+        1.583841903889122
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t49": {
+      "attachment": "front",
+      "box": [
+        [
+          2648.0338134765625,
+          1928.2971801757812
+        ],
+        [
+          64.997314453125,
+          28.7996826171875
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t50": {
+      "attachment": "front",
+      "box": [
+        [
+          2878.5416259765625,
+          1752.08740234375
+        ],
+        [
+          70.12530365875371,
+          28.26902758321162
+        ],
+        0.21780693612144758
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t51": {
+      "attachment": "front",
+      "box": [
+        [
+          2471.4887922344637,
+          2306.5440561055766
+        ],
+        [
+          67.6410353016542,
+          25.35434857174993
+        ],
+        -0.39788814224848945
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t52": {
+      "attachment": "front",
+      "box": [
+        [
+          2653.21411479039,
+          2454.274075320197
+        ],
+        [
+          65.29752991652094,
+          30.085932566656034
+        ],
+        0.824358230970812
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t53": {
+      "attachment": "front",
+      "box": [
+        [
+          3102.9266357421875,
+          2450.749267578125
+        ],
+        [
+          66.68213917003865,
+          30.68087567307427
+        ],
+        0.5455968232863724
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t54": {
+      "attachment": "front",
+      "box": [
+        [
+          3515.5008686409774,
+          2306.2452132531944
+        ],
+        [
+          70.81093495896158,
+          27.131143144270464
+        ],
+        0.28505619153603035
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t55": {
+      "attachment": "front",
+      "box": [
+        [
+          2782.2563413509693,
+          2126.08764328298
+        ],
+        [
+          46.77063715184902,
+          82.62741924977959
+        ],
+        -1.022912711134363
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "7"
+    },
+    "t56": {
+      "attachment": "front",
+      "box": [
+        [
+          3211.612606737175,
+          2131.186058620334
+        ],
+        [
+          45.115030995143435,
+          75.01565395397651
+        ],
+        -1.7899396618991448
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "3"
+    },
+    "t57": {
+      "attachment": "front",
+      "box": [
+        [
+          3265.4715576171875,
+          2034.7488403320312
+        ],
+        [
+          67.4497296579208,
+          32.393945638520854
+        ],
+        2.842190181801908
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t58": {
+      "attachment": "front",
+      "box": [
+        [
+          3146.1632080078125,
+          1971.3369140625
+        ],
+        [
+          100.19777549333806,
+          31.94386271841686
+        ],
+        -88.92413100660654
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t59": {
+      "attachment": "front",
+      "box": [
+        [
+          2797.189579503177,
+          2765.708714140202
+        ],
+        [
+          469.3072232474151,
+          57.62698951643357
+        ],
+        0.3058420499050403
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "1e VERDIEPING schaal 1:100"
+    },
+    "t60": {
+      "attachment": "front",
+      "box": [
+        [
+          4135.644315875774,
+          1959.2108446083205
+        ],
+        [
+          102.74221824941117,
+          32.58799481093221
+        ],
+        1.3972291631583138
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t61": {
+      "attachment": "front",
+      "box": [
+        [
+          3970.1170654296875,
+          2311.9036865234375
+        ],
+        [
+          72.75325442170276,
+          30.705373675422063
+        ],
+        -0.996236466124492
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t62": {
+      "attachment": "front",
+      "box": [
+        [
+          4160.831246775553,
+          2433.4042130287107
+        ],
+        [
+          68.27711304761438,
+          33.19926594601465
+        ],
+        1.0510642351361774
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t63": {
+      "attachment": "front",
+      "box": [
+        [
+          4582.965576171875,
+          2441.7315673828125
+        ],
+        [
+          73.45140668113349,
+          30.051718947737765
+        ],
+        1.4814803932983458
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t64": {
+      "attachment": "front",
+      "box": [
+        [
+          4996.987060546875,
+          2313.420166015625
+        ],
+        [
+          69.89212549832618,
+          23.45600149067924
+        ],
+        1.961459531056778
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t65": {
+      "attachment": "front",
+      "box": [
+        [
+          4660.4150390625,
+          1876.1829223632812
+        ],
+        [
+          101.44558832811965,
+          31.935252099934758
+        ],
+        1.0675169108854254
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "badkamer"
+    },
+    "t66": {
+      "attachment": "front",
+      "box": [
+        [
+          4370.067138671875,
+          1762.9395751953125
+        ],
+        [
+          64.36715965183218,
+          22.184893462487043
+        ],
+        0.6366033788585158
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "rookgas"
+    },
+    "t67": {
+      "attachment": "front",
+      "box": [
+        [
+          4282.282768227696,
+          1668.0521233647498
+        ],
+        [
+          69.40445547519188,
+          26.779699013728678
+        ],
+        0.5816732877666845
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "bordes"
+    },
+    "t68": {
+      "attachment": "front",
+      "box": [
+        [
+          4376.303466796875,
+          1663.6463012695312
+        ],
+        [
+          59.88916015625,
+          32.0582275390625
+        ],
+        0
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "kamer"
+    },
+    "t69": {
+      "attachment": "front",
+      "box": [
+        [
+          4289.288330078125,
+          1590.8987426757812
+        ],
+        [
+          48.20124820326661,
+          33.12114652463878
+        ],
+        -88.31528565325138
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    },
+    "t7": {
+      "attachment": "front",
+      "box": [
+        [
+          4304.99951171875,
+          2082.499755859375
+        ],
+        [
+          39.99999237060547,
+          64.99998474121094
+        ],
+        0.0
+      ],
+      "color": "blue",
+      "type": "appartementsnummer",
+      "value": "8"
+    },
+    "t70": {
+      "attachment": "front",
+      "box": [
+        [
+          4677.036964162418,
+          2099.6562738381967
+        ],
+        [
+          45.819038301850554,
+          70.37025088449982
+        ],
+        -1.7624285803980686
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "5"
+    },
+    "t71": {
+      "attachment": "front",
+      "box": [
+        [
+          4282.9656982421875,
+          2771.9544677734375
+        ],
+        [
+          475.41210991569943,
+          49.26738165592663
+        ],
+        0.302079669313825
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "2e VERDIEPING schaal 1:100"
+    },
+    "t72": {
+      "attachment": "front",
+      "box": [
+        [
+          3898.191162109375,
+          444.6564178466797
+        ],
+        [
+          167.28527467762768,
+          40.06665053194852
+        ],
+        0.3871271806075713
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "2e VERDIEPING"
+    },
+    "t73": {
+      "attachment": "front",
+      "box": [
+        [
+          3883.996980343795,
+          704.6403202307251
+        ],
+        [
+          170.36587197731788,
+          42.32038852129167
+        ],
+        0.748919099818374
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "1e VERDIEPING"
+    },
+    "t74": {
+      "attachment": "front",
+      "box": [
+        [
+          3890.466266938015,
+          988.8308713197122
+        ],
+        [
+          167.84711568064156,
+          36.9462405517386
+        ],
+        -0.21378612023088445
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "BEGANE GROND"
+    },
+    "t75": {
+      "attachment": "front",
+      "box": [
+        [
+          4889.892822265625,
+          1177.0454711914062
+        ],
+        [
+          92.30380061054534,
+          40.07072472086803
+        ],
+        1.3971772926195698
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "KELDER"
+    },
+    "t76": {
+      "attachment": "front",
+      "box": [
+        [
+          5507.1591796875,
+          2462.349365234375
+        ],
+        [
+          46.206024299260065,
+          28.665700702382484
+        ],
+        -0.5965057402042403
+      ],
+      "color": "black",
+      "drawing_source": "human",
+      "type": "ruimteomschrijving",
+      "value": "plat"
+    },
+    "t77": {
+      "attachment": "front",
+      "box": [
+        [
+          5524.069091796875,
+          2398.9375
+        ],
+        [
+          41.72392464332781,
+          71.84483207149792
+        ],
+        0.6820688329855059
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "5"
+    },
+    "t78": {
+      "attachment": "front",
+      "box": [
+        [
+          5606.928955078125,
+          2611.9359130859375
+        ],
+        [
+          312.7117288408236,
+          48.41126797017127
+        ],
+        0.46329139913260386
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "TOREN schaal 1:100"
+    },
+    "t79": {
+      "attachment": "front",
+      "box": [
+        [
+          3148.3302001953125,
+          1595.2022094726562
+        ],
+        [
+          78.46483110313442,
+          60.05320949056311
+        ],
+        92.43676147318703
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "5"
+    },
+    "t8": {
+      "attachment": "front",
+      "box": [
+        [
+          4636.0986328125,
+          1663.2767333984375
+        ],
+        [
+          45.29753875732422,
+          31.691160202026367
+        ],
+        3.2704925537109375
+      ],
+      "color": "black",
+      "type": "ruimteomschrijving",
+      "value": "trap"
+    }
+  }
+}

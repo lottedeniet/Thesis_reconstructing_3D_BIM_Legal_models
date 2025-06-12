@@ -1,0 +1,2468 @@
+{
+  "Tables": {},
+  "attachments": {
+    "front": {
+      "filename": "VW_HVS00_N_9252.front.png",
+      "id": "('front', 'png')",
+      "md5": "18430e32aacf941bf0a895a29899946b",
+      "properties": {
+        "vectorize": true
+      },
+      "type": "image"
+    },
+    "front-1": {
+      "filename": "VW_HVS00_N_9252.front-1.png",
+      "id": "('front-1', 'png')",
+      "md5": "d5be6e1ca49ffc8a5028a3fdd8fceb91",
+      "properties": {
+        "vectorize": true
+      },
+      "type": "image"
+    },
+    "front-1-segmentation": {
+      "filename": "VW_HVS00_N_9252.front-1-segmentation.png",
+      "id": "('front-1-segmentation', 'png')",
+      "md5": "ef7c1ef8de433a80aba0bbf6eea15d7d",
+      "properties": {},
+      "type": "image"
+    },
+    "front-segmentation": {
+      "filename": "VW_HVS00_N_9252.front-segmentation.png",
+      "id": "('front-segmentation', 'png')",
+      "md5": "971d59655db41d6cbcf5f078b9598f86",
+      "properties": {},
+      "type": "image"
+    }
+  },
+  "buildings": {},
+  "gps_points": {},
+  "lines": {
+    "l10": {
+      "attachment": "front",
+      "points": [
+        "p11",
+        "p33"
+      ]
+    },
+    "l11": {
+      "attachment": "front",
+      "points": [
+        "p24",
+        "p12"
+      ]
+    },
+    "l111": {
+      "attachment": "front-1",
+      "points": [
+        "p185",
+        "p183"
+      ]
+    },
+    "l112": {
+      "attachment": "front-1",
+      "points": [
+        "p258",
+        "p217",
+        "p180",
+        "p178",
+        "p181"
+      ]
+    },
+    "l113": {
+      "attachment": "front-1",
+      "points": [
+        "p179",
+        "p210",
+        "p239"
+      ]
+    },
+    "l114": {
+      "attachment": "front-1",
+      "points": [
+        "p182",
+        "p189"
+      ]
+    },
+    "l115": {
+      "attachment": "front-1",
+      "points": [
+        "p179",
+        "p212",
+        "p221",
+        "p190",
+        "p200",
+        "p178"
+      ]
+    },
+    "l116": {
+      "attachment": "front-1",
+      "points": [
+        "p180",
+        "p210"
+      ]
+    },
+    "l117": {
+      "attachment": "front-1",
+      "points": [
+        "p181",
+        "p196",
+        "p188"
+      ]
+    },
+    "l119": {
+      "attachment": "front-1",
+      "points": [
+        "p183",
+        "p187"
+      ]
+    },
+    "l12": {
+      "attachment": "front",
+      "points": [
+        "p13",
+        "p14"
+      ]
+    },
+    "l120": {
+      "attachment": "front-1",
+      "points": [
+        "p197",
+        "p184"
+      ]
+    },
+    "l121": {
+      "attachment": "front-1",
+      "points": [
+        "p201",
+        "p215",
+        "p191"
+      ]
+    },
+    "l122": {
+      "attachment": "front-1",
+      "points": [
+        "p198",
+        "p211"
+      ]
+    },
+    "l123": {
+      "attachment": "front-1",
+      "points": [
+        "p194",
+        "p211",
+        "p185"
+      ]
+    },
+    "l124": {
+      "attachment": "front-1",
+      "points": [
+        "p187",
+        "p186",
+        "p205"
+      ]
+    },
+    "l125": {
+      "attachment": "front-1",
+      "points": [
+        "p192",
+        "p193"
+      ]
+    },
+    "l126": {
+      "attachment": "front-1",
+      "points": [
+        "p188",
+        "p212"
+      ]
+    },
+    "l127": {
+      "attachment": "front-1",
+      "points": [
+        "p226",
+        "p189"
+      ]
+    },
+    "l128": {
+      "attachment": "front-1",
+      "points": [
+        "p191",
+        "p190",
+        "p204"
+      ]
+    },
+    "l129": {
+      "attachment": "front-1",
+      "points": [
+        "p398",
+        "p195"
+      ]
+    },
+    "l13": {
+      "attachment": "front",
+      "points": [
+        "p15",
+        "p25"
+      ]
+    },
+    "l130": {
+      "attachment": "front-1",
+      "points": [
+        "p192",
+        "p397"
+      ]
+    },
+    "l132": {
+      "attachment": "front-1",
+      "points": [
+        "p255",
+        "p193",
+        "p202"
+      ]
+    },
+    "l133": {
+      "attachment": "front-1",
+      "points": [
+        "p195",
+        "p194"
+      ]
+    },
+    "l134": {
+      "attachment": "front-1",
+      "points": [
+        "p196",
+        "p215"
+      ]
+    },
+    "l138": {
+      "attachment": "front-1",
+      "points": [
+        "p197",
+        "p198"
+      ]
+    },
+    "l140": {
+      "attachment": "front-1",
+      "points": [
+        "p201",
+        "p200"
+      ]
+    },
+    "l141": {
+      "attachment": "front-1",
+      "points": [
+        "p217",
+        "p202"
+      ]
+    },
+    "l143": {
+      "attachment": "front-1",
+      "points": [
+        "p208",
+        "p204"
+      ]
+    },
+    "l144": {
+      "attachment": "front-1",
+      "points": [
+        "p209",
+        "p205"
+      ]
+    },
+    "l147": {
+      "attachment": "front-1",
+      "points": [
+        "p221",
+        "p208"
+      ]
+    },
+    "l148": {
+      "attachment": "front-1",
+      "points": [
+        "p209",
+        "p222"
+      ]
+    },
+    "l149": {
+      "attachment": "front-1",
+      "points": [
+        "p262",
+        "p249",
+        "p251",
+        "p232"
+      ]
+    },
+    "l15": {
+      "attachment": "front",
+      "points": [
+        "p26",
+        "p27"
+      ]
+    },
+    "l150": {
+      "attachment": "front-1",
+      "points": [
+        "p247",
+        "p236"
+      ]
+    },
+    "l151": {
+      "attachment": "front-1",
+      "points": [
+        "p232",
+        "p245",
+        "p258"
+      ]
+    },
+    "l153": {
+      "attachment": "front-1",
+      "points": [
+        "p233",
+        "p235",
+        "p189"
+      ]
+    },
+    "l155": {
+      "attachment": "front-1",
+      "points": [
+        "p234",
+        "p237",
+        "p233"
+      ]
+    },
+    "l156": {
+      "attachment": "front-1",
+      "points": [
+        "p238",
+        "p270",
+        "p269",
+        "p268",
+        "p260"
+      ]
+    },
+    "l157": {
+      "attachment": "front-1",
+      "points": [
+        "p235",
+        "p240"
+      ]
+    },
+    "l159": {
+      "attachment": "front-1",
+      "points": [
+        "p256",
+        "p237",
+        "p236"
+      ]
+    },
+    "l16": {
+      "attachment": "front",
+      "points": [
+        "p18",
+        "p28"
+      ]
+    },
+    "l160": {
+      "attachment": "front-1",
+      "points": [
+        "p239",
+        "p246"
+      ]
+    },
+    "l161": {
+      "attachment": "front-1",
+      "points": [
+        "p238",
+        "p239"
+      ]
+    },
+    "l162": {
+      "attachment": "front-1",
+      "points": [
+        "p244",
+        "p265",
+        "p260"
+      ]
+    },
+    "l163": {
+      "attachment": "front-1",
+      "points": [
+        "p266",
+        "p240"
+      ]
+    },
+    "l166": {
+      "attachment": "front-1",
+      "points": [
+        "p404",
+        "p257"
+      ]
+    },
+    "l167": {
+      "attachment": "front-1",
+      "points": [
+        "p266",
+        "p248"
+      ]
+    },
+    "l169": {
+      "attachment": "front-1",
+      "points": [
+        "p250",
+        "p244"
+      ]
+    },
+    "l17": {
+      "attachment": "front",
+      "points": [
+        "p393",
+        "p28"
+      ]
+    },
+    "l170": {
+      "attachment": "front-1",
+      "points": [
+        "p245",
+        "p252"
+      ]
+    },
+    "l171": {
+      "attachment": "front-1",
+      "points": [
+        "p395",
+        "p255"
+      ]
+    },
+    "l173": {
+      "attachment": "front-1",
+      "points": [
+        "p246",
+        "p268"
+      ]
+    },
+    "l174": {
+      "attachment": "front-1",
+      "points": [
+        "p248",
+        "p247"
+      ]
+    },
+    "l175": {
+      "attachment": "front-1",
+      "points": [
+        "p249",
+        "p250"
+      ]
+    },
+    "l176": {
+      "attachment": "front-1",
+      "points": [
+        "p252",
+        "p251"
+      ]
+    },
+    "l178": {
+      "attachment": "front-1",
+      "points": [
+        "p255",
+        "p259"
+      ]
+    },
+    "l179": {
+      "attachment": "front-1",
+      "points": [
+        "p257",
+        "p256"
+      ]
+    },
+    "l180": {
+      "attachment": "front-1",
+      "points": [
+        "p261",
+        "p263"
+      ]
+    },
+    "l181": {
+      "attachment": "front-1",
+      "points": [
+        "p259",
+        "p258"
+      ]
+    },
+    "l183": {
+      "attachment": "front-1",
+      "points": [
+        "p269",
+        "p261"
+      ]
+    },
+    "l185": {
+      "attachment": "front-1",
+      "points": [
+        "p263",
+        "p270"
+      ]
+    },
+    "l197": {
+      "attachment": "front-1",
+      "points": [
+        "p164",
+        "p80"
+      ]
+    },
+    "l2": {
+      "attachment": "front",
+      "points": [
+        "p23",
+        "p6",
+        "p385",
+        "p388",
+        "p3"
+      ]
+    },
+    "l23": {
+      "attachment": "front",
+      "points": [
+        "p38",
+        "p47",
+        "p49",
+        "p36"
+      ]
+    },
+    "l28": {
+      "attachment": "front",
+      "points": [
+        "p53",
+        "p38"
+      ]
+    },
+    "l31": {
+      "attachment": "front",
+      "points": [
+        "p44",
+        "p59"
+      ]
+    },
+    "l329": {
+      "attachment": "front",
+      "points": [
+        "p385",
+        "p386"
+      ]
+    },
+    "l33": {
+      "attachment": "front",
+      "points": [
+        "p44",
+        "p54"
+      ]
+    },
+    "l330": {
+      "attachment": "front",
+      "points": [
+        "p386",
+        "p387"
+      ]
+    },
+    "l331": {
+      "attachment": "front",
+      "points": [
+        "p387",
+        "p388"
+      ]
+    },
+    "l332": {
+      "attachment": "front",
+      "points": [
+        "p389",
+        "p390"
+      ]
+    },
+    "l333": {
+      "attachment": "front",
+      "points": [
+        "p390",
+        "p391"
+      ]
+    },
+    "l334": {
+      "attachment": "front",
+      "points": [
+        "p392",
+        "p391"
+      ]
+    },
+    "l335": {
+      "attachment": "front",
+      "points": [
+        "p33",
+        "p394"
+      ]
+    },
+    "l337": {
+      "attachment": "front",
+      "points": [
+        "p18",
+        "p5"
+      ]
+    },
+    "l338": {
+      "attachment": "front",
+      "points": [
+        "p13",
+        "p4"
+      ]
+    },
+    "l341": {
+      "attachment": "front-1",
+      "points": [
+        "p244",
+        "p262"
+      ]
+    },
+    "l342": {
+      "attachment": "front-1",
+      "points": [
+        "p397",
+        "p396"
+      ]
+    },
+    "l343": {
+      "attachment": "front-1",
+      "points": [
+        "p395",
+        "p396"
+      ]
+    },
+    "l345": {
+      "attachment": "front-1",
+      "points": [
+        "p195",
+        "p403",
+        "p404"
+      ]
+    },
+    "l346": {
+      "attachment": "front-1",
+      "points": [
+        "p185",
+        "p405"
+      ]
+    },
+    "l347": {
+      "attachment": "front-1",
+      "points": [
+        "p404",
+        "p405",
+        "p234"
+      ]
+    },
+    "l348": {
+      "attachment": "front-1",
+      "points": [
+        "p186",
+        "p184"
+      ]
+    },
+    "l349": {
+      "attachment": "front-1",
+      "points": [
+        "p402",
+        "p398"
+      ]
+    },
+    "l35": {
+      "attachment": "front",
+      "points": [
+        "p45",
+        "p394"
+      ]
+    },
+    "l350": {
+      "attachment": "front",
+      "points": [
+        "p45",
+        "p36"
+      ]
+    },
+    "l351": {
+      "attachment": "front",
+      "points": [
+        "p11",
+        "p3"
+      ]
+    },
+    "l352": {
+      "attachment": "front",
+      "points": [
+        "p10",
+        "p3"
+      ]
+    },
+    "l358": {
+      "attachment": "front",
+      "points": [
+        "p406",
+        "p409"
+      ]
+    },
+    "l359": {
+      "attachment": "front",
+      "points": [
+        "p410",
+        "p413"
+      ]
+    },
+    "l360": {
+      "attachment": "front",
+      "points": [
+        "p420",
+        "p418"
+      ]
+    },
+    "l361": {
+      "attachment": "front",
+      "points": [
+        "p417",
+        "p414"
+      ]
+    },
+    "l362": {
+      "attachment": "front",
+      "points": [
+        "p425",
+        "p422"
+      ]
+    },
+    "l363": {
+      "attachment": "front-1",
+      "points": [
+        "p402",
+        "p401",
+        "p226",
+        "p400",
+        "p399"
+      ]
+    },
+    "l364": {
+      "attachment": "front-1",
+      "points": [
+        "p398",
+        "p399"
+      ]
+    },
+    "l365": {
+      "attachment": "front",
+      "points": [
+        "p406",
+        "p407",
+        "p408"
+      ]
+    },
+    "l366": {
+      "attachment": "front",
+      "points": [
+        "p409",
+        "p408"
+      ]
+    },
+    "l367": {
+      "attachment": "front",
+      "points": [
+        "p410",
+        "p411"
+      ]
+    },
+    "l368": {
+      "attachment": "front",
+      "points": [
+        "p413",
+        "p412",
+        "p411"
+      ]
+    },
+    "l369": {
+      "attachment": "front",
+      "points": [
+        "p414",
+        "p415",
+        "p416"
+      ]
+    },
+    "l370": {
+      "attachment": "front",
+      "points": [
+        "p417",
+        "p416"
+      ]
+    },
+    "l371": {
+      "attachment": "front",
+      "points": [
+        "p418",
+        "p419",
+        "p421"
+      ]
+    },
+    "l372": {
+      "attachment": "front",
+      "points": [
+        "p420",
+        "p421"
+      ]
+    },
+    "l373": {
+      "attachment": "front",
+      "points": [
+        "p422",
+        "p423"
+      ]
+    },
+    "l374": {
+      "attachment": "front",
+      "points": [
+        "p423",
+        "p424",
+        "p425"
+      ]
+    },
+    "l38": {
+      "attachment": "front",
+      "points": [
+        "p47",
+        "p57"
+      ]
+    },
+    "l39": {
+      "attachment": "front",
+      "points": [
+        "p49",
+        "p58"
+      ]
+    },
+    "l42": {
+      "attachment": "front",
+      "points": [
+        "p53",
+        "p54"
+      ]
+    },
+    "l44": {
+      "attachment": "front",
+      "points": [
+        "p57",
+        "p58"
+      ]
+    },
+    "l45": {
+      "attachment": "front",
+      "points": [
+        "p59",
+        "p23"
+      ]
+    },
+    "l6": {
+      "attachment": "front",
+      "points": [
+        "p4",
+        "p25",
+        "p389",
+        "p27",
+        "p392",
+        "p12",
+        "p393",
+        "p5",
+        "p10"
+      ]
+    },
+    "l7": {
+      "attachment": "front",
+      "points": [
+        "p14",
+        "p6"
+      ]
+    },
+    "l8": {
+      "attachment": "front",
+      "points": [
+        "p24",
+        "p26",
+        "p15"
+      ]
+    }
+  },
+  "measurement_lines": {},
+  "meta": {
+    "dataVersion": "0.2.0",
+    "front-1Dimensions": [
+      6623,
+      4678
+    ],
+    "frontDimensions": [
+      6623,
+      4678
+    ],
+    "id": "VW_HVS00_N_9252",
+    "municipality": "HVS00",
+    "parcels": [],
+    "section": "N",
+    "sketch": 9252,
+    "sketchSub": ""
+  },
+  "points": {
+    "p10": {
+      "attachment": "front",
+      "position": [
+        1499.4282453727287,
+        3148.921159935223
+      ]
+    },
+    "p11": {
+      "attachment": "front",
+      "position": [
+        2697.1799862865587,
+        3133.9960245789916
+      ]
+    },
+    "p12": {
+      "attachment": "front",
+      "position": [
+        1499.8374630022693,
+        2496.7200453915348
+      ]
+    },
+    "p13": {
+      "attachment": "front",
+      "position": [
+        1220.1028666910602,
+        1956.7582704145266
+      ]
+    },
+    "p14": {
+      "attachment": "front",
+      "position": [
+        1220.1165206260735,
+        1676.5407796862246
+      ]
+    },
+    "p15": {
+      "attachment": "front",
+      "position": [
+        1220.1204588198877,
+        2068.1066408300526
+      ]
+    },
+    "p164": {
+      "attachment": "front",
+      "position": [
+        6178.141091306861,
+        75.83620493783698
+      ]
+    },
+    "p178": {
+      "attachment": "front-1",
+      "position": [
+        1491.1381764333134,
+        4211.920771409572
+      ]
+    },
+    "p179": {
+      "attachment": "front-1",
+      "position": [
+        1491.7758969016186,
+        3266.240467351883
+      ]
+    },
+    "p18": {
+      "attachment": "front",
+      "position": [
+        1378.433335266161,
+        2901.9564155682797
+      ]
+    },
+    "p180": {
+      "attachment": "front-1",
+      "position": [
+        2082.131885092219,
+        4212.555326888851
+      ]
+    },
+    "p181": {
+      "attachment": "front-1",
+      "position": [
+        1212.070052076066,
+        4211.621133351149
+      ]
+    },
+    "p182": {
+      "attachment": "front-1",
+      "position": [
+        1491.741839046644,
+        1023.0616901338396
+      ]
+    },
+    "p183": {
+      "attachment": "front-1",
+      "position": [
+        1212.1407402013472,
+        1966.6439876567485
+      ]
+    },
+    "p184": {
+      "attachment": "front-1",
+      "position": [
+        1491.1710782684413,
+        1728.0812983866679
+      ]
+    },
+    "p185": {
+      "attachment": "front-1",
+      "position": [
+        2549.919573173419,
+        1968.5673121427292
+      ]
+    },
+    "p186": {
+      "attachment": "front-1",
+      "position": [
+        1491.4680791729245,
+        1361.2175100428042
+      ]
+    },
+    "p187": {
+      "attachment": "front-1",
+      "position": [
+        1212.1113492692255,
+        1361.1597525526447
+      ]
+    },
+    "p188": {
+      "attachment": "front-1",
+      "position": [
+        1212.0002574998907,
+        3378.5178241166927
+      ]
+    },
+    "p189": {
+      "attachment": "front-1",
+      "position": [
+        2673.5069986737044,
+        1023.1074726555046
+      ]
+    },
+    "p190": {
+      "attachment": "front-1",
+      "position": [
+        1491.546294699888,
+        3606.7192362425035
+      ]
+    },
+    "p191": {
+      "attachment": "front-1",
+      "position": [
+        1369.1669553432644,
+        3606.5025953752092
+      ]
+    },
+    "p192": {
+      "attachment": "front-1",
+      "position": [
+        2551.1050969859784,
+        3782.7681588647174
+      ]
+    },
+    "p193": {
+      "attachment": "front-1",
+      "position": [
+        2550.3807038680156,
+        4118.7202313786875
+      ]
+    },
+    "p194": {
+      "attachment": "front-1",
+      "position": [
+        2551.065389316026,
+        1539.2855081251137
+      ]
+    },
+    "p195": {
+      "attachment": "front-1",
+      "position": [
+        2672.8490666188177,
+        1538.3081126746847
+      ]
+    },
+    "p196": {
+      "attachment": "front-1",
+      "position": [
+        1212.0370932217731,
+        3818.2076034652528
+      ]
+    },
+    "p197": {
+      "attachment": "front-1",
+      "position": [
+        2082.175168396051,
+        1728.2265134379718
+      ]
+    },
+    "p198": {
+      "attachment": "front-1",
+      "position": [
+        2082.0970776497275,
+        1847.3656828622684
+      ]
+    },
+    "p200": {
+      "attachment": "front-1",
+      "position": [
+        1491.227830460122,
+        4078.9721653258166
+      ]
+    },
+    "p201": {
+      "attachment": "front-1",
+      "position": [
+        1370.587185326533,
+        4079.017524051953
+      ]
+    },
+    "p202": {
+      "attachment": "front-1",
+      "position": [
+        2463.443584445348,
+        4119.90401616907
+      ]
+    },
+    "p204": {
+      "attachment": "front-1",
+      "position": [
+        1551.1009606581074,
+        3606.8246623262885
+      ]
+    },
+    "p205": {
+      "attachment": "front-1",
+      "position": [
+        1550.8189021624225,
+        1361.229780928764
+      ]
+    },
+    "p208": {
+      "attachment": "front-1",
+      "position": [
+        1551.1903796801041,
+        3535.3630193447984
+      ]
+    },
+    "p209": {
+      "attachment": "front-1",
+      "position": [
+        1550.8055376381055,
+        1290.8081073625178
+      ]
+    },
+    "p210": {
+      "attachment": "front-1",
+      "position": [
+        2082.189155624223,
+        3266.88766103499
+      ]
+    },
+    "p211": {
+      "attachment": "front-1",
+      "position": [
+        2550.2437642394425,
+        1847.1086238820706
+      ]
+    },
+    "p212": {
+      "attachment": "front-1",
+      "position": [
+        1491.7001731565535,
+        3378.5317576845364
+      ]
+    },
+    "p215": {
+      "attachment": "front-1",
+      "position": [
+        1369.8026991785887,
+        3818.0165449072356
+      ]
+    },
+    "p217": {
+      "attachment": "front-1",
+      "position": [
+        2463.4962981668955,
+        4212.964801430411
+      ]
+    },
+    "p221": {
+      "attachment": "front-1",
+      "position": [
+        1491.5943692173448,
+        3535.429185906375
+      ]
+    },
+    "p222": {
+      "attachment": "front-1",
+      "position": [
+        1491.5250617181523,
+        1290.8310832804852
+      ]
+    },
+    "p226": {
+      "attachment": "front-1",
+      "position": [
+        2672.843089605708,
+        1288.1231527718592
+      ]
+    },
+    "p23": {
+      "attachment": "front",
+      "position": [
+        2090.1896758096655,
+        1635.4274887889198
+      ]
+    },
+    "p232": {
+      "attachment": "front-1",
+      "position": [
+        3916.5994893632237,
+        4212.822836506378
+      ]
+    },
+    "p233": {
+      "attachment": "front-1",
+      "position": [
+        3760.96115447961,
+        1023.0883361846714
+      ]
+    },
+    "p234": {
+      "attachment": "front-1",
+      "position": [
+        3759.7543564812167,
+        1966.7908204715181
+      ]
+    },
+    "p235": {
+      "attachment": "front-1",
+      "position": [
+        3251.7671314303134,
+        1022.8873625890432
+      ]
+    },
+    "p236": {
+      "attachment": "front-1",
+      "position": [
+        3916.251448948542,
+        1729.1238838809863
+      ]
+    },
+    "p237": {
+      "attachment": "front-1",
+      "position": [
+        3760.0587192308276,
+        1728.7825677941937
+      ]
+    },
+    "p238": {
+      "attachment": "front-1",
+      "position": [
+        3250.3691503838745,
+        3267.672347233774
+      ]
+    },
+    "p239": {
+      "attachment": "front-1",
+      "position": [
+        3031.89051269733,
+        3267.6658339490546
+      ]
+    },
+    "p24": {
+      "attachment": "front",
+      "position": [
+        1220.1066645764904,
+        2497.0340288179013
+      ]
+    },
+    "p240": {
+      "attachment": "front-1",
+      "position": [
+        3251.711342445787,
+        184.58876391942326
+      ]
+    },
+    "p244": {
+      "attachment": "front-1",
+      "position": [
+        3712.2462790571567,
+        2466.160165974241
+      ]
+    },
+    "p245": {
+      "attachment": "front-1",
+      "position": [
+        3736.4462456715896,
+        4212.821288387503
+      ]
+    },
+    "p246": {
+      "attachment": "front-1",
+      "position": [
+        3031.5309781021415,
+        2602.3188586349474
+      ]
+    },
+    "p247": {
+      "attachment": "front-1",
+      "position": [
+        3916.893094509409,
+        522.7878452994197
+      ]
+    },
+    "p248": {
+      "attachment": "front-1",
+      "position": [
+        3712.2289570528346,
+        522.8615489592701
+      ]
+    },
+    "p249": {
+      "attachment": "front-1",
+      "position": [
+        3917.1958162706524,
+        2766.643334685925
+      ]
+    },
+    "p25": {
+      "attachment": "front",
+      "position": [
+        1500.1062933783376,
+        2068.2647242182443
+      ]
+    },
+    "p250": {
+      "attachment": "front-1",
+      "position": [
+        3712.2291623979927,
+        2766.3173770573285
+      ]
+    },
+    "p251": {
+      "attachment": "front-1",
+      "position": [
+        3916.710439012203,
+        3943.7537972099676
+      ]
+    },
+    "p252": {
+      "attachment": "front-1",
+      "position": [
+        3736.437061684383,
+        3943.74148013854
+      ]
+    },
+    "p255": {
+      "attachment": "front-1",
+      "position": [
+        2794.857815081731,
+        4118.580069023678
+      ]
+    },
+    "p256": {
+      "attachment": "front-1",
+      "position": [
+        3263.754238582909,
+        1727.6980313788413
+      ]
+    },
+    "p257": {
+      "attachment": "front-1",
+      "position": [
+        3263.824298217389,
+        1847.6038149246422
+      ]
+    },
+    "p258": {
+      "attachment": "front-1",
+      "position": [
+        2882.411535676454,
+        4212.8139493730805
+      ]
+    },
+    "p259": {
+      "attachment": "front-1",
+      "position": [
+        2882.4587659170415,
+        4120.00847632971
+      ]
+    },
+    "p26": {
+      "attachment": "front",
+      "position": [
+        1220.1148007145173,
+        2244.0435362180624
+      ]
+    },
+    "p260": {
+      "attachment": "front-1",
+      "position": [
+        3252.1787927900086,
+        2428.6148528522363
+      ]
+    },
+    "p261": {
+      "attachment": "front-1",
+      "position": [
+        3322.827137523085,
+        2984.1963717390468
+      ]
+    },
+    "p262": {
+      "attachment": "front-1",
+      "position": [
+        3917.311553588889,
+        2485.963500949141
+      ]
+    },
+    "p263": {
+      "attachment": "front-1",
+      "position": [
+        3322.65604071938,
+        3078.3868143012487
+      ]
+    },
+    "p265": {
+      "attachment": "front-1",
+      "position": [
+        3654.574453997745,
+        2464.1216815622615
+      ]
+    },
+    "p266": {
+      "attachment": "front-1",
+      "position": [
+        3712.2922623306517,
+        223.76572016458732
+      ]
+    },
+    "p268": {
+      "attachment": "front-1",
+      "position": [
+        3251.80401777046,
+        2602.382768432372
+      ]
+    },
+    "p269": {
+      "attachment": "front-1",
+      "position": [
+        3250.982126962178,
+        2983.4600685191795
+      ]
+    },
+    "p27": {
+      "attachment": "front",
+      "position": [
+        1499.9958197801022,
+        2244.3348607311286
+      ]
+    },
+    "p270": {
+      "attachment": "front-1",
+      "position": [
+        3250.7775353500647,
+        3078.320868006143
+      ]
+    },
+    "p28": {
+      "attachment": "front",
+      "position": [
+        1378.4800302375784,
+        2739.9538130898673
+      ]
+    },
+    "p3": {
+      "attachment": "front",
+      "position": [
+        2090.2217406829404,
+        3141.2808980980467
+      ]
+    },
+    "p33": {
+      "attachment": "front",
+      "position": [
+        2697.036733228549,
+        2738.0384924784657
+      ]
+    },
+    "p36": {
+      "attachment": "front",
+      "position": [
+        4041.1375601203918,
+        3127.217956174969
+      ]
+    },
+    "p38": {
+      "attachment": "front",
+      "position": [
+        4037.643328088239,
+        1187.6798651185422
+      ]
+    },
+    "p385": {
+      "attachment": "front",
+      "position": [
+        2090.2022376166974,
+        2225.3640147616834
+      ]
+    },
+    "p386": {
+      "attachment": "front",
+      "position": [
+        2055.417236328125,
+        2225.364013671875
+      ]
+    },
+    "p387": {
+      "attachment": "front",
+      "position": [
+        2055.23046875,
+        2272.890625
+      ]
+    },
+    "p388": {
+      "attachment": "front",
+      "position": [
+        2090.20324962394,
+        2272.890619445235
+      ]
+    },
+    "p389": {
+      "attachment": "front",
+      "position": [
+        1500.0075361466177,
+        2225.661600470317
+      ]
+    },
+    "p390": {
+      "attachment": "front",
+      "position": [
+        1558.6400146484375,
+        2226.034912109375
+      ]
+    },
+    "p391": {
+      "attachment": "front",
+      "position": [
+        1559.386474609375,
+        2296.205078125
+      ]
+    },
+    "p392": {
+      "attachment": "front",
+      "position": [
+        1499.9631572841704,
+        2296.391553093955
+      ]
+    },
+    "p393": {
+      "attachment": "front",
+      "position": [
+        1499.7019254308875,
+        2712.736533285733
+      ]
+    },
+    "p394": {
+      "attachment": "front",
+      "position": [
+        2802.74951171875,
+        2714.614013671875
+      ]
+    },
+    "p395": {
+      "attachment": "front-1",
+      "position": [
+        2794.91650390625,
+        3869.511474609375
+      ]
+    },
+    "p396": {
+      "attachment": "front-1",
+      "position": [
+        2835.040283203125,
+        3870.071533203125
+      ]
+    },
+    "p397": {
+      "attachment": "front-1",
+      "position": [
+        2834.49462890625,
+        3784.05126953125
+      ]
+    },
+    "p398": {
+      "attachment": "front-1",
+      "position": [
+        2673.1314788805616,
+        1363.8466442271035
+      ]
+    },
+    "p399": {
+      "attachment": "front-1",
+      "position": [
+        2732.088623046875,
+        1362.8507080078125
+      ]
+    },
+    "p4": {
+      "attachment": "front",
+      "position": [
+        1500.1759497360486,
+        1957.2481138510345
+      ]
+    },
+    "p400": {
+      "attachment": "front-1",
+      "position": [
+        2731.7568359375,
+        1291.519287109375
+      ]
+    },
+    "p401": {
+      "attachment": "front-1",
+      "position": [
+        2614.640625,
+        1291.85107421875
+      ]
+    },
+    "p402": {
+      "attachment": "front-1",
+      "position": [
+        2613.3134765625,
+        1362.1871337890625
+      ]
+    },
+    "p403": {
+      "attachment": "front-1",
+      "position": [
+        2794.812255859375,
+        1540.153076171875
+      ]
+    },
+    "p404": {
+      "attachment": "front-1",
+      "position": [
+        2795.6005859375,
+        1848.6341552734375
+      ]
+    },
+    "p405": {
+      "attachment": "front-1",
+      "position": [
+        2795.1962890625,
+        1969.084716796875
+      ]
+    },
+    "p406": {
+      "attachment": "front",
+      "position": [
+        2282.689208984375,
+        2461.518310546875
+      ]
+    },
+    "p407": {
+      "attachment": "front",
+      "position": [
+        2362.8544921875,
+        2460.68310546875
+      ]
+    },
+    "p408": {
+      "attachment": "front",
+      "position": [
+        2361.184326171875,
+        2489.91015625
+      ]
+    },
+    "p409": {
+      "attachment": "front",
+      "position": [
+        2284.359375,
+        2488.239990234375
+      ]
+    },
+    "p410": {
+      "attachment": "front",
+      "position": [
+        2624.2265625,
+        2226.867919921875
+      ]
+    },
+    "p411": {
+      "attachment": "front",
+      "position": [
+        2740.299072265625,
+        2226.032958984375
+      ]
+    },
+    "p412": {
+      "attachment": "front",
+      "position": [
+        2738.62890625,
+        2294.50732421875
+      ]
+    },
+    "p413": {
+      "attachment": "front",
+      "position": [
+        2620.88623046875,
+        2293.67236328125
+      ]
+    },
+    "p414": {
+      "attachment": "front",
+      "position": [
+        3000.7509765625,
+        2462.214111328125
+      ]
+    },
+    "p415": {
+      "attachment": "front",
+      "position": [
+        3079.037353515625,
+        2461.587646484375
+      ]
+    },
+    "p416": {
+      "attachment": "front",
+      "position": [
+        3077.78466796875,
+        2488.518310546875
+      ]
+    },
+    "p417": {
+      "attachment": "front",
+      "position": [
+        3000.7509765625,
+        2489.14453125
+      ]
+    },
+    "p418": {
+      "attachment": "front",
+      "position": [
+        3283.91162109375,
+        2202.769775390625
+      ]
+    },
+    "p419": {
+      "attachment": "front",
+      "position": [
+        3329.630859375,
+        2201.51708984375
+      ]
+    },
+    "p420": {
+      "attachment": "front",
+      "position": [
+        3283.285400390625,
+        2295.460693359375
+      ]
+    },
+    "p421": {
+      "attachment": "front",
+      "position": [
+        3329.630859375,
+        2295.460693359375
+      ]
+    },
+    "p422": {
+      "attachment": "front",
+      "position": [
+        3284.3828125,
+        1675.263916015625
+      ]
+    },
+    "p423": {
+      "attachment": "front",
+      "position": [
+        3331.149169921875,
+        1675.5281982421875
+      ]
+    },
+    "p424": {
+      "attachment": "front",
+      "position": [
+        3330.884765625,
+        1768.5323486328125
+      ]
+    },
+    "p425": {
+      "attachment": "front",
+      "position": [
+        3284.9111328125,
+        1768.5323486328125
+      ]
+    },
+    "p44": {
+      "attachment": "front",
+      "position": [
+        2842.1558286731124,
+        1291.3319968936075
+      ]
+    },
+    "p45": {
+      "attachment": "front",
+      "position": [
+        2802.583576838305,
+        3133.985083798211
+      ]
+    },
+    "p47": {
+      "attachment": "front",
+      "position": [
+        4038.9595212118675,
+        1918.2571922604784
+      ]
+    },
+    "p49": {
+      "attachment": "front",
+      "position": [
+        4039.15073307453,
+        2024.3928717697152
+      ]
+    },
+    "p5": {
+      "attachment": "front",
+      "position": [
+        1499.583221201486,
+        2901.9244497586674
+      ]
+    },
+    "p53": {
+      "attachment": "front",
+      "position": [
+        3259.9743012346344,
+        1118.684723111977
+      ]
+    },
+    "p54": {
+      "attachment": "front",
+      "position": [
+        3258.763410726739,
+        1291.2140375579465
+      ]
+    },
+    "p57": {
+      "attachment": "front",
+      "position": [
+        3735.915501579099,
+        1918.0196984172926
+      ]
+    },
+    "p58": {
+      "attachment": "front",
+      "position": [
+        3761.759884625789,
+        2024.9163363423545
+      ]
+    },
+    "p59": {
+      "attachment": "front",
+      "position": [
+        2842.1834057395686,
+        1652.469156627772
+      ]
+    },
+    "p6": {
+      "attachment": "front",
+      "position": [
+        2090.1905134825097,
+        1674.7668773255846
+      ]
+    },
+    "p80": {
+      "attachment": "front",
+      "position": [
+        6542.84019124577,
+        79.40434534829336
+      ]
+    }
+  },
+  "rooms": {
+    "r1": {
+      "appartementsnummer": "t8",
+      "attachment": "front",
+      "points": [
+        "p11",
+        "p33",
+        "p394",
+        "p45",
+        "p36",
+        "p49",
+        "p58",
+        "p57",
+        "p47",
+        "p38",
+        "p53",
+        "p54",
+        "p44",
+        "p59",
+        "p23",
+        "p6",
+        "p385",
+        "p388",
+        "p3",
+        "p11"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r10": {
+      "attachment": "front-1",
+      "points": [
+        "p200",
+        "p190",
+        "p191",
+        "p215",
+        "p201",
+        "p200"
+      ]
+    },
+    "r11": {
+      "appartementsnummer": "t6",
+      "attachment": "front",
+      "points": [
+        "p14",
+        "p13",
+        "p4",
+        "p25",
+        "p389",
+        "p390",
+        "p391",
+        "p392",
+        "p12",
+        "p393",
+        "p5",
+        "p10",
+        "p3",
+        "p388",
+        "p387",
+        "p386",
+        "p385",
+        "p6",
+        "p14"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r12": {
+      "attachment": "front-1",
+      "points": [
+        "p194",
+        "p211",
+        "p185",
+        "p405",
+        "p404",
+        "p403",
+        "p195",
+        "p194"
+      ]
+    },
+    "r13": {
+      "attachment": "front-1",
+      "points": [
+        "p192",
+        "p193",
+        "p255",
+        "p395",
+        "p396",
+        "p397",
+        "p192"
+      ]
+    },
+    "r14": {
+      "attachment": "front-1",
+      "points": [
+        "p189",
+        "p226",
+        "p400",
+        "p399",
+        "p398",
+        "p195",
+        "p403",
+        "p404",
+        "p257",
+        "p256",
+        "p237",
+        "p233",
+        "p235",
+        "p189"
+      ]
+    },
+    "r15": {
+      "appartementsnummer": "t3",
+      "attachment": "front",
+      "points": [
+        "p25",
+        "p15",
+        "p26",
+        "p27",
+        "p389",
+        "p25"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r16": {
+      "attachment": "front-1",
+      "points": [
+        "p249",
+        "p262",
+        "p244",
+        "p250",
+        "p249"
+      ]
+    },
+    "r17": {
+      "attachment": "front-1",
+      "points": [
+        "p232",
+        "p251",
+        "p252",
+        "p245",
+        "p232"
+      ]
+    },
+    "r18": {
+      "attachment": "front-1",
+      "points": [
+        "p236",
+        "p247",
+        "p248",
+        "p266",
+        "p240",
+        "p235",
+        "p233",
+        "p237",
+        "p236"
+      ]
+    },
+    "r19": {
+      "attachment": "front-1",
+      "points": [
+        "p234",
+        "p237",
+        "p256",
+        "p257",
+        "p404",
+        "p405",
+        "p234"
+      ]
+    },
+    "r2": {
+      "appartementsnummer": "t4",
+      "attachment": "front",
+      "points": [
+        "p24",
+        "p12",
+        "p392",
+        "p27",
+        "p26",
+        "p24"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r20": {
+      "attachment": "front-1",
+      "points": [
+        "p238",
+        "p270",
+        "p269",
+        "p268",
+        "p246",
+        "p239",
+        "p238"
+      ]
+    },
+    "r21": {
+      "attachment": "front-1",
+      "points": [
+        "p269",
+        "p270",
+        "p263",
+        "p261",
+        "p269"
+      ]
+    },
+    "r22": {
+      "appartementsnummer": "t5",
+      "attachment": "front",
+      "points": [
+        "p28",
+        "p18",
+        "p5",
+        "p393",
+        "p28"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r23": {
+      "attachment": "front",
+      "points": [
+        "p388",
+        "p385",
+        "p386",
+        "p387",
+        "p388"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r24": {
+      "appartementsnummer": "t7",
+      "attachment": "front",
+      "points": [
+        "p49",
+        "p47",
+        "p57",
+        "p58",
+        "p49"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r25": {
+      "attachment": "front",
+      "points": [
+        "p390",
+        "p389",
+        "p27",
+        "p392",
+        "p391",
+        "p390"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r26": {
+      "attachment": "front-1",
+      "points": [
+        "p398",
+        "p399",
+        "p400",
+        "p226",
+        "p401",
+        "p402",
+        "p398"
+      ]
+    },
+    "r27": {
+      "attachment": "front",
+      "points": [
+        "p407",
+        "p406",
+        "p409",
+        "p408",
+        "p407"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r28": {
+      "attachment": "front",
+      "points": [
+        "p411",
+        "p410",
+        "p413",
+        "p412",
+        "p411"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r29": {
+      "attachment": "front",
+      "points": [
+        "p415",
+        "p414",
+        "p417",
+        "p416",
+        "p415"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r3": {
+      "attachment": "front-1",
+      "points": [
+        "p183",
+        "p185",
+        "p211",
+        "p198",
+        "p197",
+        "p184",
+        "p186",
+        "p187",
+        "p183"
+      ]
+    },
+    "r30": {
+      "attachment": "front",
+      "points": [
+        "p419",
+        "p418",
+        "p420",
+        "p421",
+        "p419"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r31": {
+      "attachment": "front",
+      "points": [
+        "p423",
+        "p422",
+        "p425",
+        "p424",
+        "p423"
+      ],
+      "verdiepingaanduiding": "t9"
+    },
+    "r4": {
+      "attachment": "front-1",
+      "points": [
+        "p217",
+        "p258",
+        "p259",
+        "p255",
+        "p193",
+        "p202",
+        "p217"
+      ]
+    },
+    "r5": {
+      "attachment": "front-1",
+      "points": [
+        "p180",
+        "p217",
+        "p202",
+        "p193",
+        "p192",
+        "p397",
+        "p396",
+        "p395",
+        "p255",
+        "p259",
+        "p258",
+        "p245",
+        "p252",
+        "p251",
+        "p249",
+        "p250",
+        "p244",
+        "p265",
+        "p260",
+        "p268",
+        "p269",
+        "p261",
+        "p263",
+        "p270",
+        "p238",
+        "p239",
+        "p210",
+        "p180"
+      ]
+    },
+    "r6": {
+      "attachment": "front-1",
+      "points": [
+        "p178",
+        "p180",
+        "p210",
+        "p179",
+        "p212",
+        "p221",
+        "p208",
+        "p204",
+        "p190",
+        "p200",
+        "p178"
+      ]
+    },
+    "r7": {
+      "attachment": "front-1",
+      "points": [
+        "p181",
+        "p178",
+        "p200",
+        "p201",
+        "p215",
+        "p196",
+        "p181"
+      ]
+    },
+    "r8": {
+      "attachment": "front-1",
+      "points": [
+        "p221",
+        "p212",
+        "p188",
+        "p196",
+        "p215",
+        "p191",
+        "p190",
+        "p221"
+      ]
+    },
+    "r9": {
+      "attachment": "front-1",
+      "points": [
+        "p221",
+        "p190",
+        "p204",
+        "p208",
+        "p221"
+      ]
+    }
+  },
+  "semantic_lines": {},
+  "symbols": {},
+  "text": {
+    "t2": {
+      "attachment": "front-1",
+      "box": [
+        [
+          3330.0,
+          1464.0
+        ],
+        [
+          60.0,
+          74.0
+        ],
+        -0.0
+      ],
+      "color": "black",
+      "type": "ruimteomschrijving",
+      "value": "6"
+    },
+    "t3": {
+      "attachment": "front",
+      "box": [
+        [
+          1359.6309814453125,
+          2149.9814453125
+        ],
+        [
+          60.817138671875,
+          77.59423828125
+        ],
+        0
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "7"
+    },
+    "t4": {
+      "attachment": "front",
+      "box": [
+        [
+          1358.5823974609375,
+          2363.3653564453125
+        ],
+        [
+          51.26655965522945,
+          70.23520847278624
+        ],
+        -2.4366844157469822
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "8"
+    },
+    "t5": {
+      "attachment": "front",
+      "box": [
+        [
+          1443.7471923828125,
+          2858.1068115234375
+        ],
+        [
+          40.936108531128916,
+          66.51136971122804
+        ],
+        -3.6915334439842282
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "3"
+    },
+    "t6": {
+      "attachment": "front",
+      "box": [
+        [
+          1797.35498046875,
+          2429.749755859375
+        ],
+        [
+          63.990054358146416,
+          30.663802303223804
+        ],
+        89.46452030172118
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "1"
+    },
+    "t7": {
+      "attachment": "front",
+      "box": [
+        [
+          3886.4056396484375,
+          1972.9739990234375
+        ],
+        [
+          44.90674780694288,
+          66.79377927711379
+        ],
+        -0.572960830456386
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "4"
+    },
+    "t8": {
+      "attachment": "front",
+      "box": [
+        [
+          3263.0020751953125,
+          2429.027099609375
+        ],
+        [
+          65.63034418639866,
+          77.44093915650137
+        ],
+        -1.7899319927101431
+      ],
+      "color": "blue",
+      "drawing_source": "human",
+      "type": "appartementsnummer",
+      "value": "2"
+    },
+    "t9": {
+      "attachment": "front",
+      "box": [
+        [
+          2105.252685546875,
+          3353.870361328125
+        ],
+        [
+          367.02997891723385,
+          132.97654218168265
+        ],
+        -1.3639422500923137
+      ],
+      "color": "red",
+      "drawing_source": "human",
+      "type": "verdiepingaanduiding",
+      "value": "begane grond schaal 1:100"
+    }
+  }
+}
