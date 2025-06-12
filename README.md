@@ -39,6 +39,8 @@ You can also turn on "manual", which will allow you to manually adjust georefere
 Initialization techniques can also be changed, but they have been set to the best performing methods.
 
 
+
+
 This project is part of my MSc thesis at Geomatics TU Delft.
 
 Supervised by: Jantien Stoter, Amir Hakim, Ken Arroyo Ohori and Bhavya Kausika
