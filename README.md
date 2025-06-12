@@ -31,10 +31,16 @@ thesis/
 ```
 
 The code starts at line 1016. Nothing has to be adjusted for it to run.
+
 You can choose to turn off "automatic capping", this will allow you to manually set the height of each storey that is beyond reasonable limits (2.1-3.3 m).
+
 You can also turn on "manual", which will allow you to manually adjust georeferencing parameters.
+
 Initialization techniques can also be changed, but they have been set to the best performing methods.
 
+
 This project is part of my MSc thesis at Geomatics TU Delft.
+
 Supervised by: Jantien Stoter, Amir Hakim, Ken Arroyo Ohori and Bhavya Kausika
+
 Data provided by: Kadaster
