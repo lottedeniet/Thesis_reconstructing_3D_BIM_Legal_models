@@ -453,13 +453,13 @@ def grid_search(pand, aligned_column, bgt_outline, pand_data, room_geom,
     """
 
     if isinstance(pand[aligned_column].iloc[0], Polygon) and isinstance(pand[bgt_outline].iloc[0], MultiPolygon):
-        alpha = 0.8
+        alpha = 0.75
 
 
     # only apply translation when its multipolygons, this makes the result more precise but it also takes longer
     if isinstance(pand[aligned_column].iloc[0], MultiPolygon) or isinstance(pand[bgt_outline].iloc[0],
                                                                             MultiPolygon):
-        apply_translation = False
+        apply_translation = True
     else:
         apply_translation = False
 
@@ -1037,7 +1037,6 @@ rotate_version = 'none'
 translation_version = 'centroid'
 rotation_angles2 = [171.3,  180,  -43.5,  78.9,  6.8,  0.0,  121.6, 120,  22.2,7]
 rotation_angles = {'HVS00N1878': 171.3, "HVS00N1882": 180, "HVS00N2359": -43.5, "HVS00N2643": 78.9, "HVS00N2848": 6.8, "HVS00N3211": 0.0, "HVS00N3723": 121.6, "HVS00N4216": 120, "HVS00N555": 22.2, "HVS00N9252":7}
-alpha = 0.5
 epsilon_value = 1.4
 angles_list = []
 # cap height values automatically to realistic values, or do this manually if they're off standard values
@@ -1447,7 +1446,7 @@ for perceel in perceel_list:
 
     pand.set_geometry('aligned_geometry', inplace=True)
     pand = grid_search(pand, "aligned_geometry", "bgt_outline", pand_data, "aligned_rooms",
-                       alpha=0.2, buffer=1,
+                       alpha=0.25, buffer=1,
                        angle_step=1, scale_step=0.05, scale_range=(0.8, 1.2),
                        translation_step=0.8)
 
