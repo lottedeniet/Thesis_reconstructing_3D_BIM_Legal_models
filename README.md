@@ -1,6 +1,4 @@
-# Thesis Project: Reconstructing legal
-3D apartment models from
-2D division drawings
+# Thesis Project: Reconstructing legal 3D apartment models from 2D division drawings
 
 ## Overview
 This research focused on converting 2D legal division drawings of apartment buildings into 3D digital models. These 3D models represent the legal ownership structure of buildings, which parts are private apartments and which are shared spaces.
@@ -42,6 +40,8 @@ Initialization techniques can also be changed, but they have been set to the bes
 ## Acknowledgements
 
 This project is part of my MSc thesis at Geomatics TU Delft.
+
+https://repository.tudelft.nl/record/uuid:aae7672b-ffd7-4656-a81a-8c4134f0b197
 
 Supervised by: Jantien Stoter, Amir Hakim, Ken Arroyo Ohori and Bhavya Kausika
 
